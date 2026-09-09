@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const {
+	title,
+	description = '096matics — tarjetas NFC que llevan a tus clientes directo a dejar una reseña en Google.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<title>{title} · 096matics</title>
+	</head>
+	<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+		<slot />
+	</body>
+</html>

@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import TestimonialBlock from '../../components/TestimonialBlock.astro';
+import WhatsAppCTA from '../../components/WhatsAppCTA.astro';
+
+export async function getStaticPaths() {
+	const sectores = await getCollection('sectores');
+	return sectores.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { titulo, negocioEjemplo, resumen, valoracion, testimonioTexto, testimonioAutor, testimonioNegocio } =
+	entry.data;
+---
+
+<Layout title={`${titulo} — ${negocioEjemplo}`}>
+	<Header />
+	<main class="mx-auto max-w-3xl px-6 py-16">
+		<p class="text-sm tracking-widest text-amber-400 uppercase">{titulo}</p>
+		<h1 class="mt-3 text-3xl font-semibold text-white">{negocioEjemplo}</h1>
+		<p class="mt-4 text-zinc-400">{resumen}</p>
+
+		<div class="mt-8 flex items-center gap-2">
+			<span class="text-2xl font-semibold text-white">{valoracion}</span>
+			<span class="text-sm text-zinc-400">/ 5 tras usar la tarjeta</span>
+		</div>
+
+		<div class="mt-10 space-y-4 leading-relaxed text-zinc-300">
+			<Content />
+		</div>
+
+		<div class="mt-10">
+			<TestimonialBlock texto={testimonioTexto} autor={testimonioAutor} negocio={testimonioNegocio} />
+		</div>
+
+		<div class="mt-12">
+			<WhatsAppCTA
+				texto={`Quiero una tarjeta como la de ${negocioEjemplo}`}
+				mensaje={`Hola, vi el ejemplo de ${titulo} y quiero una tarjeta para mi negocio`}
+			/>
+		</div>
+	</main>
+	<Footer />
+</Layout>

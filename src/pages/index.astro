@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+---
+
+<Layout title="Tarjetas NFC para reseñas de Google">
+	<Header />
+	<main class="mx-auto max-w-5xl px-6">
+		<section class="py-20 text-center sm:py-28">
+			<p class="text-sm tracking-widest text-amber-400 uppercase">Reseñas de Google, sin fricción</p>
+			<h1 class="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+				Acerca el móvil, deja la reseña.<br class="hidden sm:block" /> Así de simple.
+			</h1>
+			<p class="mx-auto mt-6 max-w-2xl text-lg text-zinc-400">
+				Tarjetas NFC que llevan a tus clientes directo a tu ficha de Google, en tres segundos, sin buscar
+				y sin escribir nada.
+			</p>
+			<div class="mt-10 flex items-center justify-center gap-6">
+				<WhatsAppCTA texto="Pide tu tarjeta" />
+				<a href="/portafolio" class="text-sm font-medium text-zinc-300 transition-colors hover:text-white">
+					Ver ejemplos por sector →
+				</a>
+			</div>
+		</section>
+	</main>
+	<Footer />
+</Layout>
