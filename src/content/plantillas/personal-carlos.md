@@ -5,4 +5,5 @@ descripcion: "Tarjeta digital personal · 096matics"
 estado: "publico"
 colorHex: "#E8483A"
 origenArchivo: "personal/CarlosCantosBlasco/index.html"
+imagen: "/plantillas/personal-carlos.jpg"
 ---

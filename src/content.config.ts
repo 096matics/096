@@ -25,6 +25,7 @@ const plantillas = defineCollection({
     estado: z.enum(['publico', 'proximamente', 'privado']),
     colorHex: z.string().optional(),
     origenArchivo: z.string().optional(),
+    imagen: z.string().optional(),
   }),
 });
 

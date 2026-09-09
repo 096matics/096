@@ -26,65 +26,107 @@ const { title, description = '096matics — tarjetas NFC.', accent, accent2 } = 
 		/>
 	</head>
 	<body>
-		<div class="chasis-root" style={`--accent:${accent}; --accent-2:${accent2}`}>
+		<div class="chasis-root at-splash" id="chasisRoot" style={`--accent:${accent}; --accent-2:${accent2}`}>
+			<nav class="side-nav" id="sideNav" aria-label="Secciones">
+				<button class="side-nav-logo" id="sideNavLogo" aria-label="Volver al inicio">
+					<span class="brand"><span class="n">096</span><span class="m">matics</span></span>
+				</button>
+				<ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px;" id="sideNavList">
+				</ul>
+			</nav>
 			<div id="pager">
 				<slot />
 			</div>
 		</div>
 
 		<script>
+			const root = document.getElementById('chasisRoot');
 			const pager = document.getElementById('pager');
-			if (pager) {
-				const pages = Array.from(document.querySelectorAll('.page'));
-				const DURATION = 1050;
+			const sideNavList = document.getElementById('sideNavList');
+			const sideNavLogo = document.getElementById('sideNavLogo');
+
+			if (root && pager) {
+				const pages = Array.from(document.querySelectorAll('.page')) as HTMLElement[];
+				const DURATION = 1300; // debe coincidir con la duración de las animaciones stack-* en chasis.css
 				let current = 0;
 				let locked = false;
 
-				function playEnter(page: Element, goingBack: boolean) {
-					page.classList.remove('enter-forward', 'enter-back');
-					void (page as HTMLElement).offsetWidth;
+				pages.forEach((p, i) => {
+					p.classList.toggle('is-current', i === 0);
+				});
+
+				const navButtons: HTMLButtonElement[] = [];
+				pages.forEach((p, i) => {
+					const label = p.dataset.nav;
+					if (!label) return;
+					const li = document.createElement('li');
+					const btn = document.createElement('button');
+					btn.className = 'side-nav-item';
+					btn.innerHTML = `<span class="side-nav-label">${label}</span>`;
+					btn.addEventListener('click', () => goToPage(i));
+					li.appendChild(btn);
+					sideNavList?.appendChild(li);
+					navButtons.push(btn);
+				});
+
+				function setActiveNav(index: number) {
+					const page = pages[index];
+					const label = page?.dataset.nav;
+					navButtons.forEach((btn) => {
+						const btnLabel = btn.querySelector('.side-nav-label')?.textContent;
+						btn.classList.toggle('active', !!label && btnLabel === label);
+					});
+					root?.classList.toggle('at-splash', index === 0);
+				}
+
+				sideNavLogo?.addEventListener('click', () => goToPage(0));
+
+				function playReveal(page: HTMLElement) {
 					const els = page.querySelectorAll('.reveal, .reveal-pop');
 					els.forEach((el, i) => {
-						(el as HTMLElement).style.animationDelay = (i % 4) * 90 + 'ms';
+						(el as HTMLElement).style.animationDelay = (i % 4) * 130 + 'ms';
 					});
-					page.classList.add(goingBack ? 'enter-back' : 'enter-forward');
 				}
 
 				function goToPage(index: number) {
 					index = Math.max(0, Math.min(pages.length - 1, index));
-					if (index === current || locked || !pager) return;
+					if (index === current || locked) return;
 					locked = true;
 
 					const goingBack = index < current;
-					const target = pages[index];
+					const oldPage = pages[current];
+					const newPage = pages[index];
 					current = index;
 
-					pager.style.transition = `transform ${DURATION}ms cubic-bezier(0.22, 1, 0.36, 1)`;
-					pager.style.transform = `translateY(-${current * window.innerHeight}px)`;
-					playEnter(target, goingBack);
+					// limpia restos de una transición anterior antes de empezar una nueva
+					oldPage.classList.remove('stack-enter-forward', 'stack-enter-back');
+					newPage.classList.remove('stack-exit-forward', 'stack-exit-back');
+
+					newPage.classList.add('is-current');
+					void newPage.offsetWidth;
+
+					oldPage.classList.add(goingBack ? 'stack-exit-back' : 'stack-exit-forward');
+					newPage.classList.add(goingBack ? 'stack-enter-back' : 'stack-enter-forward');
+					playReveal(newPage);
+					setActiveNav(current);
 
 					window.setTimeout(() => {
+						// la página nueva conserva su clase stack-enter-* (con fill-mode forwards)
+						// para que el contenido .reveal no vuelva a opacity:0
+						oldPage.classList.remove('is-current', 'stack-exit-forward', 'stack-exit-back');
 						locked = false;
 					}, DURATION + 60);
 				}
-
-				window.addEventListener('resize', () => {
-					if (!pager) return;
-					pager.style.transition = 'none';
-					pager.style.transform = `translateY(-${current * window.innerHeight}px)`;
-					requestAnimationFrame(() => {
-						pager.style.transition = '';
-					});
-				});
 
 				let wheelBuffer = 0;
 				window.addEventListener(
 					'wheel',
 					(e) => {
+						if (root.classList.contains('presenting')) return;
 						e.preventDefault();
 						if (locked || current === 0) return;
 						wheelBuffer += e.deltaY;
-						if (Math.abs(wheelBuffer) > 35) {
+						if (Math.abs(wheelBuffer) > 22) {
 							goToPage(current + (wheelBuffer > 0 ? 1 : -1));
 							wheelBuffer = 0;
 						}
@@ -103,6 +145,7 @@ const { title, description = '096matics — tarjetas NFC.', accent, accent2 } = 
 				window.addEventListener(
 					'touchmove',
 					(e) => {
+						if (root.classList.contains('presenting')) return;
 						e.preventDefault();
 					},
 					{ passive: false }
@@ -110,12 +153,13 @@ const { title, description = '096matics — tarjetas NFC.', accent, accent2 } = 
 				window.addEventListener(
 					'touchend',
 					(e) => {
+						if (root.classList.contains('presenting')) return;
 						if (touchStartY === null || locked || current === 0) {
 							touchStartY = null;
 							return;
 						}
 						const dy = touchStartY - e.changedTouches[0].clientY;
-						if (Math.abs(dy) > 45) {
+						if (Math.abs(dy) > 36) {
 							goToPage(current + (dy > 0 ? 1 : -1));
 						}
 						touchStartY = null;
@@ -124,6 +168,7 @@ const { title, description = '096matics — tarjetas NFC.', accent, accent2 } = 
 				);
 
 				window.addEventListener('keydown', (e) => {
+					if (root.classList.contains('presenting')) return;
 					if (current === 0) return;
 					if (e.key === 'ArrowDown' || e.key === 'PageDown') goToPage(current + 1);
 					if (e.key === 'ArrowUp' || e.key === 'PageUp') goToPage(current - 1);
