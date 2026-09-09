@@ -15,4 +15,17 @@ const sectores = defineCollection({
   }),
 });
 
-export const collections = { sectores };
+const plantillas = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/plantillas' }),
+  schema: z.object({
+    categoria: z.enum(['sector', 'personal', 'cliente']),
+    sector: z.string().optional(),
+    nombre: z.string(),
+    descripcion: z.string(),
+    estado: z.enum(['publico', 'proximamente', 'privado']),
+    colorHex: z.string().optional(),
+    origenArchivo: z.string().optional(),
+  }),
+});
+
+export const collections = { sectores, plantillas };
