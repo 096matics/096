@@ -1,6 +1,7 @@
 ---
 titulo: "Peluquería y estética"
 negocioEjemplo: "Espacio Bella"
+colorHex: "#ec4899"
 resumen: "Salones donde la clienta ya está satisfecha al salir; solo falta ponérselo fácil para que lo cuente."
 valoracion: "4.9"
 testimonioTexto: "Lo dejamos junto al espejo de salida. Las clientas lo usan mientras esperan el cambio, sin que nadie tenga que pedírselo."

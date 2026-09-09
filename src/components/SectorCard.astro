@@ -4,16 +4,18 @@ interface Props {
 	titulo: string;
 	resumen: string;
 	negocioEjemplo: string;
+	colorHex: string;
 }
 
-const { slug, titulo, resumen, negocioEjemplo } = Astro.props;
+const { slug, titulo, resumen, negocioEjemplo, colorHex } = Astro.props;
 ---
 
 <a
 	href={`/portafolio/${slug}`}
-	class="group block rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 transition-colors hover:border-amber-400/50"
+	class="group block rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 transition-colors hover:border-[var(--accent)]"
+	style={`--accent: ${colorHex}`}
 >
-	<p class="text-xs tracking-wide text-amber-400 uppercase">{titulo}</p>
+	<p class="text-xs tracking-wide uppercase" style="color: var(--accent)">{titulo}</p>
 	<h3 class="mt-2 text-lg font-medium text-white">{negocioEjemplo}</h3>
 	<p class="mt-2 text-sm text-zinc-400">{resumen}</p>
 	<span class="mt-4 inline-block text-sm text-zinc-300 group-hover:text-white">Ver ejemplo →</span>

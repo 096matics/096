@@ -1,6 +1,7 @@
 ---
 titulo: "Hostelería"
 negocioEjemplo: "Bar El Rincón"
+colorHex: "#f59e0b"
 resumen: "Bares y restaurantes que quieren pasar de un puñado de reseñas a decenas cada mes, sin pedirlas una a una en caja."
 valoracion: "4.8"
 testimonioTexto: "Antes teníamos 12 reseñas en dos años. Con la tarjeta en la barra, en un mes llegamos a 40."

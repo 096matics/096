@@ -6,6 +6,7 @@ const sectores = defineCollection({
   schema: z.object({
     titulo: z.string(),
     negocioEjemplo: z.string(),
+    colorHex: z.string(),
     resumen: z.string(),
     valoracion: z.string(),
     testimonioTexto: z.string(),

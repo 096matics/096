@@ -1,0 +1,40 @@
+---
+interface Props {
+	color: string;
+	negocio: string;
+}
+
+const { color, negocio } = Astro.props;
+---
+
+<div
+	class="flex flex-col items-center gap-6 rounded-2xl border border-zinc-800 bg-zinc-900/40 px-6 py-10 sm:flex-row sm:justify-center"
+	style={`--accent: ${color}`}
+>
+	<div class="relative">
+		<svg width="88" height="176" viewBox="0 0 88 176" role="img" aria-label="Teléfono acercándose a la tarjeta NFC">
+			<rect x="1" y="1" width="86" height="174" rx="16" fill="none" stroke="#52525b" stroke-width="2" />
+			<rect x="10" y="14" width="68" height="132" rx="4" fill="#18181b" />
+			<circle cx="44" cy="160" r="6" fill="none" stroke="#52525b" stroke-width="2" />
+			<path
+				d="M8 66c-6-4-6-10 0-14M2 60c-10-6-10-16 0-22"
+				fill="none"
+				stroke="var(--accent)"
+				stroke-width="2.5"
+				stroke-linecap="round"
+				opacity="0.85"
+			></path>
+		</svg>
+	</div>
+	<div class="text-center sm:text-left">
+		<p class="text-xs tracking-wide text-zinc-500 uppercase">Así lo ve el cliente de {negocio}</p>
+		<div class="mt-2 flex justify-center gap-1 sm:justify-start" aria-label="5 estrellas">
+			{Array.from({ length: 5 }).map(() => (
+				<svg width="20" height="20" viewBox="0 0 20 20" fill="var(--accent)">
+					<path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6.1L10 14.9l-5.4 3 1.3-6.1L1.3 7.7l6.1-.6L10 1.5z" />
+				</svg>
+			))}
+		</div>
+		<p class="mt-2 text-sm text-zinc-400">Reseña dejada en menos de 10 segundos, sin salir de la app de Google.</p>
+	</div>
+</div>
