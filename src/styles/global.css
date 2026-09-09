@@ -1,1 +1,85 @@
 @import "tailwindcss";
+
+body:has([data-page]) {
+	scroll-snap-type: y proximity;
+}
+
+[data-page] {
+	scroll-snap-align: start;
+	position: relative;
+	overflow: hidden;
+}
+
+[data-page] .reveal {
+	opacity: 0;
+}
+
+[data-page].enter-forward .reveal {
+	animation: page-reveal-forward 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes page-reveal-forward {
+	0% {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+[data-page].enter-back .reveal {
+	animation: page-reveal-back 0.75s steps(6, end) forwards;
+}
+
+@keyframes page-reveal-back {
+	0% {
+		opacity: 0;
+		filter: blur(14px) contrast(0.6) brightness(1.25);
+		transform: scale(0.97);
+	}
+	40% {
+		opacity: 0.55;
+		filter: blur(6px) contrast(0.85);
+		transform: scale(0.99);
+	}
+	100% {
+		opacity: 1;
+		filter: blur(0) contrast(1);
+		transform: scale(1);
+	}
+}
+
+[data-page].enter-back::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 5;
+	pointer-events: none;
+	background:
+		repeating-linear-gradient(0deg, #09090b 0 5px, transparent 5px 10px),
+		repeating-linear-gradient(90deg, #09090b 0 5px, transparent 5px 10px);
+	animation: page-pixel-grid 0.75s steps(6, end) forwards;
+}
+
+@keyframes page-pixel-grid {
+	0% {
+		opacity: 0.9;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-page].enter-forward .reveal,
+	[data-page].enter-back .reveal {
+		animation: none;
+		opacity: 1;
+	}
+	[data-page].enter-back::after {
+		animation: none;
+		opacity: 0;
+	}
+}

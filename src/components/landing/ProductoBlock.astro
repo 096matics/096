@@ -15,7 +15,7 @@ interface Props {
 	titulo: string;
 	descripcion: string;
 	paraQuien: string;
-	accent?: 'amber' | 'sky';
+	accent?: 'amber' | 'brand';
 	accentHex: string;
 	mockupTipo: 'resena' | 'contacto';
 	mockupNegocio: string;
@@ -31,7 +31,7 @@ const {
 	titulo,
 	descripcion,
 	paraQuien,
-	accent = 'amber',
+	accent = 'brand',
 	accentHex,
 	mockupTipo,
 	mockupNegocio,
@@ -41,18 +41,19 @@ const {
 	conStats = false,
 } = Astro.props;
 
-const accentText = accent === 'sky' ? 'text-sky-400' : 'text-amber-400';
+const accentText = accent === 'brand' ? 'text-indigo-400' : 'text-amber-400';
+const ctaVariant = accent === 'amber' ? 'amber' : 'brand';
 ---
 
-<section id={id} class="scroll-mt-20 border-t border-zinc-800 py-16 sm:py-20">
-	<div class="mx-auto max-w-5xl px-6">
+<section id={id} data-page class="scroll-mt-20 flex min-h-dvh flex-col justify-center border-t border-zinc-800 py-16 sm:py-20">
+	<div class="reveal mx-auto max-w-5xl px-6">
 		<p class={`text-sm tracking-widest uppercase ${accentText}`}>{numero}</p>
 		<h2 class="mt-3 text-3xl font-semibold text-white sm:text-4xl">{titulo}</h2>
 		<p class="mt-4 max-w-2xl text-lg text-zinc-400">{descripcion}</p>
 		<p class="mt-2 text-sm text-zinc-500">{paraQuien}</p>
 
 		<div class="mt-8">
-			<WhatsAppCTA texto={ctaTexto} mensaje={ctaMensaje} />
+			<WhatsAppCTA texto={ctaTexto} mensaje={ctaMensaje} variant={ctaVariant} />
 		</div>
 
 		<div class="mt-12">

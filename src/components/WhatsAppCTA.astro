@@ -3,22 +3,29 @@ interface Props {
 	texto?: string;
 	mensaje?: string;
 	class?: string;
+	variant?: 'brand' | 'amber';
 }
 
 const {
 	texto = 'Habla con nosotros por WhatsApp',
 	mensaje = 'Hola, quiero información sobre las tarjetas NFC de 096matics',
 	class: className = '',
+	variant = 'brand',
 } = Astro.props;
 
 const href = `https://wa.me/34727700065?text=${encodeURIComponent(mensaje)}`;
+
+const styles =
+	variant === 'amber'
+		? 'bg-amber-400 text-zinc-950 hover:bg-amber-300'
+		: 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500';
 ---
 
 <a
 	href={href}
 	target="_blank"
 	rel="noopener noreferrer"
-	class={`inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-3 text-sm font-medium text-zinc-950 transition-colors hover:bg-amber-300 ${className}`}
+	class={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-colors ${styles} ${className}`}
 >
 	{texto}
 </a>

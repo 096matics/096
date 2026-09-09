@@ -1,0 +1,12 @@
+---
+interface Props {
+	class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<span class={`font-semibold tracking-tight ${className}`}>
+	<span class="text-white">096</span><span
+		class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">matics</span
+	>
+</span>

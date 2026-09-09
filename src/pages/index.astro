@@ -17,8 +17,33 @@ import Contacto from '../components/landing/Contacto.astro';
 		<Hero />
 
 		<ProductoBlock
+			id="producto-personal"
+			numero="Producto 1 · Tarjetas personales"
+			titulo="Tu contacto, en un toque"
+			descripcion="Una tarjeta NFC de presentación digital para profesionales: un toque y tu cliente guarda tu teléfono, email, redes o web, sin repartir tarjetas de papel."
+			paraQuien="Para autónomos, comerciales y equipos que quieren dar una buena primera impresión."
+			accent="brand"
+			accentHex="#6366f1"
+			mockupTipo="contacto"
+			mockupNegocio="tu perfil"
+			ctaTexto="Pide tu tarjeta personal"
+			ctaMensaje="Hola, quiero una tarjeta NFC personal"
+			pasos={[
+				{ titulo: 'Acerca la tarjeta', descripcion: 'Un toque del móvil de la otra persona sobre tu tarjeta.' },
+				{
+					titulo: 'Se abre tu perfil',
+					descripcion: 'Tu landing personal se carga al instante, sin apps ni códigos QR.',
+				},
+				{
+					titulo: 'Guarda tu contacto',
+					descripcion: 'Con un botón, tus datos quedan guardados en su móvil para siempre.',
+				},
+			]}
+		/>
+
+		<ProductoBlock
 			id="producto-google"
-			numero="Producto 1 · Reseñas de Google"
+			numero="Producto 2 · Reseñas de Google"
 			titulo="Reseñas de Google, sin fricción"
 			descripcion="Tu cliente acerca el móvil a la tarjeta y aterriza directo en la ventana de dejar una reseña en tu ficha de Google. Sin apps, sin buscar el nombre del negocio, sin escribir nada a mano."
 			paraQuien="Pensado para negocios con pocas reseñas que necesitan reputación online rápido."
@@ -42,34 +67,40 @@ import Contacto from '../components/landing/Contacto.astro';
 			]}
 		/>
 
-		<ProductoBlock
-			id="producto-personal"
-			numero="Producto 2 · Tarjetas personales"
-			titulo="Tu contacto, en un toque"
-			descripcion="Una tarjeta NFC de presentación digital para profesionales: un toque y tu cliente guarda tu teléfono, email, redes o web, sin repartir tarjetas de papel."
-			paraQuien="Para autónomos, comerciales y equipos que quieren dar una buena primera impresión."
-			accent="sky"
-			accentHex="#38bdf8"
-			mockupTipo="contacto"
-			mockupNegocio="tu perfil"
-			ctaTexto="Pide tu tarjeta personal"
-			ctaMensaje="Hola, quiero una tarjeta NFC personal"
-			pasos={[
-				{ titulo: 'Acerca la tarjeta', descripcion: 'Un toque del móvil de la otra persona sobre tu tarjeta.' },
-				{
-					titulo: 'Se abre tu perfil',
-					descripcion: 'Tu landing personal se carga al instante, sin apps ni códigos QR.',
-				},
-				{
-					titulo: 'Guarda tu contacto',
-					descripcion: 'Con un botón, tus datos quedan guardados en su móvil para siempre.',
-				},
-			]}
-		/>
-
 		<QuienesSomos />
 		<PortafolioPreview />
 		<Contacto />
 	</main>
 	<Footer />
 </Layout>
+
+<script>
+	let lastY = window.scrollY;
+	let direction: 'forward' | 'back' = 'forward';
+
+	window.addEventListener(
+		'scroll',
+		() => {
+			const y = window.scrollY;
+			if (y > lastY) direction = 'forward';
+			else if (y < lastY) direction = 'back';
+			lastY = y;
+		},
+		{ passive: true }
+	);
+
+	const pages = document.querySelectorAll('[data-page]');
+	const observer = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) {
+				if (!entry.isIntersecting) continue;
+				const el = entry.target;
+				el.classList.remove('enter-forward', 'enter-back');
+				void (el as HTMLElement).offsetWidth;
+				el.classList.add(direction === 'back' ? 'enter-back' : 'enter-forward');
+			}
+		},
+		{ threshold: 0.35 }
+	);
+	pages.forEach((p) => observer.observe(p));
+</script>

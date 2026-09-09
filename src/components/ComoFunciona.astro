@@ -8,12 +8,12 @@ interface Props {
 	kicker: string;
 	titulo: string;
 	pasos: Paso[];
-	accent?: 'amber' | 'sky';
+	accent?: 'amber' | 'brand';
 }
 
-const { kicker, titulo, pasos, accent = 'amber' } = Astro.props;
-const accentText = accent === 'sky' ? 'text-sky-400' : 'text-amber-400';
-const accentBorder = accent === 'sky' ? 'border-sky-400/40' : 'border-amber-400/40';
+const { kicker, titulo, pasos, accent = 'brand' } = Astro.props;
+const accentText = accent === 'brand' ? 'text-indigo-400' : 'text-amber-400';
+const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber-400/40';
 ---
 
 <div>
