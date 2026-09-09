@@ -1,0 +1,38 @@
+---
+interface Paso {
+	titulo: string;
+	descripcion: string;
+}
+
+const pasos: Paso[] = [
+	{ titulo: 'Acerca la tarjeta', descripcion: 'Un toque del móvil de tu cliente sobre la tarjeta NFC.' },
+	{
+		titulo: 'Se abre tu ficha de Google',
+		descripcion: 'Directo a dejar la reseña, sin apps ni buscar el nombre del negocio.',
+	},
+	{ titulo: 'Reseña publicada', descripcion: 'En menos de 10 segundos, antes de que se levante de la mesa.' },
+];
+---
+
+<section class="py-16 sm:py-20">
+	<p class="text-sm tracking-widest text-amber-400 uppercase">Cómo funciona</p>
+	<h2 class="mt-3 text-2xl font-semibold text-white sm:text-3xl">De la tarjeta a la reseña, en 3 pasos</h2>
+	<ol class="mt-10 space-y-8">
+		{
+			pasos.map((paso, i) => (
+				<li class="flex gap-4">
+					<div class="flex flex-col items-center">
+						<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-amber-400/40 text-sm font-semibold text-amber-400">
+							{i + 1}
+						</span>
+						{i < pasos.length - 1 && <span class="mt-1 w-px flex-1 bg-zinc-800" />}
+					</div>
+					<div class="pb-2">
+						<h3 class="text-base font-medium text-white">{paso.titulo}</h3>
+						<p class="mt-1 text-sm text-zinc-400">{paso.descripcion}</p>
+					</div>
+				</li>
+			))
+		}
+	</ol>
+</section>

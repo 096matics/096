@@ -3,6 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import NfcMockup from '../components/NfcMockup.astro';
+import ComoFunciona from '../components/ComoFunciona.astro';
+import StatsGrid from '../components/StatsGrid.astro';
 ---
 
 <Layout title="Tarjetas NFC para reseñas de Google">
@@ -24,6 +27,13 @@ import WhatsAppCTA from '../components/WhatsAppCTA.astro';
 				</a>
 			</div>
 		</section>
+
+		<section class="pb-16 sm:pb-20">
+			<NfcMockup color="#f59e0b" negocio="tu negocio" />
+		</section>
+
+		<ComoFunciona />
+		<StatsGrid />
 	</main>
 	<Footer />
 </Layout>
