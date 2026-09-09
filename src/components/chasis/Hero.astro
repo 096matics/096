@@ -1,0 +1,25 @@
+---
+interface Props {
+	kicker: string;
+	titulo: string;
+	descripcion: string;
+}
+const { kicker, titulo, descripcion } = Astro.props;
+---
+
+<div class="hero page">
+	<div class="brand-row"><h1 class="brand"><span class="n">096</span><span class="m">matics</span></h1></div>
+
+	<div class="hero-bottom">
+		<p class="hero-kicker reveal">{kicker}</p>
+		<h2 class="hero-title reveal">{titulo}</h2>
+		<p class="hero-desc reveal">{descripcion}</p>
+	</div>
+
+	<div class="scroll-cue">
+		<span>Desliza</span>
+		<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+			><path d="M6 9l6 6 6-6"></path></svg
+		>
+	</div>
+</div>

@@ -1,0 +1,56 @@
+---
+interface Item {
+	icono: 'tarjeta' | 'landing' | 'mantenimiento' | 'enlace' | 'sector';
+	titulo: string;
+	descripcion: string;
+}
+interface Props {
+	titulo: string;
+	items: Item[];
+}
+const { titulo, items } = Astro.props;
+
+const iconos: Record<Item['icono'], string> = {
+	tarjeta: '<rect x="2" y="6" width="20" height="12" rx="3"/><path d="M6 12h.01M10 12h4"/>',
+	landing:
+		'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+	mantenimiento:
+		'<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>',
+	enlace: '<path d="M10 14L21 3"/><path d="M15 3h6v6"/><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>',
+	sector: '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1M9 13h1M14 9h1M14 13h1M9 21v-4h6v4"/>',
+};
+---
+
+<section id="que-hacemos" class="page">
+	<p class="eyebrow reveal">Qué hacemos</p>
+	<h2 class="section-title reveal">{titulo}</h2>
+
+	<div class="services-grid">
+		{
+			items.map((item) => (
+				<div class="service-card reveal-pop">
+					<div class="service-icon">
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							set:html={iconos[item.icono]}
+						/>
+					</div>
+					<div>
+						<h3>{item.titulo}</h3>
+						<p>{item.descripcion}</p>
+					</div>
+				</div>
+			))
+		}
+	</div>
+
+	<div class="scroll-cue">
+		<span>Desliza</span>
+		<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+			><path d="M6 9l6 6 6-6"></path></svg
+		>
+	</div>
+</section>

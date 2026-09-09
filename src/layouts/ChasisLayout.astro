@@ -1,0 +1,145 @@
+---
+import '../styles/chasis.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	accent: string;
+	accent2: string;
+}
+
+const { title, description = '096matics — tarjetas NFC.', accent, accent2 } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<title>{title} · 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<div class="chasis-root" style={`--accent:${accent}; --accent-2:${accent2}`}>
+			<div id="pager">
+				<slot />
+			</div>
+		</div>
+
+		<script>
+			const pager = document.getElementById('pager');
+			if (pager) {
+				const pages = Array.from(document.querySelectorAll('.page'));
+				const DURATION = 1050;
+				let current = 0;
+				let locked = false;
+
+				function playEnter(page: Element, goingBack: boolean) {
+					page.classList.remove('enter-forward', 'enter-back');
+					void (page as HTMLElement).offsetWidth;
+					const els = page.querySelectorAll('.reveal, .reveal-pop');
+					els.forEach((el, i) => {
+						(el as HTMLElement).style.animationDelay = (i % 4) * 90 + 'ms';
+					});
+					page.classList.add(goingBack ? 'enter-back' : 'enter-forward');
+				}
+
+				function goToPage(index: number) {
+					index = Math.max(0, Math.min(pages.length - 1, index));
+					if (index === current || locked || !pager) return;
+					locked = true;
+
+					const goingBack = index < current;
+					const target = pages[index];
+					current = index;
+
+					pager.style.transition = `transform ${DURATION}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+					pager.style.transform = `translateY(-${current * window.innerHeight}px)`;
+					playEnter(target, goingBack);
+
+					window.setTimeout(() => {
+						locked = false;
+					}, DURATION + 60);
+				}
+
+				window.addEventListener('resize', () => {
+					if (!pager) return;
+					pager.style.transition = 'none';
+					pager.style.transform = `translateY(-${current * window.innerHeight}px)`;
+					requestAnimationFrame(() => {
+						pager.style.transition = '';
+					});
+				});
+
+				let wheelBuffer = 0;
+				window.addEventListener(
+					'wheel',
+					(e) => {
+						e.preventDefault();
+						if (locked || current === 0) return;
+						wheelBuffer += e.deltaY;
+						if (Math.abs(wheelBuffer) > 35) {
+							goToPage(current + (wheelBuffer > 0 ? 1 : -1));
+							wheelBuffer = 0;
+						}
+					},
+					{ passive: false }
+				);
+
+				let touchStartY: number | null = null;
+				window.addEventListener(
+					'touchstart',
+					(e) => {
+						touchStartY = e.touches[0].clientY;
+					},
+					{ passive: true }
+				);
+				window.addEventListener(
+					'touchmove',
+					(e) => {
+						e.preventDefault();
+					},
+					{ passive: false }
+				);
+				window.addEventListener(
+					'touchend',
+					(e) => {
+						if (touchStartY === null || locked || current === 0) {
+							touchStartY = null;
+							return;
+						}
+						const dy = touchStartY - e.changedTouches[0].clientY;
+						if (Math.abs(dy) > 45) {
+							goToPage(current + (dy > 0 ? 1 : -1));
+						}
+						touchStartY = null;
+					},
+					{ passive: true }
+				);
+
+				window.addEventListener('keydown', (e) => {
+					if (current === 0) return;
+					if (e.key === 'ArrowDown' || e.key === 'PageDown') goToPage(current + 1);
+					if (e.key === 'ArrowUp' || e.key === 'PageUp') goToPage(current - 1);
+				});
+
+				const splash = document.getElementById('splash');
+				splash?.addEventListener('click', () => {
+					if (current === 0) goToPage(1);
+				});
+				splash?.addEventListener('keydown', (e) => {
+					if (current === 0 && (e.key === 'Enter' || e.key === ' ')) {
+						e.preventDefault();
+						goToPage(1);
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

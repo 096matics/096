@@ -1,0 +1,68 @@
+---
+import ChasisLayout from '../layouts/ChasisLayout.astro';
+import Splash from '../components/chasis/Splash.astro';
+import Hero from '../components/chasis/Hero.astro';
+import QueHacemos from '../components/chasis/QueHacemos.astro';
+import ComoFunciona from '../components/chasis/ComoFunciona.astro';
+import PorQue from '../components/chasis/PorQue.astro';
+import Contacto from '../components/chasis/Contacto.astro';
+
+const whatsappHref =
+	'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, quiero una tarjeta NFC personal');
+---
+
+<ChasisLayout title="Tarjetas personales" accent="#3b82f6" accent2="#a855f7">
+	<Splash />
+	<Hero
+		kicker="Tarjetas digitales NFC"
+		titulo="Tu contacto, en un solo toque."
+		descripcion="Presencia digital profesional para ti o tu equipo. Sin apps, sin fricciones."
+	/>
+	<QueHacemos
+		titulo="Todo lo que necesitas, en una sola tarjeta"
+		items={[
+			{
+				icono: 'tarjeta',
+				titulo: 'Tarjetas NFC personalizadas',
+				descripcion: 'Contacto, redes y portfolio en un solo toque.',
+			},
+			{
+				icono: 'landing',
+				titulo: 'Landing a medida',
+				descripcion: 'Diseño propio por persona o equipo, a tu sector y tu marca.',
+			},
+			{
+				icono: 'mantenimiento',
+				titulo: 'Mantenimiento continuo',
+				descripcion: 'Actualizamos tus datos cuando los necesites, sin que muevas un dedo.',
+			},
+		]}
+	/>
+	<ComoFunciona
+		titulo="De la tarjeta al contacto guardado, en 3 pasos"
+		pasos={[
+			{
+				titulo: 'Acerca la tarjeta',
+				descripcion: 'Un simple toque del móvil de la otra persona sobre tu tarjeta NFC.',
+			},
+			{
+				titulo: 'Se abre tu perfil',
+				descripcion: 'Tu landing personal se carga al instante, sin apps ni códigos QR.',
+			},
+			{
+				titulo: 'Guarda tu contacto',
+				descripcion: 'Con un botón, tus datos quedan guardados en su móvil para siempre.',
+			},
+		]}
+	/>
+	<PorQue
+		titulo="Pensado para negocios que se lo toman en serio"
+		stats={[
+			{ valor: '0 apps', etiqueta: 'Funciona en cualquier móvil, sin instalar nada' },
+			{ valor: '100%', etiqueta: 'Diseño a medida por sector' },
+			{ valor: '24h', etiqueta: 'Actualizamos tus datos cuando lo necesites' },
+			{ valor: '1 toque', etiqueta: 'De la tarjeta al contacto guardado' },
+		]}
+	/>
+	<Contacto titulo="Solicita tu tarjeta digital" whatsappHref={whatsappHref} />
+</ChasisLayout>

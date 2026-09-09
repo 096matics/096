@@ -1,0 +1,34 @@
+---
+interface Stat {
+	valor: string;
+	etiqueta: string;
+}
+interface Props {
+	titulo: string;
+	stats: Stat[];
+}
+const { titulo, stats } = Astro.props;
+---
+
+<section id="por-que" class="page">
+	<p class="eyebrow reveal">Por qué 096matics</p>
+	<h2 class="section-title reveal">{titulo}</h2>
+
+	<div class="stats">
+		{
+			stats.map((stat) => (
+				<div class="stat reveal-pop">
+					<b>{stat.valor}</b>
+					<span>{stat.etiqueta}</span>
+				</div>
+			))
+		}
+	</div>
+
+	<div class="scroll-cue">
+		<span>Desliza</span>
+		<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+			><path d="M6 9l6 6 6-6"></path></svg
+		>
+	</div>
+</section>

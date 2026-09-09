@@ -1,0 +1,37 @@
+---
+interface Paso {
+	titulo: string;
+	descripcion: string;
+}
+interface Props {
+	titulo: string;
+	pasos: Paso[];
+}
+const { titulo, pasos } = Astro.props;
+---
+
+<section id="como-funciona" class="page">
+	<p class="eyebrow reveal">Cómo funciona</p>
+	<h2 class="section-title reveal">{titulo}</h2>
+
+	<div class="steps">
+		{
+			pasos.map((paso, i) => (
+				<div class="step reveal">
+					<div class="step-num">{i + 1}</div>
+					<div>
+						<h3>{paso.titulo}</h3>
+						<p>{paso.descripcion}</p>
+					</div>
+				</div>
+			))
+		}
+	</div>
+
+	<div class="scroll-cue">
+		<span>Desliza</span>
+		<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+			><path d="M6 9l6 6 6-6"></path></svg
+		>
+	</div>
+</section>

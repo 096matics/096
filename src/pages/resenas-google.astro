@@ -1,0 +1,68 @@
+---
+import ChasisLayout from '../layouts/ChasisLayout.astro';
+import Splash from '../components/chasis/Splash.astro';
+import Hero from '../components/chasis/Hero.astro';
+import QueHacemos from '../components/chasis/QueHacemos.astro';
+import ComoFunciona from '../components/chasis/ComoFunciona.astro';
+import PorQue from '../components/chasis/PorQue.astro';
+import Contacto from '../components/chasis/Contacto.astro';
+
+const whatsappHref =
+	'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, quiero tarjetas NFC para reseñas de Google');
+---
+
+<ChasisLayout title="Reseñas de Google" accent="#f59e0b" accent2="#fcd34d">
+	<Splash />
+	<Hero
+		kicker="Reseñas de Google, sin fricción"
+		titulo="Acerca el móvil, deja la reseña."
+		descripcion="Tarjetas NFC que llevan a tus clientes directo a tu ficha de Google, en tres segundos, sin buscar y sin escribir nada."
+	/>
+	<QueHacemos
+		titulo="Todo lo que necesitas para más reseñas"
+		items={[
+			{
+				icono: 'enlace',
+				titulo: 'Enlace directo a tu ficha',
+				descripcion: 'Tu cliente aterriza en la ventana de dejar reseña, sin buscar el negocio.',
+			},
+			{
+				icono: 'sector',
+				titulo: 'Diseño a medida por sector',
+				descripcion: 'Cada tarjeta con el estilo de tu negocio: hostelería, comercio, servicios...',
+			},
+			{
+				icono: 'mantenimiento',
+				titulo: 'Sin fecha de caducidad',
+				descripcion: 'La tarjeta no se actualiza ni caduca — apunta siempre a tu ficha de Google.',
+			},
+		]}
+	/>
+	<ComoFunciona
+		titulo="De la tarjeta a la reseña, en 3 pasos"
+		pasos={[
+			{
+				titulo: 'Acerca la tarjeta',
+				descripcion: 'Un toque del móvil de tu cliente sobre la tarjeta NFC.',
+			},
+			{
+				titulo: 'Se abre tu ficha de Google',
+				descripcion: 'Directo a dejar la reseña, sin apps ni buscar el nombre del negocio.',
+			},
+			{
+				titulo: 'Reseña publicada',
+				descripcion: 'En menos de 10 segundos, antes de que se levante de la mesa.',
+			},
+		]}
+	/>
+	<PorQue
+		titulo="Pensado para negocios que quieren reseñas ya"
+		stats={[
+			{ valor: '0', etiqueta: 'apps que instalar' },
+			{ valor: '3s', etiqueta: 'del toque a la reseña' },
+			{ valor: '1', etiqueta: 'toque, nada de escribir' },
+			{ valor: 'NFC', etiqueta: 'compatible con cualquier móvil moderno' },
+		]}
+	/>
+	<Contacto titulo="Pide tu tarjeta de reseñas" whatsappHref={whatsappHref} />
+</ChasisLayout>
