@@ -1,39 +1,75 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import WhatsAppCTA from '../components/WhatsAppCTA.astro';
-import NfcMockup from '../components/NfcMockup.astro';
-import ComoFunciona from '../components/ComoFunciona.astro';
-import StatsGrid from '../components/StatsGrid.astro';
+import Pulso from '../components/landing/Pulso.astro';
+import Nav from '../components/landing/Nav.astro';
+import Hero from '../components/landing/Hero.astro';
+import ProductoBlock from '../components/landing/ProductoBlock.astro';
+import QuienesSomos from '../components/landing/QuienesSomos.astro';
+import PortafolioPreview from '../components/landing/PortafolioPreview.astro';
+import Contacto from '../components/landing/Contacto.astro';
 ---
 
-<Layout title="Tarjetas NFC para reseñas de Google">
-	<Header />
-	<main class="mx-auto max-w-5xl px-6">
-		<section class="py-20 text-center sm:py-28">
-			<p class="text-sm tracking-widest text-amber-400 uppercase">Reseñas de Google, sin fricción</p>
-			<h1 class="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-				Acerca el móvil, deja la reseña.<br class="hidden sm:block" /> Así de simple.
-			</h1>
-			<p class="mx-auto mt-6 max-w-2xl text-lg text-zinc-400">
-				Tarjetas NFC que llevan a tus clientes directo a tu ficha de Google, en tres segundos, sin buscar
-				y sin escribir nada.
-			</p>
-			<div class="mt-10 flex items-center justify-center gap-6">
-				<WhatsAppCTA texto="Pide tu tarjeta" />
-				<a href="/portafolio" class="text-sm font-medium text-zinc-300 transition-colors hover:text-white">
-					Ver ejemplos por sector →
-				</a>
-			</div>
-		</section>
+<Layout title="Tarjetas NFC para negocios locales">
+	<Pulso />
+	<Nav />
+	<main>
+		<Hero />
 
-		<section class="pb-16 sm:pb-20">
-			<NfcMockup color="#f59e0b" negocio="tu negocio" />
-		</section>
+		<ProductoBlock
+			id="producto-google"
+			numero="Producto 1 · Reseñas de Google"
+			titulo="Reseñas de Google, sin fricción"
+			descripcion="Tu cliente acerca el móvil a la tarjeta y aterriza directo en la ventana de dejar una reseña en tu ficha de Google. Sin apps, sin buscar el nombre del negocio, sin escribir nada a mano."
+			paraQuien="Pensado para negocios con pocas reseñas que necesitan reputación online rápido."
+			accent="amber"
+			accentHex="#f59e0b"
+			mockupTipo="resena"
+			mockupNegocio="tu negocio"
+			ctaTexto="Pide tu tarjeta de reseñas"
+			ctaMensaje="Hola, quiero tarjetas NFC para reseñas de Google"
+			conStats={true}
+			pasos={[
+				{ titulo: 'Acerca la tarjeta', descripcion: 'Un toque del móvil de tu cliente sobre la tarjeta NFC.' },
+				{
+					titulo: 'Se abre tu ficha de Google',
+					descripcion: 'Directo a dejar la reseña, sin apps ni buscar el nombre del negocio.',
+				},
+				{
+					titulo: 'Reseña publicada',
+					descripcion: 'En menos de 10 segundos, antes de que se levante de la mesa.',
+				},
+			]}
+		/>
 
-		<ComoFunciona />
-		<StatsGrid />
+		<ProductoBlock
+			id="producto-personal"
+			numero="Producto 2 · Tarjetas personales"
+			titulo="Tu contacto, en un toque"
+			descripcion="Una tarjeta NFC de presentación digital para profesionales: un toque y tu cliente guarda tu teléfono, email, redes o web, sin repartir tarjetas de papel."
+			paraQuien="Para autónomos, comerciales y equipos que quieren dar una buena primera impresión."
+			accent="sky"
+			accentHex="#38bdf8"
+			mockupTipo="contacto"
+			mockupNegocio="tu perfil"
+			ctaTexto="Pide tu tarjeta personal"
+			ctaMensaje="Hola, quiero una tarjeta NFC personal"
+			pasos={[
+				{ titulo: 'Acerca la tarjeta', descripcion: 'Un toque del móvil de la otra persona sobre tu tarjeta.' },
+				{
+					titulo: 'Se abre tu perfil',
+					descripcion: 'Tu landing personal se carga al instante, sin apps ni códigos QR.',
+				},
+				{
+					titulo: 'Guarda tu contacto',
+					descripcion: 'Con un botón, tus datos quedan guardados en su móvil para siempre.',
+				},
+			]}
+		/>
+
+		<QuienesSomos />
+		<PortafolioPreview />
+		<Contacto />
 	</main>
 	<Footer />
 </Layout>
