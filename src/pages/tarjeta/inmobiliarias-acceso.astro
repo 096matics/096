@@ -1,0 +1,373 @@
+---
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Nuria Salas — Acceso · 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Roboto+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--bg: #1c1f22;
+				--card: #25292d;
+				--card-2: #2c3136;
+				--lime: #c6f135;
+				--ink: #f2f3f0;
+				--ink-dim: rgba(242, 243, 240, 0.55);
+				--line: rgba(242, 243, 240, 0.14);
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: var(--bg);
+			}
+			body {
+				height: 100dvh;
+				font-family: 'Roboto Mono', monospace;
+				color: var(--ink);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 30px 18px;
+				background:
+					radial-gradient(circle at 50% 0%, rgba(198, 241, 53, 0.06), transparent 55%),
+					var(--bg);
+			}
+			.lanyard {
+				width: 100%;
+				max-width: 400px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.strap {
+				width: 34px;
+				height: 46px;
+				background: repeating-linear-gradient(45deg, #34383c 0 6px, #2a2e32 6px 12px);
+				border-radius: 4px 4px 0 0;
+				margin-bottom: -8px;
+				z-index: 0;
+			}
+			.clip {
+				width: 20px;
+				height: 14px;
+				background: #8a8f94;
+				border-radius: 3px;
+				margin-bottom: -6px;
+				z-index: 1;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+			}
+			.badge {
+				position: relative;
+				width: 100%;
+				background: var(--card);
+				border: 1px solid var(--line);
+				border-radius: 16px;
+				padding: 0 0 20px;
+				z-index: 2;
+				box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.7);
+			}
+			.punch {
+				width: 34px;
+				height: 9px;
+				background: var(--bg);
+				border-radius: 999px;
+				margin: 14px auto 16px;
+			}
+			.top-row {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 0 20px;
+				margin-bottom: 16px;
+			}
+			.brand-tag {
+				font-size: 10px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: var(--ink-dim);
+			}
+			.brand-tag b {
+				color: var(--lime);
+			}
+			.access-pill {
+				font-size: 9px;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: var(--lime);
+				border: 1px solid rgba(198, 241, 53, 0.4);
+				padding: 3px 9px;
+				border-radius: 999px;
+				display: flex;
+				align-items: center;
+				gap: 5px;
+			}
+			.access-pill .dot {
+				width: 5px;
+				height: 5px;
+				border-radius: 50%;
+				background: var(--lime);
+				animation: blink 1.8s ease-in-out infinite;
+			}
+			@keyframes blink {
+				0%,
+				100% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.3;
+				}
+			}
+			.photo-row {
+				display: flex;
+				gap: 14px;
+				padding: 0 20px;
+				align-items: center;
+				margin-bottom: 16px;
+			}
+			.photo {
+				width: 76px;
+				height: 76px;
+				border-radius: 12px;
+				background: linear-gradient(150deg, #3a3f44, #24282c);
+				border: 1px solid var(--line);
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: 'Barlow Condensed', sans-serif;
+				font-weight: 600;
+				font-size: 26px;
+				color: var(--lime);
+			}
+			.chip {
+				width: 24px;
+				height: 18px;
+				border-radius: 3px;
+				background: linear-gradient(150deg, #d8c88a, #a9975a);
+				position: relative;
+				margin-bottom: 7px;
+			}
+			.chip::before,
+			.chip::after {
+				content: '';
+				position: absolute;
+				left: 3px;
+				right: 3px;
+				height: 1px;
+				background: rgba(0, 0, 0, 0.35);
+			}
+			.chip::before {
+				top: 5px;
+			}
+			.chip::after {
+				top: 9px;
+			}
+			.id-text .name {
+				font-family: 'Barlow Condensed', sans-serif;
+				font-weight: 700;
+				font-size: 26px;
+				letter-spacing: 0.01em;
+				text-transform: uppercase;
+				line-height: 1.05;
+				margin: 0 0 3px;
+			}
+			.id-text .role {
+				font-size: 12.5px;
+				color: var(--ink-dim);
+				margin: 0;
+			}
+			.field-grid {
+				padding: 0 20px;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 10px 16px;
+				margin-bottom: 18px;
+			}
+			.field {
+				border-top: 1px solid var(--line);
+				padding-top: 7px;
+			}
+			.field label {
+				display: block;
+				font-size: 9.5px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				color: var(--ink-dim);
+				margin-bottom: 3px;
+			}
+			.field span {
+				font-size: 13.5px;
+				color: var(--ink);
+			}
+			.divider-full {
+				border: none;
+				border-top: 1px dashed var(--line);
+				margin: 0 0 16px;
+			}
+			.contact-row {
+				display: flex;
+				gap: 8px;
+				padding: 0 20px;
+				margin-bottom: 14px;
+			}
+			.contact-btn {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 6px;
+				padding: 12px 4px;
+				background: var(--card-2);
+				border: 1px solid var(--line);
+				border-radius: 10px;
+				text-decoration: none;
+				color: var(--ink);
+				transition: border-color 0.15s ease;
+			}
+			.contact-btn:hover {
+				border-color: var(--lime);
+			}
+			.contact-btn svg {
+				width: 18px;
+				height: 18px;
+				color: var(--lime);
+			}
+			.contact-btn span {
+				font-size: 9px;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				color: var(--ink-dim);
+			}
+			.cta {
+				display: block;
+				margin: 0 20px;
+				text-align: center;
+				padding: 15px;
+				background: var(--lime);
+				color: #1c1f22;
+				text-decoration: none;
+				font-family: 'Barlow Condensed', sans-serif;
+				font-weight: 700;
+				font-size: 15.5px;
+				letter-spacing: 0.03em;
+				text-transform: uppercase;
+				border-radius: 10px;
+				margin-bottom: 10px;
+			}
+			.cta:hover {
+				filter: brightness(1.08);
+			}
+			.barcode {
+				display: flex;
+				align-items: flex-end;
+				gap: 2px;
+				height: 26px;
+				padding: 0 20px;
+				margin-bottom: 6px;
+			}
+			.barcode span {
+				display: block;
+				width: 2px;
+				background: var(--ink-dim);
+			}
+			.serial {
+				padding: 0 20px;
+				font-size: 9px;
+				letter-spacing: 0.12em;
+				color: var(--ink-dim);
+				display: flex;
+				justify-content: space-between;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="lanyard">
+			<div class="strap"></div>
+			<div class="clip"></div>
+
+			<div class="badge">
+				<div class="punch"></div>
+
+				<div class="top-row">
+					<span class="brand-tag"><b>096</b>matics · Acceso</span>
+					<span class="access-pill"><span class="dot"></span>Válido</span>
+				</div>
+
+				<div class="photo-row">
+					<div class="photo">NS</div>
+					<div class="id-text">
+						<div class="chip"></div>
+						<p class="name">Nuria Salas</p>
+						<p class="role">Agente inmobiliaria</p>
+					</div>
+				</div>
+
+				<div class="field-grid">
+					<div class="field"><label>Empresa</label><span>Costa Norte Propiedades</span></div>
+					<div class="field"><label>Zona</label><span>Valencia · Costa</span></div>
+					<div class="field"><label>Especialidad</label><span>Pisos, chalets, obra nueva</span></div>
+					<div class="field"><label>Idiomas</label><span>ES · EN · FR</span></div>
+				</div>
+
+				<hr class="divider-full" />
+
+				<div class="contact-row">
+					<a class="contact-btn" href="tel:+34727700065">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+							></path></svg
+						>
+						<span>Llamar</span>
+					</a>
+					<a class="contact-btn" href="https://wa.me/34727700065" target="_blank">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+							></path></svg
+						>
+						<span>WhatsApp</span>
+					</a>
+					<a class="contact-btn" href="mailto:contacto@096matics.com">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
+						>
+						<span>Email</span>
+					</a>
+				</div>
+
+				<a class="cta" href="https://wa.me/34727700065?text=Hola%2C%20quiero%20ver%20las%20propiedades%20disponibles"
+					>Acceder a propiedades</a
+				>
+
+				<div class="barcode">
+					<span style="height:100%;width:2px;"></span><span style="height:60%;"></span><span
+						style="height:90%;"></span
+					><span style="height:40%;"></span><span style="height:100%;"></span><span style="height:70%;"
+					></span><span style="height:50%;"></span><span style="height:100%;"></span><span style="height:30%;"
+					></span><span style="height:80%;"></span><span style="height:60%;"></span><span style="height:100%;"
+					></span><span style="height:45%;"></span><span style="height:90%;"></span><span style="height:65%;"
+					></span><span style="height:100%;"></span><span style="height:35%;"></span><span style="height:75%;"
+					></span><span style="height:100%;"></span><span style="height:55%;"></span>
+				</div>
+				<div class="serial">
+					<span>ID · 096-NS-01</span>
+					<span>Vigencia · Indefinida</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

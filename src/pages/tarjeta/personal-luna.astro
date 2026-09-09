@@ -1,0 +1,213 @@
+---
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Luna Antonino Cano · 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: #0a0f0a;
+			}
+			body {
+				height: 100dvh;
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: #fff;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+				background: url('/tarjeta/personal-luna/fondo.jpg') no-repeat center center / cover;
+			}
+			.page {
+				position: relative;
+				z-index: 1;
+				width: 100%;
+				max-width: 430px;
+				padding: 0 18px;
+			}
+			.photo-card {
+				position: relative;
+				overflow: hidden;
+				border-radius: 18px;
+				aspect-ratio: 4 / 5;
+				background: url('/tarjeta/personal-luna/foto.jpg') no-repeat center 20% / cover;
+				box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.6);
+				border: 1px solid rgba(255, 255, 255, 0.15);
+			}
+			.photo-card::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(200deg, transparent 35%, rgba(10, 10, 8, 0.55) 65%, rgba(10, 10, 8, 0.8) 100%);
+			}
+			.photo-card::before {
+				content: '';
+				position: absolute;
+				top: -20%;
+				left: 55%;
+				width: 60px;
+				height: 180%;
+				background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+				transform: rotate(18deg);
+				z-index: 2;
+				pointer-events: none;
+			}
+			.card-text {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 3;
+				padding: 22px 20px 20px;
+			}
+			.role {
+				font-size: 11.5px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.8);
+				margin: 0 0 8px;
+			}
+			.name {
+				font-family: 'Poppins', sans-serif;
+				font-weight: 600;
+				font-size: 21px;
+				margin: 0 0 12px;
+			}
+			.quote {
+				font-size: 13px;
+				line-height: 1.55;
+				color: rgba(255, 255, 255, 0.88);
+				margin: 0;
+				font-style: italic;
+				max-width: 230px;
+			}
+			.icon-row {
+				display: flex;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 10px;
+				margin: 20px 0 16px;
+			}
+			.icon-btn {
+				width: 46px;
+				height: 46px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(60, 60, 60, 0.55);
+				border: 1px solid rgba(255, 255, 255, 0.18);
+				color: #fff;
+				text-decoration: none;
+				backdrop-filter: blur(6px);
+				-webkit-backdrop-filter: blur(6px);
+				transition:
+					background 0.15s ease,
+					transform 0.15s ease;
+			}
+			.icon-btn:hover {
+				background: rgba(85, 85, 85, 0.7);
+				transform: translateY(-2px);
+			}
+			.icon-btn svg {
+				width: 18px;
+				height: 18px;
+			}
+			.cta {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 10px;
+				padding: 15px;
+				border-radius: 999px;
+				background: rgba(60, 60, 60, 0.55);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				backdrop-filter: blur(6px);
+				-webkit-backdrop-filter: blur(6px);
+				color: #fff;
+				text-decoration: none;
+				font-size: 14.5px;
+				font-weight: 500;
+			}
+			.cta:hover {
+				background: rgba(85, 85, 85, 0.7);
+			}
+			.cta svg {
+				width: 16px;
+				height: 16px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<div class="photo-card">
+				<div class="card-text">
+					<p class="role">Integradora social</p>
+					<h1 class="name">Luna Antonino Cano</h1>
+					<p class="quote">
+						"No puedes arreglar la vida de nadie, caminas a su lado mientras va reconstruyendo. Con paciencia, con
+						cariño, y con la certeza de que nadie debería hacerlo solo."
+					</p>
+				</div>
+			</div>
+
+			<div class="icon-row">
+				<a class="icon-btn" href="https://instagram.com" target="_blank" aria-label="Instagram">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"
+						></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg
+					>
+				</a>
+				<a class="icon-btn" href="https://facebook.com" target="_blank" aria-label="Facebook">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg
+					>
+				</a>
+				<a class="icon-btn" href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"></path><rect
+							x="2"
+							y="9"
+							width="4"
+							height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg
+					>
+				</a>
+				<a class="icon-btn" href="tel:+34727700065" aria-label="Teléfono">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path
+							d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+						></path></svg
+					>
+				</a>
+				<a class="icon-btn" href="mailto:contacto@096matics.com" aria-label="Email">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
+					>
+				</a>
+			</div>
+
+			<a class="cta" href="mailto:contacto@096matics.com">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+					><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
+				>
+				Ponte en contacto
+			</a>
+		</div>
+	</body>
+</html>

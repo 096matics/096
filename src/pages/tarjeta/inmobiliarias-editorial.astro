@@ -1,0 +1,260 @@
+---
+const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, me interesa la plantilla de Inmobiliarias (Editorial)');
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Nuria Salas · 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--ink: #0c0c0b;
+				--paper: #f1eee6;
+				--accent: #2b6e4e;
+				--white: #ffffff;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: var(--ink);
+			}
+			body {
+				height: 100dvh;
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: var(--white);
+				display: flex;
+				flex-direction: column;
+			}
+			.photo {
+				position: relative;
+				flex: 1 1 56%;
+				background: linear-gradient(150deg, #c9c2ae, #a7a08d);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+			}
+			.photo-placeholder {
+				font-family: 'IBM Plex Sans', sans-serif;
+				font-size: 13px;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: rgba(12, 12, 11, 0.4);
+			}
+			.tag {
+				position: absolute;
+				top: 18px;
+				left: -8px;
+				background: var(--accent);
+				color: var(--white);
+				font-size: 11px;
+				font-weight: 600;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				padding: 7px 16px 7px 20px;
+				transform: rotate(-3deg);
+				box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.4);
+			}
+			.status {
+				position: absolute;
+				top: 20px;
+				right: 18px;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				background: rgba(12, 12, 11, 0.55);
+				backdrop-filter: blur(6px);
+				padding: 6px 12px;
+				border-radius: 999px;
+				font-size: 10px;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+			}
+			.status .dot {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: var(--accent);
+				animation: pulse 2s ease-in-out infinite;
+			}
+			@keyframes pulse {
+				0%,
+				100% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.4;
+				}
+			}
+			.panel {
+				flex: 1 1 44%;
+				background: var(--ink);
+				padding: 22px 22px 18px;
+				display: flex;
+				flex-direction: column;
+			}
+			.name {
+				font-family: 'Archivo Black', sans-serif;
+				font-size: 13.5vw;
+				line-height: 0.92;
+				text-transform: uppercase;
+				margin: 0 0 10px;
+				letter-spacing: -0.01em;
+				max-width: 100%;
+			}
+			.name .line2 {
+				color: var(--accent);
+			}
+			.role-line {
+				font-size: 13px;
+				color: rgba(255, 255, 255, 0.6);
+				margin: 0 0 16px;
+			}
+			.role-line b {
+				color: var(--white);
+				font-weight: 600;
+			}
+			.spec-strip {
+				display: flex;
+				border-top: 1px solid rgba(255, 255, 255, 0.16);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+				margin-bottom: 16px;
+			}
+			.spec {
+				flex: 1;
+				text-align: center;
+				padding: 10px 4px;
+				border-right: 1px solid rgba(255, 255, 255, 0.16);
+			}
+			.spec:last-child {
+				border-right: none;
+			}
+			.spec b {
+				display: block;
+				font-family: 'Archivo Black', sans-serif;
+				font-size: 16px;
+				color: var(--accent);
+			}
+			.spec span {
+				font-size: 8.5px;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.5);
+			}
+			.cta {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				padding: 14px;
+				background: var(--accent);
+				color: var(--white);
+				text-decoration: none;
+				font-weight: 600;
+				font-size: 13.5px;
+				letter-spacing: 0.02em;
+				text-transform: uppercase;
+				margin-bottom: 12px;
+			}
+			.cta:hover {
+				background: #245d40;
+			}
+			.mini-row {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.mini-links {
+				display: flex;
+				gap: 16px;
+			}
+			.mini-links a {
+				color: rgba(255, 255, 255, 0.65);
+				text-decoration: none;
+				font-size: 11px;
+				display: flex;
+				align-items: center;
+				gap: 5px;
+			}
+			.mini-links a:hover {
+				color: var(--white);
+			}
+			.mini-links svg {
+				width: 14px;
+				height: 14px;
+			}
+			.save-link {
+				color: rgba(255, 255, 255, 0.4);
+				text-decoration: underline;
+				font-size: 10.5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="photo">
+			<div class="photo-placeholder">Foto del agente</div>
+			<span class="tag">Agente inmobiliaria</span>
+			<div class="status"><span class="dot"></span>Disponible</div>
+		</div>
+
+		<div class="panel">
+			<h1 class="name">Nuria<br /><span class="line2">Salas</span></h1>
+			<p class="role-line"><b>Costa Norte Propiedades</b> · Valencia</p>
+
+			<div class="spec-strip">
+				<div class="spec"><b>8</b><span>Años exp.</span></div>
+				<div class="spec"><b>120+</b><span>Cierres</span></div>
+				<div class="spec"><b>5.0</b><span>Valoración</span></div>
+			</div>
+
+			<a class="cta" href={whatsapp} target="_blank">Ver propiedades disponibles</a>
+
+			<div class="mini-row">
+				<div class="mini-links">
+					<a href="tel:+34727700065">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+							></path></svg
+						>
+						Llamar
+					</a>
+					<a href="https://wa.me/34727700065" target="_blank">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+							></path></svg
+						>
+						WhatsApp
+					</a>
+					<a href="mailto:contacto@096matics.com">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
+						>
+						Email
+					</a>
+				</div>
+			</div>
+
+			<a
+				class="save-link"
+				download="nuria-salas.vcf"
+				href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3ASalas%3BNuria%3B%3B%3B%0AFN%3ANuria%20Salas%0AORG%3ACosta%20Norte%20Propiedades%0ATITLE%3AAgente%20inmobiliaria%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
+				style="margin-top:10px;">↓ Guardar contacto</a
+			>
+		</div>
+	</body>
+</html>

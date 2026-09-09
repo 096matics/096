@@ -891,6 +891,47 @@ body:has(.chasis-root) {
 	color: var(--ink-dim);
 	margin: 0;
 }
+.slide-cta {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	gap: 14px;
+	padding: 40px 30px;
+	background: radial-gradient(ellipse 500px 300px at 50% 0%, var(--accent-dim), transparent 65%);
+}
+.slide-cta-icon {
+	width: 56px;
+	height: 56px;
+	border-radius: 16px;
+	background: linear-gradient(145deg, var(--accent-dim), transparent);
+	border: 1px solid var(--accent-dim);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+.slide-cta-icon svg {
+	width: 26px;
+	height: 26px;
+	color: var(--accent);
+}
+.slide-cta h2 {
+	font-family: 'Chakra Petch', sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	margin: 0;
+}
+.slide-cta p {
+	font-size: 13px;
+	color: var(--ink-dim);
+	margin: 0;
+	max-width: 280px;
+	line-height: 1.55;
+}
 .tap-zone {
 	position: absolute;
 	top: 0;

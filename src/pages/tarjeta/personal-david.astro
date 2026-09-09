@@ -1,0 +1,160 @@
+---
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>David Ferrer Herraiz · 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: #0a0f0a;
+			}
+			body {
+				height: 100dvh;
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: #fff;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+				background: url('/tarjeta/personal-david/fondo.jpg') no-repeat center center / cover;
+			}
+			.page {
+				position: relative;
+				z-index: 1;
+				width: 100%;
+				max-width: 430px;
+				padding: 0 18px;
+			}
+			.photo-card {
+				position: relative;
+				overflow: hidden;
+				border-radius: 18px;
+				aspect-ratio: 4 / 5;
+				background: url('/tarjeta/personal-david/foto.jpg') no-repeat center 15% / cover;
+				box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.6);
+				border: 1px solid rgba(255, 255, 255, 0.15);
+			}
+			.photo-card::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(200deg, transparent 30%, rgba(10, 10, 8, 0.5) 60%, rgba(10, 10, 8, 0.82) 100%);
+			}
+			.photo-card::before {
+				content: '';
+				position: absolute;
+				top: -20%;
+				left: 8%;
+				width: 55px;
+				height: 180%;
+				background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+				transform: rotate(-16deg);
+				z-index: 2;
+				pointer-events: none;
+			}
+			.card-text {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 3;
+				padding: 22px 20px 20px;
+				display: flex;
+				align-items: flex-end;
+				justify-content: space-between;
+				gap: 14px;
+			}
+			.name {
+				font-size: 11.5px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.8);
+				margin: 0 0 8px;
+			}
+			.role {
+				font-family: 'Poppins', sans-serif;
+				font-weight: 600;
+				font-size: 22px;
+				margin: 0;
+			}
+			.icon-row {
+				display: flex;
+				gap: 10px;
+				flex-shrink: 0;
+			}
+			.icon-btn {
+				width: 44px;
+				height: 44px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(60, 60, 60, 0.55);
+				border: 1px solid rgba(255, 255, 255, 0.18);
+				color: #fff;
+				text-decoration: none;
+				backdrop-filter: blur(6px);
+				-webkit-backdrop-filter: blur(6px);
+				transition:
+					background 0.15s ease,
+					transform 0.15s ease;
+			}
+			.icon-btn:hover {
+				background: rgba(85, 85, 85, 0.7);
+				transform: translateY(-2px);
+			}
+			.icon-btn svg {
+				width: 17px;
+				height: 17px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<div class="photo-card">
+				<div class="card-text">
+					<div>
+						<p class="name">David Ferrer Herraiz</p>
+						<h1 class="role">Freelancer</h1>
+					</div>
+					<div class="icon-row">
+						<a class="icon-btn" href="https://wa.link/bxc4ew" target="_blank" aria-label="WhatsApp">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+								><path
+									d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+								></path></svg
+							>
+						</a>
+						<a class="icon-btn" href="https://www.instagram.com/_dark__cheto_/" target="_blank" aria-label="Instagram">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+								><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"
+								></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg
+							>
+						</a>
+						<a class="icon-btn" href="mailto:david@096matics.com" aria-label="Email">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+								><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
+							>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

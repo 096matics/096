@@ -1,0 +1,271 @@
+---
+const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, me interesa la plantilla "Notificación de bloqueo" para reseñas de Google');
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Café Marina · 096matics</title>
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<style>
+			:root {
+				--ink: #fff;
+				--ink-dim: rgba(255, 255, 255, 0.72);
+				--ink-faint: rgba(255, 255, 255, 0.45);
+				--glass: rgba(255, 255, 255, 0.14);
+				--glass-border: rgba(255, 255, 255, 0.22);
+				--gold: #f0b94d;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+			}
+			body {
+				height: 100dvh;
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: var(--ink);
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				position: relative;
+				background:
+					radial-gradient(ellipse 700px 500px at 25% 0%, rgba(120, 90, 220, 0.55), transparent 60%),
+					radial-gradient(ellipse 600px 500px at 90% 25%, rgba(90, 150, 230, 0.45), transparent 55%),
+					radial-gradient(ellipse 700px 600px at 50% 100%, rgba(230, 140, 90, 0.35), transparent 55%),
+					linear-gradient(180deg, #14152b 0%, #1b1430 55%, #241835 100%);
+			}
+			body::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 5px);
+				pointer-events: none;
+			}
+			.status-bar {
+				width: 100%;
+				max-width: 400px;
+				display: flex;
+				justify-content: space-between;
+				padding: 16px 22px 0;
+				font-size: 13px;
+				font-weight: 600;
+				color: var(--ink);
+			}
+			.status-icons {
+				display: flex;
+				gap: 5px;
+				align-items: center;
+			}
+			.status-icons svg {
+				width: 15px;
+				height: 15px;
+			}
+			.clock {
+				text-align: center;
+				margin: 26px 0 8px;
+			}
+			.clock .time {
+				font-size: 64px;
+				font-weight: 600;
+				line-height: 1;
+				letter-spacing: -0.02em;
+			}
+			.clock .date {
+				font-size: 14px;
+				color: var(--ink-dim);
+				margin-top: 6px;
+				text-transform: capitalize;
+			}
+			.notifs {
+				width: 100%;
+				max-width: 360px;
+				padding: 0 18px;
+				margin-top: 22px;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+			.notif {
+				display: block;
+				text-decoration: none;
+				color: var(--ink);
+				background: var(--glass);
+				backdrop-filter: blur(18px) saturate(140%);
+				-webkit-backdrop-filter: blur(18px) saturate(140%);
+				border: 1px solid var(--glass-border);
+				border-radius: 18px;
+				padding: 13px 14px;
+				opacity: 0;
+				transform: translateY(-10px) scale(0.97);
+				animation: notifDrop 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+			}
+			.notif.primary {
+				animation-delay: 0.3s;
+			}
+			.notif.secondary {
+				animation-delay: 0.55s;
+				padding: 11px 14px;
+			}
+			@keyframes notifDrop {
+				to {
+					opacity: 1;
+					transform: translateY(0) scale(1);
+				}
+			}
+			.notif-top {
+				display: flex;
+				align-items: center;
+				gap: 9px;
+				margin-bottom: 7px;
+			}
+			.app-icon {
+				width: 26px;
+				height: 26px;
+				border-radius: 7px;
+				background: linear-gradient(150deg, #c9ae7c, #a88c56);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 7px;
+				color: rgba(255, 255, 255, 0.7);
+				flex-shrink: 0;
+			}
+			.app-name {
+				font-size: 12px;
+				font-weight: 600;
+				color: var(--ink-dim);
+				flex: 1;
+			}
+			.notif-time {
+				font-size: 11px;
+				color: var(--ink-faint);
+			}
+			.notif-title {
+				font-size: 14px;
+				font-weight: 600;
+				margin: 0 0 3px;
+			}
+			.notif-body {
+				font-size: 12.5px;
+				color: var(--ink-dim);
+				margin: 0;
+				line-height: 1.4;
+			}
+			.stars-inline {
+				color: var(--gold);
+				letter-spacing: 1px;
+			}
+			.swipe-hint {
+				position: absolute;
+				bottom: 22px;
+				left: 50%;
+				transform: translateX(-50%);
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 4px;
+				opacity: 0;
+				animation: fadeInHint 0.6s ease forwards;
+				animation-delay: 1.1s;
+			}
+			.swipe-hint span {
+				font-size: 10.5px;
+				letter-spacing: 0.06em;
+				color: var(--ink-faint);
+			}
+			.chevrons {
+				display: flex;
+				flex-direction: column;
+				gap: -2px;
+			}
+			.chevrons svg {
+				width: 16px;
+				height: 16px;
+				color: var(--ink-faint);
+				margin-top: -4px;
+				animation: chevronBounce 1.6s ease-in-out infinite;
+			}
+			.chevrons svg:nth-child(2) {
+				animation-delay: 0.15s;
+			}
+			@keyframes chevronBounce {
+				0%,
+				100% {
+					opacity: 0.3;
+					transform: translateY(0);
+				}
+				50% {
+					opacity: 1;
+					transform: translateY(3px);
+				}
+			}
+			@keyframes fadeInHint {
+				to {
+					opacity: 1;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="status-bar">
+			<span>Café Marina</span>
+			<div class="status-icons">
+				<svg viewBox="0 0 24 24" fill="currentColor"
+					><path d="M2 22h20L12 2 2 22z" opacity="0"></path><rect x="1" y="16" width="3" height="6" rx="0.5"
+					></rect><rect x="6" y="12" width="3" height="10" rx="0.5"></rect><rect x="11" y="8" width="3" height="14" rx="0.5"
+					></rect><rect x="16" y="4" width="3" height="18" rx="0.5"></rect></svg
+				>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+					><rect x="1" y="7" width="19" height="10" rx="2.5"></rect><line x1="23" y1="10" x2="23" y2="14"></line></svg
+				>
+			</div>
+		</div>
+
+		<div class="clock">
+			<div class="time">14:32</div>
+			<div class="date">Jueves, 4 de septiembre</div>
+		</div>
+
+		<div class="notifs">
+			<a class="notif primary" href={whatsapp} target="_blank">
+				<div class="notif-top">
+					<div class="app-icon">Logo</div>
+					<span class="app-name">Google</span>
+					<span class="notif-time">ahora</span>
+				</div>
+				<p class="notif-title">¿Qué tal en Café Marina?</p>
+				<p class="notif-body">Cuéntaselo a otros en 20 segundos <span class="stars-inline">★★★★★</span></p>
+			</a>
+
+			<a class="notif secondary" href="https://wa.me/34727700065" target="_blank">
+				<div class="notif-top">
+					<div class="app-icon" style="background:linear-gradient(150deg,#3FAE5A,#2E8945);">💬</div>
+					<span class="app-name">WhatsApp</span>
+					<span class="notif-time">Café Marina</span>
+				</div>
+				<p class="notif-body">L–S · 8:00–20:00 · Escríbenos cuando quieras →</p>
+			</a>
+		</div>
+
+		<div class="swipe-hint">
+			<div class="chevrons">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+					><polyline points="6 15 12 9 18 15"></polyline></svg
+				>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+					><polyline points="6 15 12 9 18 15"></polyline></svg
+				>
+			</div>
+			<span>Toca el aviso para abrir</span>
+		</div>
+	</body>
+</html>

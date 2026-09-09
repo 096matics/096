@@ -73,6 +73,16 @@ const sectorGrupos = agruparPorSector(sectorItems);
 												<span class={`rounded-full border px-3 py-1 text-xs font-medium ${info.class}`}>
 													{info.label}
 												</span>
+												{item.data.ruta && (
+													<a
+														href={item.data.ruta}
+														target="_blank"
+														rel="noopener noreferrer"
+														class="text-xs font-medium text-indigo-400 transition-colors hover:text-white"
+													>
+														Ver página →
+													</a>
+												)}
 												<a
 													href={`${REPO_EDIT_BASE}/${item.id}.md`}
 													target="_blank"
@@ -105,6 +115,16 @@ const sectorGrupos = agruparPorSector(sectorItems);
 									<span class={`rounded-full border px-3 py-1 text-xs font-medium ${info.class}`}>
 										{info.label}
 									</span>
+									{item.data.ruta && (
+										<a
+											href={item.data.ruta}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="text-xs font-medium text-indigo-400 transition-colors hover:text-white"
+										>
+											Ver página →
+										</a>
+									)}
 									<a
 										href={`${REPO_EDIT_BASE}/${item.id}.md`}
 										target="_blank"
@@ -137,6 +157,16 @@ const sectorGrupos = agruparPorSector(sectorItems);
 									<span class={`rounded-full border px-3 py-1 text-xs font-medium ${info.class}`}>
 										{info.label}
 									</span>
+									{item.data.ruta && (
+										<a
+											href={item.data.ruta}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="text-xs font-medium text-indigo-400 transition-colors hover:text-white"
+										>
+											Ver página →
+										</a>
+									)}
 									<a
 										href={`${REPO_EDIT_BASE}/${item.id}.md`}
 										target="_blank"

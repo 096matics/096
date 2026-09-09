@@ -1,0 +1,362 @@
+---
+const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, me interesa la plantilla "Ficha universal" para reseñas de Google');
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Café Marina · 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--cream: #faf3e7;
+				--ink: #2b211a;
+				--ink-dim: rgba(43, 33, 26, 0.62);
+				--ink-faint: rgba(43, 33, 26, 0.4);
+				--gold: #e8a93d;
+				--gold-deep: #c1811c;
+				--line: rgba(43, 33, 26, 0.12);
+				--whatsapp: #3fae5a;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: var(--cream);
+			}
+			body {
+				height: 100dvh;
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: var(--ink);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 16px;
+			}
+			.page {
+				width: 100%;
+				max-width: 400px;
+				background: #fff;
+				border-radius: 22px;
+				overflow: hidden;
+				box-shadow: 0 30px 60px -25px rgba(43, 33, 26, 0.35);
+			}
+			.hero {
+				position: relative;
+				aspect-ratio: 16 / 10;
+				background: linear-gradient(150deg, #e7d4b0, #c9ae7c);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 12px;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				color: rgba(43, 33, 26, 0.4);
+			}
+			.category-tag {
+				position: absolute;
+				top: 14px;
+				left: 14px;
+				background: rgba(43, 33, 26, 0.72);
+				color: #fff;
+				font-size: 10.5px;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				padding: 6px 12px;
+				border-radius: 999px;
+				backdrop-filter: blur(4px);
+			}
+			.body {
+				padding: 22px 22px 20px;
+				text-align: center;
+			}
+			.name {
+				font-family: 'Fraunces', serif;
+				font-size: 26px;
+				font-weight: 600;
+				margin: 0 0 4px;
+			}
+			.subtitle {
+				font-size: 12.5px;
+				color: var(--ink-dim);
+				margin: 0 0 16px;
+			}
+			.rating-row {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 6px;
+				margin-bottom: 20px;
+			}
+			.stars {
+				display: flex;
+				gap: 3px;
+			}
+			.stars svg {
+				width: 26px;
+				height: 26px;
+				opacity: 0;
+				transform: scale(0.4) rotate(-15deg);
+				animation: starPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+			}
+			.stars svg:nth-child(1) {
+				animation-delay: 0.05s;
+			}
+			.stars svg:nth-child(2) {
+				animation-delay: 0.18s;
+			}
+			.stars svg:nth-child(3) {
+				animation-delay: 0.31s;
+			}
+			.stars svg:nth-child(4) {
+				animation-delay: 0.44s;
+			}
+			.stars svg:nth-child(5) {
+				animation-delay: 0.57s;
+			}
+			@keyframes starPop {
+				0% {
+					opacity: 0;
+					transform: scale(0.4) rotate(-15deg);
+				}
+				100% {
+					opacity: 1;
+					transform: scale(1) rotate(0);
+				}
+			}
+			.rating-text {
+				font-size: 12.5px;
+				color: var(--ink-dim);
+				opacity: 0;
+				animation: fadeIn 0.5s ease forwards;
+				animation-delay: 0.75s;
+			}
+			.rating-text b {
+				color: var(--ink);
+				font-weight: 700;
+			}
+			@keyframes fadeIn {
+				to {
+					opacity: 1;
+				}
+			}
+			.cta-review {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 9px;
+				padding: 16px;
+				border-radius: 14px;
+				background: linear-gradient(120deg, var(--gold), var(--gold-deep));
+				color: #2b1d08;
+				text-decoration: none;
+				font-weight: 700;
+				font-size: 15px;
+				box-shadow: 0 12px 24px -10px rgba(200, 140, 30, 0.55);
+				margin-bottom: 8px;
+				animation: ctaPulse 2.6s ease-in-out infinite;
+				animation-delay: 1s;
+			}
+			@keyframes ctaPulse {
+				0%,
+				100% {
+					box-shadow: 0 12px 24px -10px rgba(200, 140, 30, 0.55);
+				}
+				50% {
+					box-shadow: 0 14px 30px -8px rgba(200, 140, 30, 0.8);
+				}
+			}
+			.cta-review svg {
+				width: 19px;
+				height: 19px;
+			}
+			.cta-note {
+				font-size: 10.5px;
+				color: var(--ink-faint);
+				margin: 0 0 22px;
+			}
+			.divider {
+				height: 1px;
+				background: var(--line);
+				margin: 0 0 18px;
+			}
+			.info-list {
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+				text-align: left;
+				margin-bottom: 20px;
+			}
+			.info-row {
+				display: flex;
+				gap: 10px;
+				align-items: flex-start;
+			}
+			.info-row svg {
+				width: 17px;
+				height: 17px;
+				flex-shrink: 0;
+				color: var(--gold-deep);
+				margin-top: 1px;
+			}
+			.info-row .label {
+				font-size: 9.5px;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: var(--ink-faint);
+				margin: 0 0 2px;
+			}
+			.info-row .value {
+				font-size: 13px;
+				color: var(--ink);
+				margin: 0;
+			}
+			.contact-row {
+				display: flex;
+				gap: 10px;
+			}
+			.btn {
+				flex: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 7px;
+				padding: 12px;
+				border-radius: 12px;
+				text-decoration: none;
+				font-size: 12.5px;
+				font-weight: 600;
+			}
+			.btn svg {
+				width: 16px;
+				height: 16px;
+			}
+			.btn.whatsapp {
+				background: var(--whatsapp);
+				color: #fff;
+			}
+			.btn.maps {
+				background: var(--cream);
+				color: var(--ink);
+				border: 1px solid var(--line);
+			}
+			.footer {
+				text-align: center;
+				margin-top: 18px;
+				font-size: 9px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				color: var(--ink-faint);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<div class="hero">
+				<span class="category-tag">Cafetería</span>
+				Foto del negocio
+			</div>
+
+			<div class="body">
+				<h1 class="name">Café Marina</h1>
+				<p class="subtitle">Sagunto, Valencia</p>
+
+				<div class="rating-row">
+					<div class="stars">
+						<svg viewBox="0 0 24 24" fill="var(--gold)"
+							><path
+								d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+							></path></svg
+						>
+						<svg viewBox="0 0 24 24" fill="var(--gold)"
+							><path
+								d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+							></path></svg
+						>
+						<svg viewBox="0 0 24 24" fill="var(--gold)"
+							><path
+								d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+							></path></svg
+						>
+						<svg viewBox="0 0 24 24" fill="var(--gold)"
+							><path
+								d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+							></path></svg
+						>
+						<svg viewBox="0 0 24 24" fill="var(--gold)"
+							><path
+								d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+							></path></svg
+						>
+					</div>
+					<p class="rating-text"><b>4.8</b> · 126 reseñas en Google</p>
+				</div>
+
+				<a class="cta-review" href={whatsapp} target="_blank">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path
+							d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+						></path></svg
+					>
+					Déjanos tu reseña en Google
+				</a>
+				<p class="cta-note">Te lleva directo a la ficha, tarda 20 segundos</p>
+
+				<div class="divider"></div>
+
+				<div class="info-list">
+					<div class="info-row">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg
+						>
+						<div>
+							<p class="label">Horario</p>
+							<p class="value">Lun–Sáb · 8:00–20:00</p>
+						</div>
+					</div>
+					<div class="info-row">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"
+							></circle></svg
+						>
+						<div>
+							<p class="label">Dirección</p>
+							<p class="value">Calle Mayor 12, Sagunto</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="contact-row">
+					<a class="btn whatsapp" href="https://wa.me/34727700065" target="_blank">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+							></path></svg
+						>
+						WhatsApp
+					</a>
+					<a class="btn maps" href={whatsapp} target="_blank">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"
+							></circle></svg
+						>
+						Cómo llegar
+					</a>
+				</div>
+
+				<p class="footer">096matics · Ficha digital</p>
+			</div>
+		</div>
+	</body>
+</html>

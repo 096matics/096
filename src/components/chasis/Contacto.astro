@@ -32,30 +32,35 @@ const personalSlides: Slide[] = personalItems.map((p) => ({
 	titulo: p.data.nombre,
 	descripcion: p.data.descripcion,
 	imagen: p.data.imagen,
-	href: WHATSAPP_BASE + encodeURIComponent(`Hola, me interesa una tarjeta como la de ${p.data.nombre}`),
-	ctaLabel: 'Quiero una así',
+	href: p.data.ruta ?? WHATSAPP_BASE + encodeURIComponent(`Hola, me interesa una tarjeta como la de ${p.data.nombre}`),
+	ctaLabel: p.data.ruta ? 'Abrir esta tarjeta real' : 'Quiero una así',
 }));
 
 const sectorSlides: Slide[] = sectorItems.map((p) => {
 	const sectorLabel = p.data.sector ?? p.data.nombre;
-	if (p.data.estado === 'proximamente' || !p.data.imagen) {
+	if (!p.data.imagen) {
 		return {
 			tipo: 'cta',
-			tag: 'Próximamente',
+			tag: p.data.ruta ? 'Recién creada' : 'Próximamente',
 			titulo: sectorLabel,
-			descripcion: `Aún no tenemos un ejemplo público de ${sectorLabel.toLowerCase()} — pero te la hacemos a medida.`,
-			href: WHATSAPP_BASE + encodeURIComponent(`Hola, me interesa una plantilla para ${sectorLabel}`),
-			ctaLabel: 'Hablar por WhatsApp',
+			descripcion: p.data.ruta
+				? `${p.data.descripcion} Aún sin captura, pero ya puedes abrirla.`
+				: `Aún no tenemos un ejemplo público de ${sectorLabel.toLowerCase()} — pero te la hacemos a medida.`,
+			href:
+				p.data.ruta ?? WHATSAPP_BASE + encodeURIComponent(`Hola, me interesa una plantilla para ${sectorLabel}`),
+			ctaLabel: p.data.ruta ? 'Abrir esta web real' : 'Hablar por WhatsApp',
 		};
 	}
 	return {
 		tipo: 'imagen',
-		tag: 'Ver ejemplo',
+		tag: p.data.ruta ? 'Ver ejemplo real' : 'Ver ejemplo',
 		titulo: `${sectorLabel} · ${p.data.nombre}`,
 		descripcion: p.data.descripcion,
 		imagen: p.data.imagen,
-		href: WHATSAPP_BASE + encodeURIComponent(`Hola, me interesa la plantilla "${p.data.nombre}" de ${sectorLabel}`),
-		ctaLabel: 'Quiero una así',
+		href:
+			p.data.ruta ??
+			WHATSAPP_BASE + encodeURIComponent(`Hola, me interesa la plantilla "${p.data.nombre}" de ${sectorLabel}`),
+		ctaLabel: p.data.ruta ? 'Abrir esta web real' : 'Quiero una así',
 	};
 });
 
@@ -123,7 +128,7 @@ let slideCursor = -1;
 					<div class="shelf">
 						{sectorItems.map((p) => {
 							slideCursor++;
-							const esPlaceholder = p.data.estado === 'proximamente' || !p.data.imagen;
+							const esPlaceholder = !p.data.imagen;
 							return (
 								<div class={`shelf-card${esPlaceholder ? ' is-placeholder' : ''}`} data-open-slide={slideCursor}>
 									<div class={`shelf-thumb${esPlaceholder ? ' placeholder' : ''}`}>
@@ -138,7 +143,7 @@ let slideCursor = -1;
 									</div>
 									<p>
 										{p.data.sector ?? p.data.nombre}
-										<span>{esPlaceholder ? 'Próximamente' : 'Ver ejemplo'}</span>
+										<span>{p.data.ruta ? 'Ver ejemplo' : esPlaceholder ? 'Próximamente' : 'Ver ejemplo'}</span>
 									</p>
 								</div>
 							);

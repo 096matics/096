@@ -1,0 +1,247 @@
+---
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Conductor profesional · 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--ink: #f3f5f8;
+				--ink-dim: rgba(243, 245, 248, 0.68);
+				--accent: #f0b94d;
+				--accent-dim: rgba(240, 185, 77, 0.3);
+				--available: #3fb56a;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: #0a0a0a;
+			}
+			body {
+				height: 100dvh;
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: var(--ink);
+				display: flex;
+				align-items: flex-end;
+				justify-content: center;
+				position: relative;
+				background: radial-gradient(ellipse at top, #26210f 0%, #0a0a0a 65%);
+			}
+			.scrim {
+				position: fixed;
+				inset: 0;
+				background: linear-gradient(180deg, rgba(10, 10, 10, 0.15) 0%, rgba(10, 10, 10, 0.55) 45%, rgba(10, 10, 10, 0.92) 100%);
+				pointer-events: none;
+			}
+			.page {
+				position: relative;
+				z-index: 1;
+				width: 100%;
+				max-width: 420px;
+				padding: 0 20px 26px;
+			}
+			.available-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				background: rgba(63, 181, 106, 0.16);
+				border: 1px solid rgba(63, 181, 106, 0.5);
+				color: var(--available);
+				font-size: 11px;
+				font-weight: 600;
+				letter-spacing: 0.03em;
+				padding: 5px 11px;
+				border-radius: 999px;
+				margin-bottom: 12px;
+			}
+			.available-badge .dot {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: var(--available);
+				animation: pulse 2s ease-in-out infinite;
+			}
+			@keyframes pulse {
+				0%,
+				100% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.4;
+				}
+			}
+			.name {
+				font-family: 'Chakra Petch', sans-serif;
+				font-size: 26px;
+				font-weight: 600;
+				margin: 0 0 3px;
+			}
+			.role {
+				font-size: 13px;
+				color: var(--ink-dim);
+				margin: 0 0 16px;
+			}
+			.stats-row {
+				display: flex;
+				gap: 10px;
+				margin-bottom: 16px;
+			}
+			.stat {
+				flex: 1;
+				background: rgba(255, 255, 255, 0.07);
+				border: 1px solid rgba(255, 255, 255, 0.14);
+				border-radius: 12px;
+				padding: 10px 8px;
+				text-align: center;
+			}
+			.stat b {
+				display: block;
+				font-family: 'Chakra Petch', sans-serif;
+				font-size: 17px;
+				color: var(--accent);
+			}
+			.stat span {
+				font-size: 9.5px;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+				color: var(--ink-dim);
+			}
+			.section-label {
+				font-size: 10px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: var(--accent);
+				margin: 0 0 8px;
+			}
+			.badges {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+				margin-bottom: 18px;
+			}
+			.badge {
+				font-size: 11px;
+				font-weight: 600;
+				color: var(--ink);
+				border: 1px solid var(--accent-dim);
+				background: rgba(240, 185, 77, 0.08);
+				padding: 5px 11px;
+				border-radius: 999px;
+			}
+			.quote {
+				font-size: 12.5px;
+				font-style: italic;
+				color: var(--ink-dim);
+				border-left: 2px solid var(--accent-dim);
+				padding-left: 10px;
+				margin: 0 0 20px;
+				line-height: 1.5;
+			}
+			.contact-row {
+				display: flex;
+				gap: 10px;
+			}
+			.btn {
+				flex: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 7px;
+				padding: 13px;
+				border-radius: 12px;
+				text-decoration: none;
+				font-weight: 600;
+				font-size: 13px;
+			}
+			.btn svg {
+				width: 16px;
+				height: 16px;
+			}
+			.btn.primary {
+				background: var(--accent);
+				color: #2a1d08;
+			}
+			.btn.secondary {
+				background: rgba(255, 255, 255, 0.1);
+				color: var(--ink);
+				border: 1px solid rgba(255, 255, 255, 0.18);
+			}
+			.save-link {
+				display: block;
+				text-align: center;
+				margin-top: 12px;
+				font-size: 11px;
+				color: var(--ink-dim);
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="scrim"></div>
+
+		<div class="page">
+			<span class="available-badge"><span class="dot"></span>Disponible para nueva incorporación</span>
+
+			<h1 class="name">[Nombre del conductor]</h1>
+			<p class="role">Conductor profesional · Rutas nacionales</p>
+
+			<div class="stats-row">
+				<div class="stat"><b>[XX]</b><span>Años exp.</span></div>
+				<div class="stat"><b>C+E</b><span>Carnet</span></div>
+				<div class="stat"><b>Nacional</b><span>Rutas</span></div>
+			</div>
+
+			<p class="section-label">Carnets y certificados</p>
+			<div class="badges">
+				<span class="badge">Carnet C+E</span>
+				<span class="badge">ADR</span>
+				<span class="badge">CAP vigente</span>
+				<span class="badge">Tacógrafo digital</span>
+			</div>
+
+			<p class="quote">
+				"[Frase personal del conductor — puntualidad, cuidado con la carga, experiencia en rutas largas...]"
+			</p>
+
+			<div class="contact-row">
+				<a class="btn primary" href="tel:+34727700065">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path
+							d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+						></path></svg
+					>
+					Llamar
+				</a>
+				<a class="btn secondary" href="https://wa.me/34727700065" target="_blank">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path
+							d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+						></path></svg
+					>
+					WhatsApp
+				</a>
+			</div>
+
+			<a
+				class="save-link"
+				download="conductor.vcf"
+				href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3ANombre%20del%20conductor%0ATITLE%3AConductor%20profesional%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
+				>↓ Guardar contacto</a
+			>
+		</div>
+	</body>
+</html>

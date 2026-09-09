@@ -1,0 +1,273 @@
+---
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Carlos Cantos Blasco · 096matics</title>
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<style>
+			:root {
+				--bg: #050505;
+				--ink: #f1f1ee;
+				--ink-dim: rgba(241, 241, 238, 0.55);
+				--ink-faint: rgba(241, 241, 238, 0.3);
+				--accent: #e8483a;
+				--line: rgba(255, 255, 255, 0.22);
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: var(--bg);
+			}
+			body {
+				height: 100dvh;
+				font-family: 'IBM Plex Mono', monospace;
+				color: var(--ink);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 26px 16px;
+				position: relative;
+				background:
+					linear-gradient(rgba(5, 5, 5, 0.82), rgba(5, 5, 5, 0.92)),
+					url('/tarjeta/personal-carlos/fondo.jpg') no-repeat center center / cover;
+			}
+			.frame {
+				position: relative;
+				width: 100%;
+				max-width: 380px;
+				border: 1px solid var(--line);
+				padding: 18px;
+				background: rgba(8, 8, 8, 0.55);
+				backdrop-filter: blur(6px);
+				-webkit-backdrop-filter: blur(6px);
+			}
+			.corner {
+				position: absolute;
+				width: 14px;
+				height: 14px;
+			}
+			.corner.tl {
+				top: -1px;
+				left: -1px;
+				border-top: 2px solid var(--ink);
+				border-left: 2px solid var(--ink);
+			}
+			.corner.tr {
+				top: -1px;
+				right: -1px;
+				border-top: 2px solid var(--ink);
+				border-right: 2px solid var(--ink);
+			}
+			.corner.bl {
+				bottom: -1px;
+				left: -1px;
+				border-bottom: 2px solid var(--ink);
+				border-left: 2px solid var(--ink);
+			}
+			.corner.br {
+				bottom: -1px;
+				right: -1px;
+				border-bottom: 2px solid var(--ink);
+				border-right: 2px solid var(--ink);
+			}
+			.readout {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 10px;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				color: var(--ink-faint);
+				margin-bottom: 14px;
+			}
+			.status {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.dot {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: var(--accent);
+				animation: pulseDot 2s ease-in-out infinite;
+			}
+			@keyframes pulseDot {
+				0%,
+				100% {
+					opacity: 1;
+					box-shadow: 0 0 0 0 rgba(232, 72, 58, 0.5);
+				}
+				50% {
+					opacity: 0.5;
+					box-shadow: 0 0 0 4px rgba(232, 72, 58, 0);
+				}
+			}
+			.portrait-box {
+				border: 1px solid var(--line);
+				padding: 5px;
+				margin-bottom: 14px;
+			}
+			.portrait {
+				aspect-ratio: 3 / 4;
+				width: 100%;
+				background: url('/tarjeta/personal-carlos/foto.jpg') no-repeat center top / cover;
+				filter: grayscale(0.15) contrast(1.05);
+				display: block;
+			}
+			.caption {
+				display: flex;
+				justify-content: space-between;
+				font-size: 9px;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: var(--ink-faint);
+				margin-top: 6px;
+				padding: 0 1px;
+			}
+			.id-block {
+				margin-bottom: 14px;
+			}
+			.id-row {
+				display: flex;
+				font-size: 12.5px;
+				line-height: 1.9;
+			}
+			.id-label {
+				width: 64px;
+				flex-shrink: 0;
+				color: var(--ink-faint);
+				letter-spacing: 0.05em;
+			}
+			.id-value {
+				font-weight: 600;
+				letter-spacing: 0.01em;
+			}
+			.id-value.accent {
+				color: var(--accent);
+			}
+			.divider {
+				border: none;
+				border-top: 1px dashed var(--line);
+				margin: 14px 0;
+			}
+			.contact-label {
+				font-size: 9.5px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: var(--ink-faint);
+				margin: 0 0 10px;
+			}
+			.contact-row {
+				display: flex;
+				gap: 8px;
+			}
+			.contact-btn {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 6px;
+				padding: 12px 6px 9px;
+				border: 1px solid var(--line);
+				text-decoration: none;
+				color: var(--ink);
+				transition:
+					border-color 0.15s ease,
+					background 0.15s ease;
+			}
+			.contact-btn:hover {
+				border-color: var(--accent);
+				background: rgba(232, 72, 58, 0.06);
+			}
+			.contact-btn svg {
+				width: 16px;
+				height: 16px;
+			}
+			.contact-btn span {
+				font-size: 8.5px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				color: var(--ink-faint);
+			}
+			.footer-tag {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 16px;
+				font-size: 8.5px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				color: var(--ink-faint);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="frame">
+			<div class="corner tl"></div>
+			<div class="corner tr"></div>
+			<div class="corner bl"></div>
+			<div class="corner br"></div>
+
+			<div class="readout">
+				<span>Perfil // 01</span>
+				<span class="status"><span class="dot"></span>Disponible</span>
+			</div>
+
+			<div class="portrait-box">
+				<div class="portrait"></div>
+				<div class="caption">
+					<span>Fmt: Retrato</span>
+					<span>Modo: Programador</span>
+				</div>
+			</div>
+
+			<div class="id-block">
+				<div class="id-row"><span class="id-label">Nombre</span><span class="id-value">Carlos Cantos Blasco</span></div>
+				<div class="id-row"><span class="id-label">Rol</span><span class="id-value accent">Programador</span></div>
+			</div>
+
+			<hr class="divider" />
+
+			<p class="contact-label">Contacto</p>
+			<div class="contact-row">
+				<a class="contact-btn" href="https://wa.link/0rnaff" target="_blank">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path
+							d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+						></path></svg
+					>
+					<span>WhatsApp</span>
+				</a>
+				<a class="contact-btn" href="https://www.instagram.com/carls096/" target="_blank">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"
+						></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg
+					>
+					<span>Instagram</span>
+				</a>
+				<a class="contact-btn" href="mailto:carlos@096matics.com">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
+					>
+					<span>Email</span>
+				</a>
+			</div>
+
+			<div class="footer-tag">
+				<span>Build // Personal</span>
+				<span>V.I · MMXXVI</span>
+			</div>
+		</div>
+	</body>
+</html>

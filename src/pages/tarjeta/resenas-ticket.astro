@@ -1,0 +1,333 @@
+---
+const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, me interesa la plantilla "Ticket de caja" para reseñas de Google');
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Café Marina — Ticket · 096matics</title>
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<style>
+			:root {
+				--counter: #dcd6c6;
+				--paper: #fbf7ec;
+				--ink: #232019;
+				--ink-dim: rgba(35, 32, 25, 0.58);
+				--ink-faint: rgba(35, 32, 25, 0.35);
+				--stamp: #b0392c;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: var(--counter);
+			}
+			body {
+				height: 100dvh;
+				font-family: 'IBM Plex Mono', monospace;
+				color: var(--ink);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 20px 16px;
+			}
+			.receipt {
+				position: relative;
+				width: 100%;
+				max-width: 300px;
+				background: var(--paper);
+				padding: 28px 20px 22px;
+				box-shadow: 0 25px 50px -20px rgba(35, 32, 25, 0.4);
+				background-image: repeating-linear-gradient(0deg, rgba(35, 32, 25, 0.025) 0 1px, transparent 1px 3px);
+			}
+			.receipt::before,
+			.receipt::after {
+				content: '';
+				position: absolute;
+				left: 0;
+				right: 0;
+				height: 11px;
+				background:
+					linear-gradient(-45deg, var(--counter) 5.5px, transparent 0),
+					linear-gradient(45deg, var(--counter) 5.5px, transparent 0);
+				background-size: 11px 22px;
+				background-repeat: repeat-x;
+			}
+			.receipt::before {
+				top: -1px;
+				background-position: 0 -5.5px;
+			}
+			.receipt::after {
+				bottom: -1px;
+				transform: scaleY(-1);
+				background-position: 0 -5.5px;
+			}
+			.header {
+				text-align: center;
+				margin-bottom: 14px;
+			}
+			.biz-name {
+				font-size: 19px;
+				font-weight: 700;
+				letter-spacing: 0.02em;
+				margin: 0 0 4px;
+				text-transform: uppercase;
+			}
+			.biz-sub {
+				font-size: 10.5px;
+				color: var(--ink-dim);
+				margin: 0;
+			}
+			.divider {
+				border: none;
+				border-top: 1px dashed rgba(35, 32, 25, 0.3);
+				margin: 14px 0;
+			}
+			.ticket-label {
+				text-align: center;
+				font-size: 9.5px;
+				letter-spacing: 0.18em;
+				color: var(--ink-faint);
+				margin: 0 0 14px;
+			}
+			.item-list {
+				display: flex;
+				flex-direction: column;
+				gap: 7px;
+				margin-bottom: 4px;
+				font-size: 12px;
+			}
+			.item-row {
+				display: flex;
+				justify-content: space-between;
+				gap: 8px;
+			}
+			.item-row .qty {
+				color: var(--ink-dim);
+			}
+			.item-row .check {
+				color: var(--stamp);
+				font-weight: 700;
+			}
+			.total-row {
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				margin: 6px 0 0;
+				font-weight: 700;
+				font-size: 13px;
+			}
+			.thanks {
+				text-align: center;
+				font-size: 12px;
+				letter-spacing: 0.04em;
+				margin: 16px 0 14px;
+			}
+			.stars {
+				display: flex;
+				justify-content: center;
+				gap: 3px;
+				margin-bottom: 6px;
+			}
+			.stars svg {
+				width: 18px;
+				height: 18px;
+				opacity: 0;
+				transform: scale(0.4);
+				animation: starPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+			}
+			.stars svg:nth-child(1) {
+				animation-delay: 0.05s;
+			}
+			.stars svg:nth-child(2) {
+				animation-delay: 0.16s;
+			}
+			.stars svg:nth-child(3) {
+				animation-delay: 0.27s;
+			}
+			.stars svg:nth-child(4) {
+				animation-delay: 0.38s;
+			}
+			.stars svg:nth-child(5) {
+				animation-delay: 0.49s;
+			}
+			@keyframes starPop {
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+			.rating-line {
+				text-align: center;
+				font-size: 10.5px;
+				color: var(--ink-dim);
+				margin: 0 0 18px;
+			}
+			.stamp-link {
+				display: block;
+				text-decoration: none;
+				margin: 0 auto 18px;
+				width: fit-content;
+			}
+			.stamp {
+				border: 2.5px solid var(--stamp);
+				color: var(--stamp);
+				border-radius: 8px;
+				padding: 10px 18px;
+				text-align: center;
+				transform: rotate(-3deg);
+				opacity: 0.92;
+				position: relative;
+			}
+			.stamp::before {
+				content: '';
+				position: absolute;
+				inset: 3px;
+				border: 1px solid var(--stamp);
+				border-radius: 5px;
+				opacity: 0.6;
+			}
+			.stamp-title {
+				font-size: 13px;
+				font-weight: 700;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+				margin: 0;
+			}
+			.stamp-sub {
+				font-size: 8.5px;
+				letter-spacing: 0.1em;
+				margin: 2px 0 0;
+			}
+			.divider2 {
+				border: none;
+				border-top: 1px dashed rgba(35, 32, 25, 0.3);
+				margin: 0 0 14px;
+			}
+			.info-line {
+				display: flex;
+				justify-content: space-between;
+				font-size: 10.5px;
+				color: var(--ink-dim);
+				margin-bottom: 6px;
+				text-decoration: none;
+			}
+			.info-line span:first-child {
+				color: var(--ink-faint);
+			}
+			a.info-line {
+				color: var(--ink-dim);
+			}
+			.barcode {
+				display: flex;
+				align-items: flex-end;
+				justify-content: center;
+				gap: 1.6px;
+				height: 34px;
+				margin: 16px 0 6px;
+			}
+			.barcode span {
+				display: block;
+				width: 2px;
+				background: var(--ink);
+			}
+			.serial {
+				text-align: center;
+				font-size: 9px;
+				letter-spacing: 0.12em;
+				color: var(--ink-faint);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="receipt">
+			<div class="header">
+				<p class="biz-name">Café Marina</p>
+				<p class="biz-sub">Sagunto, Valencia</p>
+			</div>
+
+			<hr class="divider" />
+			<p class="ticket-label">· · · Ticket de visita · · ·</p>
+
+			<div class="item-list">
+				<div class="item-row"><span class="qty">1x</span><span>Buen café</span><span class="check">✓</span></div>
+				<div class="item-row"><span class="qty">1x</span><span>Buena atención</span><span class="check">✓</span></div>
+				<div class="item-row"><span class="qty">1x</span><span>Ganas de volver</span><span class="check">✓</span></div>
+			</div>
+
+			<div class="total-row">
+				<span>Total experiencia</span>
+				<span>100%</span>
+			</div>
+
+			<p class="thanks">Gracias por tu visita</p>
+
+			<div class="stars">
+				<svg viewBox="0 0 24 24" fill="#E8A93D"
+					><path
+						d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+					></path></svg
+				>
+				<svg viewBox="0 0 24 24" fill="#E8A93D"
+					><path
+						d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+					></path></svg
+				>
+				<svg viewBox="0 0 24 24" fill="#E8A93D"
+					><path
+						d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+					></path></svg
+				>
+				<svg viewBox="0 0 24 24" fill="#E8A93D"
+					><path
+						d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+					></path></svg
+				>
+				<svg viewBox="0 0 24 24" fill="#E8A93D"
+					><path
+						d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01z"
+					></path></svg
+				>
+			</div>
+			<p class="rating-line">4.8 · 126 reseñas en Google</p>
+
+			<a class="stamp-link" href={whatsapp} target="_blank">
+				<div class="stamp">
+					<p class="stamp-title">Sella tu opinión</p>
+					<p class="stamp-sub">Toca y valóranos</p>
+				</div>
+			</a>
+
+			<hr class="divider2" />
+
+			<a class="info-line" href={whatsapp} target="_blank">
+				<span>Horario</span><span>L–S · 8:00–20:00</span>
+			</a>
+			<a class="info-line" href="https://wa.me/34727700065" target="_blank">
+				<span>WhatsApp</span><span>Escríbenos →</span>
+			</a>
+			<a class="info-line" href={whatsapp} target="_blank">
+				<span>Dirección</span><span>C. Mayor 12 →</span>
+			</a>
+
+			<div class="barcode">
+				<span style="height:100%;"></span><span style="height:60%;"></span><span style="height:90%;"
+				></span><span style="height:40%;"></span><span style="height:100%;"></span><span style="height:70%;"
+				></span><span style="height:50%;"></span><span style="height:100%;"></span><span style="height:30%;"
+				></span><span style="height:80%;"></span><span style="height:60%;"></span><span style="height:100%;"
+				></span><span style="height:45%;"></span><span style="height:90%;"></span><span style="height:65%;"
+				></span><span style="height:100%;"></span><span style="height:35%;"></span><span style="height:75%;"
+				></span><span style="height:100%;"></span><span style="height:55%;"></span>
+			</div>
+			<p class="serial">096MATICS · GRACIAS</p>
+		</div>
+	</body>
+</html>

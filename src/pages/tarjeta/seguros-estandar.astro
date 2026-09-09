@@ -1,0 +1,283 @@
+---
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Elena Bort — 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--bg-deep: #070a0f;
+				--glass-border: rgba(255, 255, 255, 0.13);
+				--ink: #f2f5f8;
+				--ink-dim: rgba(242, 245, 248, 0.6);
+				--accent: #5b93e8;
+				--accent-2: #8fd4c8;
+				--accent-dim: rgba(91, 147, 232, 0.32);
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: var(--bg-deep);
+			}
+			body {
+				height: 100dvh;
+				background:
+					radial-gradient(ellipse 720px 440px at 50% -10%, rgba(91, 147, 232, 0.14), transparent 60%),
+					linear-gradient(180deg, #0a0e15 0%, var(--bg-deep) 60%);
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: var(--ink);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 40px 16px;
+			}
+			.card {
+				width: 100%;
+				max-width: 400px;
+				position: relative;
+			}
+			.shield-mark {
+				position: absolute;
+				top: -26px;
+				right: -18px;
+				width: 130px;
+				height: 130px;
+				opacity: 0.06;
+				pointer-events: none;
+				z-index: 0;
+			}
+			.glass {
+				position: relative;
+				z-index: 1;
+				background:
+					radial-gradient(120% 60% at 50% 0%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.01) 55%),
+					rgba(255, 255, 255, 0.035);
+				backdrop-filter: blur(18px) saturate(140%);
+				-webkit-backdrop-filter: blur(18px) saturate(140%);
+				border: 1px solid var(--glass-border);
+				border-radius: 22px;
+				padding: 36px 26px 26px;
+				box-shadow:
+					0 30px 70px -25px rgba(0, 0, 0, 0.7),
+					inset 0 1px 0 rgba(255, 255, 255, 0.12);
+				text-align: center;
+			}
+			.avatar {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				margin: 0 auto 18px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(150deg, #16233a, #0a121f);
+				border: 1px solid var(--accent-dim);
+				box-shadow:
+					0 0 0 4px rgba(255, 255, 255, 0.03),
+					0 12px 30px -10px rgba(91, 147, 232, 0.3);
+				font-family: 'Chakra Petch', sans-serif;
+				font-size: 24px;
+				font-weight: 600;
+				color: var(--accent);
+				letter-spacing: 0.02em;
+			}
+			.role {
+				font-size: 11px;
+				letter-spacing: 0.16em;
+				text-transform: uppercase;
+				color: var(--accent);
+				margin: 0 0 6px;
+			}
+			.name {
+				font-family: 'Chakra Petch', sans-serif;
+				font-size: 24px;
+				font-weight: 600;
+				letter-spacing: 0.01em;
+				margin: 0 0 4px;
+			}
+			.company {
+				font-size: 13px;
+				color: var(--ink-dim);
+				margin: 0 0 16px;
+			}
+			.specialties {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 6px;
+				margin-bottom: 10px;
+			}
+			.chip {
+				font-size: 10.5px;
+				letter-spacing: 0.03em;
+				color: var(--accent-2);
+				border: 1px solid rgba(143, 212, 200, 0.3);
+				background: rgba(143, 212, 200, 0.06);
+				padding: 4px 10px;
+				border-radius: 999px;
+			}
+			.agent-id {
+				font-size: 10px;
+				color: var(--ink-dim);
+				letter-spacing: 0.04em;
+				margin: 0 0 24px;
+			}
+			.divider {
+				height: 1px;
+				background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+				margin: 0 0 24px;
+			}
+			.eyebrow {
+				font-size: 10.5px;
+				letter-spacing: 0.16em;
+				text-transform: uppercase;
+				color: var(--accent);
+				margin: 0 0 14px;
+			}
+			.icon-row {
+				display: flex;
+				justify-content: center;
+				gap: 14px;
+				margin-bottom: 18px;
+			}
+			.icon-btn {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid var(--glass-border);
+				color: var(--ink);
+				text-decoration: none;
+				transition:
+					background 0.15s ease,
+					border-color 0.15s ease,
+					transform 0.15s ease;
+			}
+			.icon-btn:hover {
+				background: rgba(255, 255, 255, 0.1);
+				border-color: var(--accent-dim);
+				transform: translateY(-2px);
+			}
+			.icon-btn svg {
+				width: 19px;
+				height: 19px;
+			}
+			.save-link {
+				display: block;
+				font-size: 12px;
+				color: var(--accent);
+				text-decoration: none;
+				margin-bottom: 26px;
+			}
+			.save-link:hover {
+				text-decoration: underline;
+			}
+			.cta {
+				display: block;
+				padding: 14px;
+				border-radius: 12px;
+				background: linear-gradient(135deg, var(--accent), #3e6fc4);
+				color: #fff;
+				text-decoration: none;
+				font-weight: 600;
+				font-size: 13.5px;
+				letter-spacing: 0.01em;
+				margin-bottom: 10px;
+			}
+			.cta:hover {
+				filter: brightness(1.08);
+			}
+			.cta-note {
+				font-size: 10px;
+				color: var(--ink-dim);
+				margin: 0;
+			}
+			.footer {
+				text-align: center;
+				margin-top: 18px;
+				font-size: 9.5px;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				color: rgba(242, 245, 248, 0.3);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="card">
+			<svg class="shield-mark" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+				<path d="M50 4 L90 18 V48 C90 72 72 88 50 96 C28 88 10 72 10 48 V18 Z"></path>
+			</svg>
+
+			<div class="glass">
+				<div class="avatar">EB</div>
+				<p class="role">Agente de seguros</p>
+				<h1 class="name">Elena Bort</h1>
+				<p class="company">Segurvida Correduría · Valencia</p>
+
+				<div class="specialties">
+					<span class="chip">Hogar</span>
+					<span class="chip">Auto</span>
+					<span class="chip">Vida</span>
+					<span class="chip">Salud</span>
+				</div>
+				<p class="agent-id">Nº agente: 0000000 · DGS</p>
+
+				<div class="divider"></div>
+
+				<p class="eyebrow">Contacto directo</p>
+				<div class="icon-row">
+					<a class="icon-btn" href="tel:+34727700065" aria-label="Llamar">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+							></path></svg
+						>
+					</a>
+					<a class="icon-btn" href="https://wa.me/34727700065" target="_blank" aria-label="WhatsApp">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+							></path></svg
+						>
+					</a>
+					<a class="icon-btn" href="mailto:contacto@096matics.com" aria-label="Email">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
+						>
+					</a>
+				</div>
+
+				<a
+					class="save-link"
+					download="elena-bort.vcf"
+					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3ABort%3BElena%3B%3B%3B%0AFN%3AElena%20Bort%0AORG%3ASegurvida%20Correduria%0ATITLE%3AAgente%20de%20seguros%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
+					>↓ Guardar contacto</a
+				>
+
+				<a class="cta" href="https://wa.me/34727700065?text=Hola%2C%20quiero%20pedir%20un%20presupuesto"
+					>Solicita tu presupuesto →</a
+				>
+				<p class="cta-note">Respuesta en menos de 24h</p>
+			</div>
+
+			<p class="footer">096matics · Tarjeta digital</p>
+		</div>
+	</body>
+</html>

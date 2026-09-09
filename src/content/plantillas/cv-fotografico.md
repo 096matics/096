@@ -6,4 +6,5 @@ descripcion: "Hero con foto de fondo y badge de disponibilidad. Ejemplo Conducto
 estado: "proximamente"
 colorHex: "#F0B94D"
 origenArchivo: "pruebas/2.html"
+ruta: "/tarjeta/cv-fotografico"
 ---

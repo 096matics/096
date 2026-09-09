@@ -1,0 +1,255 @@
+---
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Álvaro Redondo — Seguros Redondo · 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--bg: #f4f6f9;
+				--card-bg: rgba(255, 255, 255, 0.72);
+				--card-border: rgba(19, 32, 51, 0.1);
+				--ink: #132033;
+				--ink-dim: rgba(19, 32, 51, 0.62);
+				--blue: #2e4f9e;
+				--green: #3ec08c;
+				--accent-dim: rgba(46, 79, 158, 0.18);
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: var(--bg);
+			}
+			body {
+				height: 100dvh;
+				background:
+					url('/tarjeta/cliente-seguros-redondo/logo.png') no-repeat center 60px / 220px auto,
+					var(--bg);
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: var(--ink);
+				display: flex;
+				justify-content: center;
+				align-items: flex-end;
+				padding: 16px 16px 40px;
+			}
+			.card {
+				width: 100%;
+				max-width: 400px;
+			}
+			.glass {
+				background: var(--card-bg);
+				backdrop-filter: blur(18px) saturate(140%);
+				-webkit-backdrop-filter: blur(18px) saturate(140%);
+				border: 1px solid var(--card-border);
+				border-radius: 22px;
+				padding: 36px 26px 26px;
+				box-shadow:
+					0 30px 70px -30px rgba(19, 32, 51, 0.35),
+					inset 0 1px 0 rgba(255, 255, 255, 0.6);
+				text-align: center;
+			}
+			.avatar {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				margin: 0 auto 18px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(150deg, #e8edf5, #dce3ee);
+				border: 1px solid var(--accent-dim);
+				box-shadow:
+					0 0 0 4px rgba(255, 255, 255, 0.6),
+					0 12px 30px -12px rgba(46, 79, 158, 0.28);
+				font-family: 'Chakra Petch', sans-serif;
+				font-size: 24px;
+				font-weight: 600;
+				color: var(--blue);
+				letter-spacing: 0.02em;
+			}
+			.role {
+				font-size: 11px;
+				letter-spacing: 0.16em;
+				text-transform: uppercase;
+				color: var(--blue);
+				margin: 0 0 6px;
+			}
+			.name {
+				font-family: 'Chakra Petch', sans-serif;
+				font-size: 24px;
+				font-weight: 600;
+				letter-spacing: 0.01em;
+				margin: 0 0 4px;
+			}
+			.company {
+				font-size: 13px;
+				color: var(--ink-dim);
+				margin: 0 0 16px;
+			}
+			.specialties {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 6px;
+				margin-bottom: 10px;
+			}
+			.chip {
+				font-size: 10.5px;
+				letter-spacing: 0.03em;
+				color: #1f8f68;
+				border: 1px solid rgba(62, 192, 140, 0.35);
+				background: rgba(62, 192, 140, 0.08);
+				padding: 4px 10px;
+				border-radius: 999px;
+			}
+			.agent-id {
+				font-size: 10px;
+				color: var(--ink-dim);
+				letter-spacing: 0.04em;
+				margin: 0 0 24px;
+			}
+			.divider {
+				height: 1px;
+				background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+				margin: 0 0 24px;
+			}
+			.eyebrow {
+				font-size: 10.5px;
+				letter-spacing: 0.16em;
+				text-transform: uppercase;
+				color: var(--blue);
+				margin: 0 0 14px;
+			}
+			.icon-row {
+				display: flex;
+				justify-content: center;
+				gap: 14px;
+				margin-bottom: 18px;
+			}
+			.icon-btn {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(255, 255, 255, 0.6);
+				border: 1px solid var(--card-border);
+				color: var(--blue);
+				text-decoration: none;
+				transition:
+					background 0.15s ease,
+					border-color 0.15s ease,
+					transform 0.15s ease;
+			}
+			.icon-btn:hover {
+				background: #fff;
+				border-color: var(--accent-dim);
+				transform: translateY(-2px);
+			}
+			.icon-btn svg {
+				width: 19px;
+				height: 19px;
+			}
+			.save-link {
+				display: block;
+				font-size: 12px;
+				color: var(--blue);
+				text-decoration: none;
+				margin-bottom: 26px;
+			}
+			.save-link:hover {
+				text-decoration: underline;
+			}
+			.cta {
+				display: block;
+				padding: 14px;
+				border-radius: 12px;
+				background: linear-gradient(120deg, var(--blue), var(--green));
+				color: #fff;
+				text-decoration: none;
+				font-weight: 600;
+				font-size: 13.5px;
+				letter-spacing: 0.01em;
+				margin-bottom: 10px;
+			}
+			.cta:hover {
+				filter: brightness(1.06);
+			}
+			.cta-note {
+				font-size: 10px;
+				color: var(--ink-dim);
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="card">
+			<div class="glass">
+				<div class="avatar">AR</div>
+				<p class="role">Seguros Redondo</p>
+				<h1 class="name">Álvaro Redondo</h1>
+				<p class="company">Correduría de seguros · Sagunto</p>
+
+				<div class="specialties">
+					<span class="chip">Hogar</span>
+					<span class="chip">Vehículo</span>
+					<span class="chip">Vida</span>
+					<span class="chip">Salud</span>
+				</div>
+				<p class="agent-id">Nº agente: 0000000 · DGS</p>
+
+				<div class="divider"></div>
+
+				<p class="eyebrow">Contacto directo</p>
+				<div class="icon-row">
+					<a class="icon-btn" href="tel:+34727700065" aria-label="Llamar">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+							></path></svg
+						>
+					</a>
+					<a class="icon-btn" href="https://wa.me/34727700065" target="_blank" aria-label="WhatsApp">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+							></path></svg
+						>
+					</a>
+					<a class="icon-btn" href="mailto:info@segurosredondo.es" aria-label="Email">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
+						>
+					</a>
+				</div>
+
+				<a
+					class="save-link"
+					download="alvaro-redondo.vcf"
+					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3ARedondo%3B%C3%81lvaro%3B%3B%3B%0AFN%3A%C3%81lvaro%20Redondo%0AORG%3ASeguros%20Redondo%0ATITLE%3ACorreduria%20de%20seguros%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEMAIL%3Ainfo%40segurosredondo.es%0AEND%3AVCARD"
+					>↓ Guardar contacto</a
+				>
+
+				<a class="cta" href="https://wa.me/34727700065?text=Hola%2C%20quiero%20pedir%20un%20presupuesto"
+					>Solicita tu presupuesto →</a
+				>
+				<p class="cta-note">Respuesta en menos de 24h</p>
+			</div>
+		</div>
+	</body>
+</html>

@@ -26,6 +26,7 @@ const plantillas = defineCollection({
     colorHex: z.string().optional(),
     origenArchivo: z.string().optional(),
     imagen: z.string().optional(),
+    ruta: z.string().optional(),
   }),
 });
 

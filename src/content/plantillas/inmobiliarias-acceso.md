@@ -5,5 +5,6 @@ nombre: "Acceso"
 descripcion: "Estilo credencial / acreditación. Ejemplo Nuria Salas."
 estado: "publico"
 origenArchivo: "inmobiliarias/Plantilla 4/plantilla.html"
+ruta: "/tarjeta/inmobiliarias-acceso"
 imagen: "/plantillas/inmobiliarias-acceso.jpg"
 ---
