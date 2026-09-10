@@ -1,8 +1,8 @@
 ---
 categoria: "sector"
 sector: "Seguros"
-nombre: "Vitalia"
-descripcion: "Otro estilo de plantilla para correduría. Ejemplo Marta Coll — Vitalia Seguros."
+nombre: "Animada"
+descripcion: "Escena animada de carretera al cargar."
 estado: "publico"
 origenArchivo: "seguros/Plantilla 2/plantilla.html"
 ruta: "/tarjeta/seguros-vitalia.html"

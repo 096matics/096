@@ -1,8 +1,8 @@
 ---
 categoria: "sector"
 sector: "Seguros"
-nombre: "Estándar"
-descripcion: "Plantilla base para agentes de seguros, ejemplo Elena Bort."
+nombre: "Clásica"
+descripcion: "Diseño limpio con foto circular y contacto directo."
 estado: "publico"
 colorHex: "#5B93E8"
 origenArchivo: "seguros/Plantilla/plantilla.html"

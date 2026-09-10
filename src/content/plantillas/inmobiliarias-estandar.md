@@ -1,8 +1,8 @@
 ---
 categoria: "sector"
 sector: "Inmobiliarias"
-nombre: "Estándar"
-descripcion: "Plantilla base para agentes inmobiliarios, ejemplo Marc Ferrer."
+nombre: "Clásica"
+descripcion: "Diseño limpio con foto circular y contacto directo."
 estado: "publico"
 colorHex: "#E3B24E"
 origenArchivo: "inmobiliarias/Plantilla/plantilla.html"

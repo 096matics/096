@@ -1,8 +1,8 @@
 ---
 categoria: "sector"
 sector: "Inmobiliarias"
-nombre: "Acceso"
-descripcion: "Estilo credencial / acreditación. Ejemplo Nuria Salas."
+nombre: "Credencial"
+descripcion: "Estilo pase de acceso, con cordón y chip."
 estado: "publico"
 origenArchivo: "inmobiliarias/Plantilla 4/plantilla.html"
 ruta: "/tarjeta/inmobiliarias-acceso"

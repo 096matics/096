@@ -7,7 +7,7 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Nuria Salas · 096matics</title>
+		<title>Marc Ferrer · 096matics</title>
 		<link
 			href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
 			rel="stylesheet"
@@ -37,6 +37,15 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 				color: var(--white);
 				display: flex;
 				flex-direction: column;
+				animation: pageIn 0.6s ease forwards;
+			}
+			@keyframes pageIn {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
 			}
 			.photo {
 				position: relative;
@@ -206,12 +215,12 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 	<body>
 		<div class="photo">
 			<div class="photo-placeholder">Foto del agente</div>
-			<span class="tag">Agente inmobiliaria</span>
+			<span class="tag">Agente inmobiliario</span>
 			<div class="status"><span class="dot"></span>Disponible</div>
 		</div>
 
 		<div class="panel">
-			<h1 class="name">Nuria<br /><span class="line2">Salas</span></h1>
+			<h1 class="name">Marc<br /><span class="line2">Ferrer</span></h1>
 			<p class="role-line"><b>Costa Norte Propiedades</b> · Valencia</p>
 
 			<div class="spec-strip">
@@ -251,8 +260,8 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 
 			<a
 				class="save-link"
-				download="nuria-salas.vcf"
-				href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3ASalas%3BNuria%3B%3B%3B%0AFN%3ANuria%20Salas%0AORG%3ACosta%20Norte%20Propiedades%0ATITLE%3AAgente%20inmobiliaria%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
+				download="marc-ferrer.vcf"
+				href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3AFerrer%3BMarc%3B%3B%3B%0AFN%3AMarc%20Ferrer%0AORG%3ACosta%20Norte%20Propiedades%0ATITLE%3AAgente%20inmobiliario%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
 				style="margin-top:10px;">↓ Guardar contacto</a
 			>
 		</div>

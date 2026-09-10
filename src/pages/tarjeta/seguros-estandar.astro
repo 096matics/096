@@ -6,7 +6,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Elena Bort — 096matics</title>
+		<title>Marc Ferrer — 096matics</title>
 		<link
 			href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
 			rel="stylesheet"
@@ -50,6 +50,16 @@
 				max-width: 400px;
 				position: relative;
 			}
+			@keyframes cardIn {
+				from {
+					opacity: 0;
+					transform: translateY(16px) scale(0.98);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0) scale(1);
+				}
+			}
 			.shield-mark {
 				position: absolute;
 				top: -26px;
@@ -63,6 +73,7 @@
 			.glass {
 				position: relative;
 				z-index: 1;
+				animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 				background:
 					radial-gradient(120% 60% at 50% 0%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.01) 55%),
 					rgba(255, 255, 255, 0.035);
@@ -226,9 +237,9 @@
 			</svg>
 
 			<div class="glass">
-				<div class="avatar">EB</div>
+				<div class="avatar">MF</div>
 				<p class="role">Agente de seguros</p>
-				<h1 class="name">Elena Bort</h1>
+				<h1 class="name">Marc Ferrer</h1>
 				<p class="company">Segurvida Correduría · Valencia</p>
 
 				<div class="specialties">
@@ -266,8 +277,8 @@
 
 				<a
 					class="save-link"
-					download="elena-bort.vcf"
-					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3ABort%3BElena%3B%3B%3B%0AFN%3AElena%20Bort%0AORG%3ASegurvida%20Correduria%0ATITLE%3AAgente%20de%20seguros%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
+					download="marc-ferrer.vcf"
+					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3AFerrer%3BMarc%3B%3B%3B%0AFN%3AMarc%20Ferrer%0AORG%3ASegurvida%20Correduria%0ATITLE%3AAgente%20de%20seguros%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
 					>↓ Guardar contacto</a
 				>
 

@@ -6,7 +6,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Álvaro Redondo — Seguros Redondo · 096matics</title>
+		<title>Marc Ferrer — Seguros Redondo · 096matics</title>
 		<link
 			href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
 			rel="stylesheet"
@@ -50,7 +50,18 @@
 				width: 100%;
 				max-width: 400px;
 			}
+			@keyframes cardIn {
+				from {
+					opacity: 0;
+					transform: translateY(16px) scale(0.98);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0) scale(1);
+				}
+			}
 			.glass {
+				animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 				background: var(--card-bg);
 				backdrop-filter: blur(18px) saturate(140%);
 				-webkit-backdrop-filter: blur(18px) saturate(140%);
@@ -200,9 +211,9 @@
 	<body>
 		<div class="card">
 			<div class="glass">
-				<div class="avatar">AR</div>
+				<div class="avatar">MF</div>
 				<p class="role">Seguros Redondo</p>
-				<h1 class="name">Álvaro Redondo</h1>
+				<h1 class="name">Marc Ferrer</h1>
 				<p class="company">Correduría de seguros · Sagunto</p>
 
 				<div class="specialties">
@@ -231,7 +242,7 @@
 							></path></svg
 						>
 					</a>
-					<a class="icon-btn" href="mailto:info@segurosredondo.es" aria-label="Email">
+					<a class="icon-btn" href="mailto:contacto@096matics.com" aria-label="Email">
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 							><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
 						>
@@ -240,8 +251,8 @@
 
 				<a
 					class="save-link"
-					download="alvaro-redondo.vcf"
-					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3ARedondo%3B%C3%81lvaro%3B%3B%3B%0AFN%3A%C3%81lvaro%20Redondo%0AORG%3ASeguros%20Redondo%0ATITLE%3ACorreduria%20de%20seguros%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEMAIL%3Ainfo%40segurosredondo.es%0AEND%3AVCARD"
+					download="marc-ferrer.vcf"
+					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3AFerrer%3BMarc%3B%3B%3B%0AFN%3AMarc%20Ferrer%0AORG%3ASeguros%20Redondo%0ATITLE%3ACorreduria%20de%20seguros%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEMAIL%3Acontacto%40096matics.com%0AEND%3AVCARD"
 					>↓ Guardar contacto</a
 				>
 
