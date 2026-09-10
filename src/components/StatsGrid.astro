@@ -1,23 +1,19 @@
 ---
 const stats = [
-	{ valor: '0', etiqueta: 'apps que instalar' },
-	{ valor: '3s', etiqueta: 'del toque a la reseña' },
+	{ valor: '0', etiqueta: 'apps' },
+	{ valor: '3s', etiqueta: 'toque → reseña' },
 	{ valor: '1', etiqueta: 'toque, nada de escribir' },
-	{ valor: 'NFC', etiqueta: 'compatible con cualquier móvil moderno' },
+	{ valor: 'NFC', etiqueta: 'cualquier móvil moderno' },
 ];
 ---
 
-<section class="py-16 sm:py-20">
-	<p class="text-sm tracking-widest text-amber-400 uppercase">Por qué 096matics</p>
-	<h2 class="mt-3 text-2xl font-semibold text-white sm:text-3xl">Pensado para no complicarte</h2>
-	<dl class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-		{
-			stats.map((stat) => (
-				<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5">
-					<dd class="text-2xl font-semibold text-amber-400">{stat.valor}</dd>
-					<dt class="mt-1 text-sm font-normal text-zinc-400">{stat.etiqueta}</dt>
-				</div>
-			))
-		}
-	</dl>
-</section>
+<dl class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+	{
+		stats.map((stat) => (
+			<div class="rounded-xl border border-zinc-800 bg-zinc-900/40 px-3 py-2.5">
+				<dd class="text-lg font-semibold text-amber-400">{stat.valor}</dd>
+				<dt class="mt-0.5 text-[11px] leading-tight font-normal text-zinc-500">{stat.etiqueta}</dt>
+			</div>
+		))
+	}
+</dl>

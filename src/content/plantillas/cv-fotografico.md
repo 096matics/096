@@ -7,4 +7,5 @@ estado: "proximamente"
 colorHex: "#F0B94D"
 origenArchivo: "pruebas/2.html"
 ruta: "/tarjeta/cv-fotografico"
+imagen: "/plantillas/cv-fotografico.png"
 ---

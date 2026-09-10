@@ -1,0 +1,246 @@
+---
+const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, me interesa la plantilla de CV digital (Terminal)');
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>[Nombre del profesional] — 096matics</title>
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+				background: #0a0e14;
+			}
+			body {
+				height: 100dvh;
+				font-family: 'JetBrains Mono', monospace;
+				color: #d7e0ea;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 24px 14px;
+			}
+			.window {
+				width: 100%;
+				max-width: 410px;
+				background: #10151d;
+				border-radius: 10px;
+				border: 1px solid rgba(215, 224, 234, 0.1);
+				box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8);
+				overflow: hidden;
+				opacity: 0;
+				animation: boot 0.5s ease forwards;
+			}
+			@keyframes boot {
+				from {
+					opacity: 0;
+					transform: translateY(10px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+			.titlebar {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				padding: 10px 12px;
+				background: #161c26;
+				border-bottom: 1px solid rgba(215, 224, 234, 0.08);
+			}
+			.dot {
+				width: 10px;
+				height: 10px;
+				border-radius: 50%;
+			}
+			.dot.r {
+				background: #ff5f57;
+			}
+			.dot.y {
+				background: #febc2e;
+			}
+			.dot.g {
+				background: #28c840;
+			}
+			.filename {
+				margin-left: 8px;
+				font-size: 11px;
+				color: rgba(215, 224, 234, 0.5);
+			}
+			.body {
+				padding: 18px 18px 20px;
+				font-size: 12.5px;
+				line-height: 1.65;
+				max-height: 62dvh;
+				overflow: hidden;
+			}
+			.prompt {
+				color: #4fd1c5;
+			}
+			.path {
+				color: #7dd3fc;
+			}
+			.cmd {
+				color: #d7e0ea;
+			}
+			.line {
+				opacity: 0;
+				animation: typeLine 0.4s ease forwards;
+			}
+			.line:nth-child(1) {
+				animation-delay: 0.1s;
+			}
+			.line:nth-child(2) {
+				animation-delay: 0.35s;
+			}
+			.line:nth-child(3) {
+				animation-delay: 0.5s;
+			}
+			.line:nth-child(4) {
+				animation-delay: 0.65s;
+			}
+			.line:nth-child(5) {
+				animation-delay: 0.8s;
+			}
+			.line:nth-child(6) {
+				animation-delay: 0.95s;
+			}
+			@keyframes typeLine {
+				from {
+					opacity: 0;
+					transform: translateX(-6px);
+				}
+				to {
+					opacity: 1;
+					transform: translateX(0);
+				}
+			}
+			h1 {
+				font-size: 20px;
+				margin: 14px 0 2px;
+				color: #fff;
+			}
+			.role {
+				color: #4fd1c5;
+				margin: 0 0 14px;
+			}
+			.section {
+				color: rgba(215, 224, 234, 0.45);
+				margin: 16px 0 6px;
+			}
+			.log {
+				border-left: 2px solid rgba(79, 209, 197, 0.35);
+				padding-left: 10px;
+				margin-bottom: 6px;
+			}
+			.log .hash {
+				color: #febc2e;
+			}
+			.tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+				margin: 8px 0 4px;
+			}
+			.tags span {
+				padding: 4px 9px;
+				border-radius: 5px;
+				background: rgba(79, 209, 197, 0.1);
+				border: 1px solid rgba(79, 209, 197, 0.3);
+				color: #4fd1c5;
+				font-size: 10.5px;
+			}
+			.cursor {
+				display: inline-block;
+				width: 7px;
+				height: 13px;
+				background: #4fd1c5;
+				animation: blink 1s step-end infinite;
+				vertical-align: middle;
+				margin-left: 2px;
+			}
+			@keyframes blink {
+				50% {
+					opacity: 0;
+				}
+			}
+			.actions {
+				display: flex;
+				gap: 8px;
+				margin-top: 16px;
+			}
+			.btn {
+				flex: 1;
+				text-align: center;
+				padding: 11px;
+				border-radius: 6px;
+				text-decoration: none;
+				font-size: 12px;
+				font-weight: 500;
+			}
+			.btn.primary {
+				background: #4fd1c5;
+				color: #05201c;
+			}
+			.btn.ghost {
+				border: 1px solid rgba(215, 224, 234, 0.18);
+				color: #d7e0ea;
+			}
+			.footer {
+				text-align: center;
+				margin-top: 14px;
+				font-size: 9px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: rgba(215, 224, 234, 0.3);
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div class="window">
+				<div class="titlebar">
+					<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+					<span class="filename">cv.sh — 096matics</span>
+				</div>
+				<div class="body">
+					<p class="line"><span class="prompt">$</span> <span class="cmd">cat perfil.txt</span></p>
+					<h1 class="line">[Nombre del profesional]</h1>
+					<p class="role line">Desarrollador / Técnico especialista</p>
+					<p class="section line"># experiencia --last 3</p>
+					<div class="log line"><span class="hash">a1b2c3d</span> — [Proyecto o cliente destacado]</div>
+					<div class="log line"><span class="hash">e4f5a6b</span> — [Certificación o logro relevante]</div>
+					<p class="section">$ ls stack/</p>
+					<div class="tags">
+						<span>[Skill 1]</span><span>[Skill 2]</span><span>[Skill 3]</span><span>[Skill 4]</span>
+					</div>
+					<p style="margin-top:10px;color:rgba(215,224,234,0.55)">
+						<span class="prompt">$</span> ./contactar --ahora<span class="cursor"></span>
+					</p>
+				</div>
+			</div>
+			<div class="actions">
+				<a class="btn primary" href={whatsapp} target="_blank">WhatsApp</a>
+				<a
+					class="btn ghost"
+					download="perfil.vcf"
+					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3A%5BNombre%20del%20profesional%5D%0AORG%3A096matics%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
+					>↓ vCard</a
+				>
+			</div>
+			<p class="footer">096matics · Ficha digital</p>
+		</div>
+	</body>
+</html>

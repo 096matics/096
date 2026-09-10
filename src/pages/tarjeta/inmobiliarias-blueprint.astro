@@ -1,0 +1,248 @@
+---
+const whatsapp =
+	'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, me interesa la plantilla de Inmobiliarias (Plano)');
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Marc Ferrer — 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--blue: #0f2f5c;
+				--line: rgba(173, 209, 255, 0.35);
+				--paper: #eef4ff;
+				--accent: #ff6a3d;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+			}
+			body {
+				height: 100dvh;
+				background: var(--blue);
+				background-image:
+					linear-gradient(var(--line) 1px, transparent 1px),
+					linear-gradient(90deg, var(--line) 1px, transparent 1px);
+				background-size: 26px 26px;
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: var(--paper);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 32px 16px;
+			}
+			.card {
+				width: 100%;
+				max-width: 400px;
+				animation: unfold 1.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+				transform-origin: top center;
+				opacity: 0;
+			}
+			@keyframes unfold {
+				0% {
+					opacity: 0;
+					transform: scaleY(0.7) translateY(-20px);
+				}
+				100% {
+					opacity: 1;
+					transform: scaleY(1) translateY(0);
+				}
+			}
+			.sheet {
+				background: rgba(238, 244, 255, 0.06);
+				border: 1px solid var(--line);
+				border-radius: 4px;
+				padding: 22px 22px 26px;
+				position: relative;
+			}
+			.corner {
+				position: absolute;
+				width: 14px;
+				height: 14px;
+				border: 1.5px solid var(--accent);
+			}
+			.corner.tl {
+				top: -1px;
+				left: -1px;
+				border-right: none;
+				border-bottom: none;
+			}
+			.corner.br {
+				bottom: -1px;
+				right: -1px;
+				border-left: none;
+				border-top: none;
+			}
+			.tag {
+				font-family: 'Space Mono', monospace;
+				font-size: 10.5px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: var(--accent);
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 18px;
+			}
+			.house {
+				display: block;
+				margin: 6px auto 18px;
+			}
+			.house path,
+			.house line {
+				fill: none;
+				stroke: var(--paper);
+				stroke-width: 1.6;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+				stroke-dasharray: 340;
+				stroke-dashoffset: 340;
+				animation: draw 1.8s ease-out 0.3s forwards;
+			}
+			@keyframes draw {
+				to {
+					stroke-dashoffset: 0;
+				}
+			}
+			.name {
+				font-family: 'Space Mono', monospace;
+				font-size: 25px;
+				font-weight: 700;
+				text-align: center;
+				margin: 0 0 2px;
+				letter-spacing: 0.01em;
+			}
+			.role {
+				text-align: center;
+				font-size: 12.5px;
+				color: rgba(238, 244, 255, 0.65);
+				margin: 0 0 20px;
+			}
+			.specs {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 10px;
+				margin-bottom: 20px;
+			}
+			.spec {
+				border: 1px dashed var(--line);
+				border-radius: 4px;
+				padding: 8px 10px;
+			}
+			.spec b {
+				display: block;
+				font-family: 'Space Mono', monospace;
+				font-size: 13px;
+				color: var(--accent);
+			}
+			.spec span {
+				font-size: 10px;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: rgba(238, 244, 255, 0.55);
+			}
+			.icon-row {
+				display: flex;
+				gap: 10px;
+				margin-bottom: 16px;
+			}
+			.icon-btn {
+				flex: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 6px;
+				padding: 10px;
+				border: 1px solid var(--line);
+				border-radius: 4px;
+				color: var(--paper);
+				text-decoration: none;
+				font-size: 11px;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+			}
+			.icon-btn svg {
+				width: 14px;
+				height: 14px;
+			}
+			.save-link {
+				display: block;
+				text-align: center;
+				font-family: 'Space Mono', monospace;
+				font-size: 11px;
+				color: var(--accent);
+				text-decoration: none;
+				margin-bottom: 16px;
+			}
+			.cta {
+				display: block;
+				text-align: center;
+				padding: 14px;
+				border-radius: 4px;
+				background: var(--accent);
+				color: #1a1305;
+				text-decoration: none;
+				font-weight: 700;
+				font-size: 13.5px;
+				letter-spacing: 0.02em;
+			}
+			.footer {
+				text-align: center;
+				margin-top: 16px;
+				font-family: 'Space Mono', monospace;
+				font-size: 9px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: rgba(238, 244, 255, 0.4);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="card">
+			<div class="sheet">
+				<span class="corner tl"></span>
+				<span class="corner br"></span>
+				<p class="tag"><span>096matics · plano</span><span>ref. 04-B</span></p>
+				<svg class="house" width="90" height="70" viewBox="0 0 90 70">
+					<path d="M6 34 L45 6 L84 34" />
+					<path d="M14 30 V64 H76 V30" />
+					<line x1="45" y1="64" x2="45" y2="42" />
+					<line x1="34" y1="42" x2="56" y2="42" />
+				</svg>
+				<h1 class="name">Marc Ferrer</h1>
+				<p class="role">Costa Norte Propiedades · Valencia</p>
+				<div class="specs">
+					<div class="spec"><b>+120</b><span>Cierres</span></div>
+					<div class="spec"><b>5.0</b><span>Valoración</span></div>
+					<div class="spec"><b>8 años</b><span>Experiencia</span></div>
+					<div class="spec"><b>ES·EN·FR</b><span>Idiomas</span></div>
+				</div>
+				<div class="icon-row">
+					<a class="icon-btn" href="tel:+34727700065">Llamar</a>
+					<a class="icon-btn" href="https://wa.me/34727700065" target="_blank">WhatsApp</a>
+				</div>
+				<a
+					class="save-link"
+					download="marc-ferrer.vcf"
+					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3AFerrer%3BMarc%3B%3B%3B%0AFN%3AMarc%20Ferrer%0AORG%3ACosta%20Norte%20Propiedades%0ATITLE%3AAgente%20inmobiliario%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
+					>↓ Guardar contacto</a
+				>
+				<a class="cta" href={whatsapp} target="_blank">Ver planos disponibles →</a>
+			</div>
+			<p class="footer">096matics · Tarjeta digital</p>
+		</div>
+	</body>
+</html>

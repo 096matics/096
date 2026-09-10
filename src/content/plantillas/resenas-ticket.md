@@ -6,4 +6,5 @@ descripcion: "Se presenta como un recibo real, con checklist de la visita."
 estado: "proximamente"
 origenArchivo: "pruebas/4.html"
 ruta: "/tarjeta/resenas-ticket"
+imagen: "/plantillas/resenas-ticket.png"
 ---

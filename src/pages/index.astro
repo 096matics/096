@@ -82,7 +82,7 @@ import Contacto from '../components/landing/Contacto.astro';
 
 	if (root) {
 		const pages = Array.from(root.querySelectorAll<HTMLElement>('[data-page]'));
-		const DURATION = 2000; // debe coincidir con la duración de las animaciones stack-* en global.css
+		const DURATION = 700; // solo gobierna el desbloqueo; las piezas siguen animando tras esto
 		let current = 0;
 		let locked = false;
 
@@ -110,15 +110,6 @@ import Contacto from '../components/landing/Contacto.astro';
 			});
 		}
 
-		sideNavLogo?.addEventListener('click', () => goToPage(0));
-
-		function playReveal(page: HTMLElement) {
-			const els = page.querySelectorAll('.reveal');
-			els.forEach((el, i) => {
-				(el as HTMLElement).style.animationDelay = 0.35 + (i % 3) * 0.12 + 's';
-			});
-		}
-
 		function goToPage(index: number) {
 			index = Math.max(0, Math.min(pages.length - 1, index));
 			if (index === current || locked) return;
@@ -138,14 +129,30 @@ import Contacto from '../components/landing/Contacto.astro';
 
 			oldPage.classList.add(goingBack ? 'stack-exit-back' : 'stack-exit-forward');
 			newPage.classList.add(goingBack ? 'stack-enter-back' : 'stack-enter-forward');
-			playReveal(newPage);
 			setActiveNav(current);
 
 			window.setTimeout(() => {
 				oldPage.classList.remove('stack-exit-forward', 'stack-exit-back', 'is-current');
 				locked = false;
-			}, DURATION + 60);
+			}, DURATION);
 		}
+
+		// El logo del lateral te devuelve al principio: reaparece el pulso de entrada
+		sideNavLogo?.addEventListener('click', () => {
+			pages.forEach((p, i) => {
+				p.classList.remove('stack-enter-forward', 'stack-enter-back', 'stack-exit-forward', 'stack-exit-back');
+				p.classList.toggle('is-current', i === 0);
+			});
+			current = 0;
+			locked = false;
+			setActiveNav(0);
+			sideNav?.classList.add('opacity-0');
+			const pulso = document.getElementById('pulso');
+			if (pulso) {
+				document.documentElement.classList.add('overflow-hidden');
+				pulso.classList.remove('pulso-exit');
+			}
+		});
 
 		function atTop(page: HTMLElement) {
 			return page.scrollTop <= 1;
@@ -248,10 +255,11 @@ import Contacto from '../components/landing/Contacto.astro';
 
 		window.addEventListener('pulso:dismissed', () => {
 			sideNav?.classList.remove('opacity-0');
-			const first = pages[0];
+			const first = pages[current];
+			first.classList.remove('stack-enter-forward', 'stack-enter-back');
+			void first.offsetWidth;
 			first.classList.add('stack-enter-forward');
-			playReveal(first);
-			setActiveNav(0);
+			setActiveNav(current);
 		});
 	}
 </script>

@@ -86,7 +86,6 @@ import Logo from '../Logo.astro';
 		pulso.classList.add('pulso-exit');
 		document.documentElement.classList.remove('overflow-hidden');
 		window.dispatchEvent(new CustomEvent('pulso:dismissed'));
-		window.setTimeout(() => pulso.remove(), 650);
 	}
 
 	if (pulso) {

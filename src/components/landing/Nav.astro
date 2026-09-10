@@ -27,6 +27,10 @@ import Logo from '../Logo.astro';
 		text-transform: uppercase;
 		color: rgba(228, 228, 231, 0.45);
 		text-align: left;
+		transition:
+			color 0.25s ease,
+			font-size 0.25s ease,
+			letter-spacing 0.25s ease;
 	}
 	.side-nav-item::before {
 		content: '';
@@ -41,10 +45,16 @@ import Logo from '../Logo.astro';
 	}
 	.side-nav-item.active {
 		color: #fff;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.08em;
 	}
 	.side-nav-item.active::before {
 		background: linear-gradient(90deg, #3b82f6, #a855f7);
-		transform: scale(1.6);
+		transform: scale(1.8);
+	}
+	#landingSideNavLogo {
+		cursor: pointer;
 	}
 	@media (max-width: 640px) {
 		.side-nav-label {

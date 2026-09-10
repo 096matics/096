@@ -6,4 +6,5 @@ descripcion: "Foto, valoración, horario y contacto — vale para cualquier nego
 estado: "proximamente"
 origenArchivo: "pruebas/5.html"
 ruta: "/tarjeta/resenas-universal"
+imagen: "/plantillas/resenas-universal.png"
 ---

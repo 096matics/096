@@ -3,9 +3,10 @@ interface Props {
 	color: string;
 	negocio: string;
 	tipo?: 'resena' | 'contacto';
+	compact?: boolean;
 }
 
-const { color, negocio, tipo = 'resena' } = Astro.props;
+const { color, negocio, tipo = 'resena', compact = false } = Astro.props;
 const inicial = negocio.trim().charAt(0).toUpperCase();
 
 const pie =
@@ -21,11 +22,11 @@ const pie =
 ---
 
 <div
-	class="flex flex-col items-center gap-8 rounded-2xl border border-zinc-800 bg-zinc-900/40 px-6 py-10 sm:flex-row sm:justify-center sm:gap-12"
+	class={`flex flex-col items-center gap-6 ${compact ? '' : 'rounded-2xl border border-zinc-800 bg-zinc-900/40 px-6 py-10 sm:flex-row sm:justify-center sm:gap-12'}`}
 	style={`--accent: ${color}`}
 >
 	<div class="flex shrink-0 items-center gap-4">
-		<svg width="26" height="42" viewBox="0 0 20 32" role="img" aria-label="Onda NFC" class="hidden sm:block">
+		<svg width="22" height="36" viewBox="0 0 20 32" role="img" aria-label="Onda NFC" class="hidden sm:block">
 			<path
 				d="M3 24c-5-4-5-16 0-20M9 28c-8-6-8-24 0-30"
 				fill="none"
@@ -35,7 +36,7 @@ const pie =
 				opacity="0.85"
 			></path>
 		</svg>
-		<div class="relative h-80 w-40 rounded-[2rem] border-2 border-zinc-700 bg-zinc-950 p-2 shadow-2xl">
+		<div class="relative h-72 w-36 rounded-[2rem] border-2 border-zinc-700 bg-zinc-950 p-2 shadow-2xl sm:h-80 sm:w-40">
 			<div class="absolute top-3 left-1/2 h-1.5 w-10 -translate-x-1/2 rounded-full bg-zinc-700"></div>
 			<div class="flex h-full w-full flex-col justify-between rounded-[1.6rem] bg-white px-4 pt-8 pb-4 text-zinc-900">
 				{
@@ -78,19 +79,21 @@ const pie =
 			</div>
 		</div>
 	</div>
-	<div class="text-center sm:text-left">
-		<p class="text-xs tracking-wide text-zinc-500 uppercase">{pie.kicker}</p>
-		{
-			tipo === 'resena' && (
-				<div class="mt-2 flex justify-center gap-1 sm:justify-start" aria-label="5 estrellas">
-					{Array.from({ length: 5 }).map(() => (
-						<svg width="20" height="20" viewBox="0 0 20 20" fill="var(--accent)">
-							<path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6.1L10 14.9l-5.4 3 1.3-6.1L1.3 7.7l6.1-.6L10 1.5z" />
-						</svg>
-					))}
-				</div>
-			)
-		}
-		<p class="mt-2 text-sm text-zinc-400">{pie.texto}</p>
-	</div>
+	{
+		!compact && (
+			<div class="text-center sm:text-left">
+				<p class="text-xs tracking-wide text-zinc-500 uppercase">{pie.kicker}</p>
+				{tipo === 'resena' && (
+					<div class="mt-2 flex justify-center gap-1 sm:justify-start" aria-label="5 estrellas">
+						{Array.from({ length: 5 }).map(() => (
+							<svg width="20" height="20" viewBox="0 0 20 20" fill="var(--accent)">
+								<path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6.1L10 14.9l-5.4 3 1.3-6.1L1.3 7.7l6.1-.6L10 1.5z" />
+							</svg>
+						))}
+					</div>
+				)}
+				<p class="mt-2 text-sm text-zinc-400">{pie.texto}</p>
+			</div>
+		)
+	}
 </div>

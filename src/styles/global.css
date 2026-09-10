@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ============ Paginador de la landing (bloqueo de scroll + pila de documentos) ============ */
+/* ============ Paginador de la landing (bloqueo de scroll + piezas encajando) ============ */
 
 .landing-pager {
 	position: relative;
@@ -17,6 +17,11 @@
 	-webkit-overflow-scrolling: touch;
 	scrollbar-width: none;
 }
+@media (min-width: 640px) {
+	.landing-pager [data-page] {
+		padding-left: 11rem;
+	}
+}
 .landing-pager [data-page]::-webkit-scrollbar {
 	display: none;
 }
@@ -24,121 +29,138 @@
 	display: none;
 }
 
-[data-page] .reveal {
-	opacity: 0;
-}
-
+/* contenedor de página: entrada/salida sobria (fundido + escala mínima) */
 .landing-pager [data-page].stack-exit-forward {
 	display: flex;
 	z-index: 1;
-	animation: stack-exit-forward 2s cubic-bezier(0.6, 0, 0.4, 1) forwards;
+	animation: page-exit-forward 0.55s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 .landing-pager [data-page].stack-exit-back {
 	display: flex;
 	z-index: 1;
-	animation: stack-exit-back 2s cubic-bezier(0.6, 0, 0.4, 1) forwards;
+	animation: page-exit-back 0.55s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 .landing-pager [data-page].stack-enter-forward {
 	display: flex;
 	z-index: 2;
-	animation: stack-enter-forward 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	animation: page-enter-forward 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .landing-pager [data-page].stack-enter-back {
 	display: flex;
 	z-index: 2;
-	animation: stack-enter-back 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	animation: page-enter-back 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes stack-exit-forward {
+@keyframes page-exit-forward {
 	0% {
-		transform: translateY(0) scale(1);
-		filter: brightness(1) blur(0);
 		opacity: 1;
+		transform: translateY(0) scale(1);
 	}
 	100% {
-		transform: translateY(-14%) scale(0.86);
-		filter: brightness(0.35) blur(3px);
 		opacity: 0;
+		transform: translateY(-18px) scale(0.97);
 	}
 }
-@keyframes stack-exit-back {
+@keyframes page-exit-back {
 	0% {
-		transform: translateY(0) scale(1);
-		filter: brightness(1) blur(0);
 		opacity: 1;
+		transform: translateY(0) scale(1);
 	}
 	100% {
-		transform: translateY(14%) scale(0.86);
-		filter: brightness(0.35) blur(3px);
 		opacity: 0;
+		transform: translateY(18px) scale(0.97);
 	}
 }
-@keyframes stack-enter-forward {
+@keyframes page-enter-forward {
 	0% {
-		transform: translateY(16%) scale(0.9);
-		filter: brightness(0.4) blur(6px);
-		box-shadow: 0 -70px 140px rgba(0, 0, 0, 0.75);
+		opacity: 0;
+		transform: translateY(16px) scale(0.985);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+@keyframes page-enter-back {
+	0% {
+		opacity: 0;
+		transform: translateY(-16px) scale(0.985);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+/* ============ Piezas: cada elemento vuela desde un lado y encaja en su sitio ============ */
+
+[data-page] .piece {
+	opacity: 0;
+	will-change: transform, opacity;
+}
+
+.landing-pager [data-page].stack-enter-forward .piece,
+.landing-pager [data-page].stack-enter-back .piece {
+	animation: piece-settle 0.95s cubic-bezier(0.19, 1.32, 0.32, 1) forwards;
+}
+
+@keyframes piece-settle {
+	0% {
+		opacity: 0;
+		filter: blur(5px);
+		transform: translate(var(--tx, 0px), var(--ty, 22px)) rotate(var(--rot, 0deg)) scale(var(--sc, 0.94));
 	}
 	55% {
-		filter: brightness(0.85) blur(1px);
-	}
-	100% {
-		transform: translateY(0) scale(1);
-		filter: brightness(1) blur(0);
-		box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-	}
-}
-@keyframes stack-enter-back {
-	0% {
-		transform: translateY(-16%) scale(0.9);
-		filter: brightness(0.4) blur(6px);
-		box-shadow: 0 70px 140px rgba(0, 0, 0, 0.75);
-	}
-	55% {
-		filter: brightness(0.85) blur(1px);
-	}
-	100% {
-		transform: translateY(0) scale(1);
-		filter: brightness(1) blur(0);
-		box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-	}
-}
-
-/* ráfaga de "hojas" pasando, como si se rebuscara entre un montón de documentos */
-.landing-pager [data-page].stack-enter-forward::after,
-.landing-pager [data-page].stack-enter-back::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-	z-index: 5;
-	pointer-events: none;
-	background: repeating-linear-gradient(0deg, #09090b 0 7px, transparent 7px 38px);
-	animation: stack-sheets 1.1s cubic-bezier(0.6, 0, 0.4, 1) forwards;
-}
-@keyframes stack-sheets {
-	0% {
-		opacity: 0.95;
-		transform: translateY(0);
-	}
-	100% {
-		opacity: 0;
-		transform: translateY(-8%);
-	}
-}
-
-.landing-pager [data-page].stack-enter-forward .reveal,
-.landing-pager [data-page].stack-enter-back .reveal {
-	animation: page-reveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
-}
-@keyframes page-reveal {
-	0% {
-		opacity: 0;
-		transform: translateY(26px);
+		filter: blur(0);
 	}
 	100% {
 		opacity: 1;
-		transform: translateY(0);
+		filter: blur(0);
+		transform: translate(0, 0) rotate(0deg) scale(1);
 	}
+}
+
+.piece-left {
+	--tx: -52px;
+	--rot: -5deg;
+}
+.piece-right {
+	--tx: 52px;
+	--rot: 5deg;
+}
+.piece-top {
+	--ty: -28px;
+	--rot: -2deg;
+}
+.piece-bottom {
+	--ty: 30px;
+	--rot: 2deg;
+}
+.piece-pop {
+	--ty: 20px;
+	--sc: 0.86;
+}
+
+.piece-d0 {
+	animation-delay: 0.05s;
+}
+.piece-d1 {
+	animation-delay: 0.16s;
+}
+.piece-d2 {
+	animation-delay: 0.28s;
+}
+.piece-d3 {
+	animation-delay: 0.4s;
+}
+.piece-d4 {
+	animation-delay: 0.52s;
+}
+.piece-d5 {
+	animation-delay: 0.64s;
+}
+.piece-d6 {
+	animation-delay: 0.76s;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -148,15 +170,11 @@
 	.landing-pager [data-page].stack-enter-back {
 		animation: none !important;
 	}
-	.landing-pager [data-page].stack-enter-forward .reveal,
-	.landing-pager [data-page].stack-enter-back .reveal {
+	.landing-pager [data-page].stack-enter-forward .piece,
+	.landing-pager [data-page].stack-enter-back .piece {
 		animation: none;
 		opacity: 1;
 		transform: none;
-	}
-	.landing-pager [data-page].stack-enter-forward::after,
-	.landing-pager [data-page].stack-enter-back::after {
-		animation: none;
-		opacity: 0;
+		filter: none;
 	}
 }
