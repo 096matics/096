@@ -3,32 +3,71 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import SectorCard from '../../components/SectorCard.astro';
+import PlantillaCard from '../../components/PlantillaCard.astro';
 
-const sectores = await getCollection('sectores');
+const plantillas = await getCollection('plantillas');
+const personalItems = plantillas.filter((p) => p.data.categoria === 'personal' && p.data.estado === 'publico');
+const sectorItems = plantillas.filter((p) => p.data.categoria === 'sector' && p.data.estado !== 'privado');
+
+function agruparPorSector(items: typeof sectorItems) {
+	const grupos = new Map<string, typeof sectorItems>();
+	for (const item of items) {
+		const clave = item.data.sector ?? 'Otros';
+		if (!grupos.has(clave)) grupos.set(clave, []);
+		grupos.get(clave)!.push(item);
+	}
+	return grupos;
+}
+const grupos = agruparPorSector(sectorItems);
 ---
 
 <Layout title="Portafolio">
 	<Header />
 	<main class="mx-auto max-w-5xl px-6 py-16">
 		<p class="text-sm tracking-widest text-amber-400 uppercase">Portafolio</p>
-		<h1 class="mt-3 text-3xl font-semibold text-white">Ejemplos por sector</h1>
+		<h1 class="mt-3 text-3xl font-semibold text-white">Plantillas y ejemplos reales</h1>
 		<p class="mt-3 max-w-xl text-zinc-400">
-			Así se vería la tarjeta NFC en tu negocio. Elige el sector más parecido al tuyo.
+			Así se ven nuestras tarjetas NFC en la práctica. Elige el sector o el estilo más parecido al tuyo.
 		</p>
-		<div class="mt-10 grid gap-4 sm:grid-cols-2">
-			{
-				sectores.map((s) => (
-					<SectorCard
-						slug={s.id}
-						titulo={s.data.titulo}
-						resumen={s.data.resumen}
-						negocioEjemplo={s.data.negocioEjemplo}
-						colorHex={s.data.colorHex}
-					/>
-				))
-			}
-		</div>
+
+		{
+			personalItems.length > 0 && (
+				<section class="mt-12">
+					<h2 class="text-sm font-medium tracking-wide text-zinc-500 uppercase">Nuestro equipo</h2>
+					<div class="mt-4 grid gap-4 sm:grid-cols-3">
+						{personalItems.map((p) => (
+							<PlantillaCard
+								nombre={p.data.nombre}
+								descripcion={p.data.descripcion}
+								colorHex={p.data.colorHex}
+								imagen={p.data.imagen}
+								ruta={p.data.ruta}
+							/>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			[...grupos.entries()].map(([sector, items]) => (
+				<section class="mt-12">
+					<h2 class="text-sm font-medium tracking-wide text-zinc-500 uppercase">{sector}</h2>
+					<div class="mt-4 grid gap-4 sm:grid-cols-3">
+						{items.map((p) => (
+							<PlantillaCard
+								nombre={p.data.nombre}
+								descripcion={p.data.descripcion}
+								sector={sector}
+								colorHex={p.data.colorHex}
+								imagen={p.data.imagen}
+								ruta={p.data.ruta}
+							/>
+						))}
+					</div>
+				</section>
+			))
+		}
 	</main>
 	<Footer />
 </Layout>
