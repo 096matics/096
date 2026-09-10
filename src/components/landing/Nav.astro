@@ -144,11 +144,18 @@ import Logo from '../Logo.astro';
 		.side-nav-label {
 			display: none;
 		}
+		#landingSideNavLogo {
+			display: none;
+		}
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.side-nav-indicator {
 			animation: none;
+			transition: none;
 			box-shadow: 0 0 10px color-mix(in srgb, var(--dot-a) 80%, transparent);
+		}
+		.side-nav-rail {
+			transition: none;
 		}
 	}
 </style>

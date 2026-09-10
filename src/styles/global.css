@@ -79,6 +79,8 @@
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 	scrollbar-width: none;
+	/* deja hueco a la barra lateral (los puntos) para que no se solape con el texto */
+	padding-left: 2.25rem;
 }
 @media (min-width: 640px) {
 	.landing-pager [data-page] {
@@ -124,11 +126,18 @@
 .ambient-glow::after {
 	content: '';
 	position: absolute;
-	width: 60vmax;
-	height: 60vmax;
+	width: 46vmax;
+	height: 46vmax;
 	border-radius: 50%;
-	filter: blur(95px);
+	filter: blur(60px);
 	opacity: 0.22;
+	will-change: transform;
+}
+/* durante el viaje entre páginas paramos la deriva del fondo: dos animaciones pesadas a la vez
+   (el carril moviéndose + el resplandor difuminándose y desplazándose) es lo que rompía la fluidez */
+.ambient-glow.is-paused::before,
+.ambient-glow.is-paused::after {
+	animation-play-state: paused;
 }
 .ambient-glow::before {
 	background: radial-gradient(

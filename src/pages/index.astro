@@ -103,9 +103,11 @@ import Contacto from '../components/landing/Contacto.astro';
 		const MS_PER_100VH = 950; // ritmo del "viaje": ms por cada 100dvh recorrido
 		const MIN_DURATION = 1100;
 		const MAX_DURATION = 2400;
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 		let current = 0;
 		let locked = false;
+		let indicatorMidY = 0; // último centro Y conocido del punto (sin el ajuste de -5 del radio)
 
 		function durationFor(distancePx: number) {
 			const ratio = distancePx / window.innerHeight;
@@ -142,7 +144,7 @@ import Contacto from '../components/landing/Contacto.astro';
 			navButtons.push(btn);
 		});
 
-		function setActiveNav(index: number) {
+		function setActiveNav(index: number): number | null {
 			const label = pages[index]?.dataset.nav;
 			let activeBtn: HTMLButtonElement | null = null;
 			navButtons.forEach((btn) => {
@@ -151,6 +153,7 @@ import Contacto from '../components/landing/Contacto.astro';
 				btn.classList.toggle('active', isActive);
 				if (isActive) activeBtn = btn;
 			});
+			let activeMid: number | null = null;
 			if (navButtons.length > 0) {
 				// el tamaño/hueco de los items también transiciona (el activo crece y empuja a los demás);
 				// medimos las posiciones FINALES desactivando esas transiciones un instante, sin repintar
@@ -159,7 +162,7 @@ import Contacto from '../components/landing/Contacto.astro';
 				const last = navButtons[navButtons.length - 1];
 				const firstMid = first.offsetTop + first.offsetHeight / 2;
 				const lastMid = last.offsetTop + last.offsetHeight / 2;
-				const activeMid = activeBtn ? activeBtn.offsetTop + activeBtn.offsetHeight / 2 : null;
+				activeMid = activeBtn ? activeBtn.offsetTop + activeBtn.offsetHeight / 2 : null;
 				sideNavTrack?.classList.remove('nav-measuring');
 
 				if (sideNavRail) {
@@ -168,10 +171,12 @@ import Contacto from '../components/landing/Contacto.astro';
 					sideNavRail.style.height = `${lastMid - firstMid}px`;
 				}
 				if (activeMid !== null && sideNavIndicator) {
+					indicatorMidY = activeMid;
 					sideNavIndicator.style.transform = `translateY(${activeMid - 5}px)`;
 					sideNavIndicator.classList.add('is-visible');
 				}
 			}
+			return activeMid;
 		}
 
 		function goToPage(index: number) {
@@ -186,34 +191,73 @@ import Contacto from '../components/landing/Contacto.astro';
 			current = index;
 
 			newPage.scrollTop = 0;
-			setActiveNav(current);
+			const indicatorFromY = indicatorMidY;
+			const indicatorToY = setActiveNav(current);
 			updateAccent(newPage, duration);
 
 			newPage.classList.remove('is-revealing');
 			void newPage.offsetWidth;
 			newPage.classList.add('is-revealing');
 
-			// viaje en dos tramos: aceleramos hasta el punto intermedio (la página vacía), una pequeña
-			// pausa ahí, y frenamos hasta el destino — así se siente que se pasa por algo, no un único deslizamiento
+			if (prefersReducedMotion) {
+				track.style.transition = 'none';
+				track.style.transform = `translateY(-${newPage.offsetTop}px)`;
+				void track.offsetWidth;
+				track.style.transition = '';
+				window.setTimeout(() => {
+					locked = false;
+				}, duration);
+				return;
+			}
+
+			// viaje en dos tramos dentro de una única animación nativa: aceleramos hasta el punto intermedio
+			// (la página vacía), una pequeña pausa ahí, y frenamos hasta el destino — el carril y el punto de
+			// la barra lateral comparten exactamente los mismos tiempos para no desincronizarse nunca
 			const midOffset = (oldPage.offsetTop + newPage.offsetTop) / 2;
 			const PAUSE_MS = 90;
 			const phase1 = Math.max(250, duration * 0.42);
 			const phase2 = Math.max(300, duration - phase1 - PAUSE_MS);
 			const total = phase1 + PAUSE_MS + phase2;
+			const off1 = phase1 / total;
+			const off2 = (phase1 + PAUSE_MS) / total;
+			const EASE_IN = 'cubic-bezier(0.6, 0, 1, 0.4)';
+			const EASE_OUT = 'cubic-bezier(0, 0.6, 0.4, 1)';
 
-			if (sideNavIndicator) sideNavIndicator.style.transitionDuration = `${total}ms`;
+			ambientGlow?.classList.add('is-paused');
 
-			track.style.transitionTimingFunction = 'cubic-bezier(0.6, 0, 1, 0.4)';
-			track.style.transitionDuration = `${phase1}ms`;
-			track.style.transform = `translateY(-${midOffset}px)`;
-
-			window.setTimeout(() => {
-				track.style.transitionTimingFunction = 'cubic-bezier(0, 0.6, 0.4, 1)';
-				track.style.transitionDuration = `${phase2}ms`;
+			track.getAnimations().forEach((a) => a.cancel());
+			const trackAnim = track.animate(
+				[
+					{ transform: `translateY(-${oldPage.offsetTop}px)`, offset: 0, easing: EASE_IN },
+					{ transform: `translateY(-${midOffset}px)`, offset: off1 },
+					{ transform: `translateY(-${midOffset}px)`, offset: off2, easing: EASE_OUT },
+					{ transform: `translateY(-${newPage.offsetTop}px)`, offset: 1 },
+				],
+				{ duration: total, fill: 'forwards' }
+			);
+			trackAnim.onfinish = () => {
 				track.style.transform = `translateY(-${newPage.offsetTop}px)`;
-			}, phase1 + PAUSE_MS);
+			};
+
+			if (sideNavIndicator && indicatorToY !== null) {
+				const midIndY = (indicatorFromY + indicatorToY) / 2;
+				sideNavIndicator.getAnimations().forEach((a) => a.cancel());
+				const indAnim = sideNavIndicator.animate(
+					[
+						{ transform: `translateY(${indicatorFromY - 5}px)`, offset: 0, easing: EASE_IN },
+						{ transform: `translateY(${midIndY - 5}px)`, offset: off1 },
+						{ transform: `translateY(${midIndY - 5}px)`, offset: off2, easing: EASE_OUT },
+						{ transform: `translateY(${indicatorToY - 5}px)`, offset: 1 },
+					],
+					{ duration: total, fill: 'forwards' }
+				);
+				indAnim.onfinish = () => {
+					sideNavIndicator.style.transform = `translateY(${indicatorToY - 5}px)`;
+				};
+			}
 
 			window.setTimeout(() => {
+				ambientGlow?.classList.remove('is-paused');
 				locked = false;
 			}, total);
 		}
