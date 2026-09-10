@@ -29,134 +29,58 @@
 	display: none;
 }
 
-/* contenedor de página: entrada/salida sobria (fundido + escala mínima) */
+/* contenedor de página: viaje tipo ascensor, ambas páginas visibles deslizándose a la vez */
 .landing-pager [data-page].stack-exit-forward {
 	display: flex;
 	z-index: 1;
-	animation: page-exit-forward 0.55s cubic-bezier(0.4, 0, 1, 1) forwards;
+	animation: page-exit-forward 1.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 .landing-pager [data-page].stack-exit-back {
 	display: flex;
 	z-index: 1;
-	animation: page-exit-back 0.55s cubic-bezier(0.4, 0, 1, 1) forwards;
+	animation: page-exit-back 1.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 .landing-pager [data-page].stack-enter-forward {
 	display: flex;
 	z-index: 2;
-	animation: page-enter-forward 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	animation: page-enter-forward 1.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 .landing-pager [data-page].stack-enter-back {
 	display: flex;
 	z-index: 2;
-	animation: page-enter-back 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	animation: page-enter-back 1.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 @keyframes page-exit-forward {
 	0% {
-		opacity: 1;
-		transform: translateY(0) scale(1);
+		transform: translateY(0);
 	}
 	100% {
-		opacity: 0;
-		transform: translateY(-18px) scale(0.97);
+		transform: translateY(-100%);
 	}
 }
 @keyframes page-exit-back {
 	0% {
-		opacity: 1;
-		transform: translateY(0) scale(1);
+		transform: translateY(0);
 	}
 	100% {
-		opacity: 0;
-		transform: translateY(18px) scale(0.97);
+		transform: translateY(100%);
 	}
 }
 @keyframes page-enter-forward {
 	0% {
-		opacity: 0;
-		transform: translateY(16px) scale(0.985);
+		transform: translateY(100%);
 	}
 	100% {
-		opacity: 1;
-		transform: translateY(0) scale(1);
+		transform: translateY(0);
 	}
 }
 @keyframes page-enter-back {
 	0% {
-		opacity: 0;
-		transform: translateY(-16px) scale(0.985);
+		transform: translateY(-100%);
 	}
 	100% {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
-}
-
-/* ============ Overlay: buceo rápido entre "archivos" al cambiar de página ============ */
-
-.dive-overlay {
-	position: absolute;
-	inset: 0;
-	z-index: 30;
-	pointer-events: none;
-	opacity: 0;
-	background:
-		repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0 2px, transparent 2px 24px),
-		repeating-linear-gradient(180deg, rgba(129, 140, 248, 0.16) 0 1px, transparent 1px 54px);
-	background-size:
-		100% 120px,
-		100% 270px;
-}
-.dive-overlay.dive-forward {
-	animation: dive-forward 0.6s cubic-bezier(0.3, 0, 0.2, 1) forwards;
-}
-.dive-overlay.dive-back {
-	animation: dive-back 0.6s cubic-bezier(0.3, 0, 0.2, 1) forwards;
-}
-@keyframes dive-forward {
-	0% {
-		opacity: 0;
-		background-position:
-			0 0,
-			0 0;
-		filter: blur(0);
-	}
-	16% {
-		opacity: 1;
-		filter: blur(1.5px);
-	}
-	82% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-		background-position:
-			0 -1500px,
-			0 -1500px;
-		filter: blur(0);
-	}
-}
-@keyframes dive-back {
-	0% {
-		opacity: 0;
-		background-position:
-			0 0,
-			0 0;
-		filter: blur(0);
-	}
-	16% {
-		opacity: 1;
-		filter: blur(1.5px);
-	}
-	82% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-		background-position:
-			0 1500px,
-			0 1500px;
-		filter: blur(0);
+		transform: translateY(0);
 	}
 }
 
@@ -210,27 +134,92 @@
 }
 
 .piece-d0 {
-	animation-delay: 0.05s;
+	animation-delay: 0.35s;
 }
 .piece-d1 {
-	animation-delay: 0.16s;
+	animation-delay: 0.48s;
 }
 .piece-d2 {
-	animation-delay: 0.28s;
+	animation-delay: 0.62s;
 }
 .piece-d3 {
-	animation-delay: 0.4s;
-}
-.piece-d4 {
-	animation-delay: 0.52s;
-}
-.piece-d5 {
-	animation-delay: 0.64s;
-}
-.piece-d6 {
 	animation-delay: 0.76s;
 }
+.piece-d4 {
+	animation-delay: 0.9s;
+}
+.piece-d5 {
+	animation-delay: 1.04s;
+}
+.piece-d6 {
+	animation-delay: 1.18s;
+}
 
+/* ============ Piezas alternativas: texto que se construye a base de píxeles / que materializa ============ */
+
+.piece-pixel {
+	opacity: 0;
+	clip-path: inset(0 100% 0 0);
+	will-change: clip-path, opacity;
+}
+.landing-pager [data-page].stack-enter-forward .piece-pixel,
+.landing-pager [data-page].stack-enter-back .piece-pixel {
+	animation: piece-pixel-reveal 0.9s steps(12, end) forwards;
+}
+@keyframes piece-pixel-reveal {
+	0% {
+		opacity: 0.25;
+		clip-path: inset(0 100% 0 0);
+		filter: brightness(2.2) contrast(1.4);
+	}
+	6% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+		clip-path: inset(0 0 0 0);
+		filter: brightness(1) contrast(1);
+	}
+}
+
+.piece-materialize {
+	opacity: 0;
+	will-change: opacity, filter, transform;
+}
+.landing-pager [data-page].stack-enter-forward .piece-materialize,
+.landing-pager [data-page].stack-enter-back .piece-materialize {
+	animation: piece-materialize 0.85s steps(7, end) forwards;
+}
+@keyframes piece-materialize {
+	0% {
+		opacity: 0;
+		filter: blur(8px) brightness(2.2);
+		transform: scale(1.04);
+	}
+	20% {
+		opacity: 0.4;
+	}
+	38% {
+		opacity: 0.1;
+		filter: blur(4px) brightness(1.6);
+	}
+	55% {
+		opacity: 0.75;
+	}
+	70% {
+		opacity: 0.25;
+	}
+	85% {
+		opacity: 1;
+		filter: blur(1px) brightness(1.05);
+		transform: scale(1.005);
+	}
+	100% {
+		opacity: 1;
+		filter: blur(0) brightness(1);
+		transform: scale(1);
+	}
+}
 @media (prefers-reduced-motion: reduce) {
 	.landing-pager [data-page].stack-exit-forward,
 	.landing-pager [data-page].stack-exit-back,
@@ -238,16 +227,16 @@
 	.landing-pager [data-page].stack-enter-back {
 		animation: none !important;
 	}
-	.dive-overlay.dive-forward,
-	.dive-overlay.dive-back {
-		animation: none !important;
-		opacity: 0 !important;
-	}
 	.landing-pager [data-page].stack-enter-forward .piece,
-	.landing-pager [data-page].stack-enter-back .piece {
+	.landing-pager [data-page].stack-enter-back .piece,
+	.landing-pager [data-page].stack-enter-forward .piece-pixel,
+	.landing-pager [data-page].stack-enter-back .piece-pixel,
+	.landing-pager [data-page].stack-enter-forward .piece-materialize,
+	.landing-pager [data-page].stack-enter-back .piece-materialize {
 		animation: none;
 		opacity: 1;
 		transform: none;
 		filter: none;
+		clip-path: none;
 	}
 }

@@ -3,6 +3,12 @@
 
 <div id="previewOverlay" class="preview-overlay" aria-hidden="true">
 	<div class="preview-backdrop"></div>
+	<button id="previewPrev" class="preview-arrow preview-arrow-prev" aria-label="Anterior">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg>
+	</button>
+	<button id="previewNext" class="preview-arrow preview-arrow-next" aria-label="Siguiente">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg>
+	</button>
 	<div class="preview-panel">
 		<button id="previewClose" class="preview-close" aria-label="Cerrar">
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
@@ -11,7 +17,10 @@
 			<img id="previewImg" src="" alt="" />
 		</div>
 		<div class="preview-info">
-			<p id="previewSector" class="preview-sector"></p>
+			<div class="preview-info-top">
+				<p id="previewSector" class="preview-sector"></p>
+				<p id="previewCounter" class="preview-counter"></p>
+			</div>
 			<h3 id="previewTitle" class="preview-title"></h3>
 			<p id="previewDesc" class="preview-desc"></p>
 			<a id="previewCta" class="preview-cta" href="#" target="_blank" rel="noopener noreferrer">Ver página →</a>
@@ -86,6 +95,53 @@
 		width: 16px;
 		height: 16px;
 	}
+	.preview-arrow {
+		position: absolute;
+		top: 50%;
+		z-index: 2;
+		transform: translateY(-50%);
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(20, 20, 24, 0.7);
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		color: #fff;
+		cursor: pointer;
+		opacity: 0;
+		pointer-events: none;
+		transition:
+			opacity 0.2s ease,
+			background-color 0.2s ease,
+			transform 0.2s ease;
+	}
+	.preview-overlay.is-open .preview-arrow.is-active {
+		opacity: 1;
+		pointer-events: auto;
+	}
+	.preview-arrow:hover {
+		background: rgba(40, 40, 46, 0.9);
+	}
+	.preview-arrow svg {
+		width: 20px;
+		height: 20px;
+	}
+	.preview-arrow-prev {
+		left: 10px;
+	}
+	.preview-arrow-next {
+		right: 10px;
+	}
+	@media (min-width: 640px) {
+		.preview-arrow-prev {
+			left: 24px;
+		}
+		.preview-arrow-next {
+			right: 24px;
+		}
+	}
 	.preview-media {
 		flex-shrink: 0;
 		background: #000;
@@ -111,12 +167,24 @@
 		padding: 28px 28px 30px;
 		overflow-y: auto;
 	}
+	.preview-info-top {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+	}
 	.preview-sector {
 		font-size: 11px;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		color: #f59e0b;
 		margin: 0 0 8px;
+	}
+	.preview-counter {
+		font-size: 11px;
+		color: #71717a;
+		margin: 0 0 8px;
+		white-space: nowrap;
 	}
 	.preview-title {
 		font-size: 22px;
@@ -151,6 +219,18 @@
 	const titleEl = document.getElementById('previewTitle');
 	const descEl = document.getElementById('previewDesc');
 	const ctaEl = document.getElementById('previewCta') as HTMLAnchorElement | null;
+	const counterEl = document.getElementById('previewCounter');
+	const prevBtn = document.getElementById('previewPrev');
+	const nextBtn = document.getElementById('previewNext');
+
+	let group: HTMLElement[] = [];
+	let groupIndex = -1;
+
+	function collectGroup(trigger: HTMLElement) {
+		const groupName = trigger.dataset.previewGroup;
+		const all = Array.from(document.querySelectorAll<HTMLElement>('[data-preview-trigger]'));
+		return groupName ? all.filter((el) => el.dataset.previewGroup === groupName) : all;
+	}
 
 	function show(trigger: HTMLElement) {
 		if (!overlay) return;
@@ -170,14 +250,31 @@
 			ctaEl.href = previewHref;
 			ctaEl.textContent = previewCta ?? 'Ver página →';
 		}
+
+		group = collectGroup(trigger);
+		groupIndex = group.indexOf(trigger);
+		const hasMultiple = group.length > 1;
+		if (counterEl) counterEl.textContent = hasMultiple ? `${groupIndex + 1} / ${group.length}` : '';
+		prevBtn?.classList.toggle('is-active', hasMultiple);
+		nextBtn?.classList.toggle('is-active', hasMultiple);
+
 		overlay.classList.add('is-open');
 		overlay.setAttribute('aria-hidden', 'false');
+	}
+
+	function step(delta: number) {
+		if (group.length < 2) return;
+		groupIndex = (groupIndex + delta + group.length) % group.length;
+		show(group[groupIndex]);
 	}
 
 	function hide() {
 		overlay?.classList.remove('is-open');
 		overlay?.setAttribute('aria-hidden', 'true');
 	}
+
+	prevBtn?.addEventListener('click', () => step(-1));
+	nextBtn?.addEventListener('click', () => step(1));
 
 	document.addEventListener('click', (e) => {
 		const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-preview-trigger]');
@@ -200,7 +297,11 @@
 				e.preventDefault();
 				show(trigger);
 			}
+			return;
 		}
+		if (!overlay?.classList.contains('is-open')) return;
 		if (e.key === 'Escape') hide();
+		if (e.key === 'ArrowRight') step(1);
+		if (e.key === 'ArrowLeft') step(-1);
 	});
 </script>
