@@ -2,8 +2,20 @@
 import WhatsAppCTA from '../WhatsAppCTA.astro';
 
 const equipo = [
-	{ nombre: 'David Ferrer Herraiz', ruta: '/tarjeta/personal-david' },
-	{ nombre: 'Carlos Cantos Blasco', ruta: '/tarjeta/personal-carlos' },
+	{
+		nombre: 'David Ferrer Herraiz',
+		rol: 'Cofundador',
+		ruta: '/tarjeta/personal-david',
+		imagen: '/plantillas/personal-david.jpg',
+		descripcion: 'Tarjeta digital personal · 096matics',
+	},
+	{
+		nombre: 'Carlos Cantos Blasco',
+		rol: 'Cofundador',
+		ruta: '/tarjeta/personal-carlos',
+		imagen: '/plantillas/personal-carlos.jpg',
+		descripcion: 'Tarjeta digital personal · 096matics',
+	},
 ];
 ---
 
@@ -26,14 +38,26 @@ const equipo = [
 				<div class="mt-4 flex flex-wrap gap-3">
 					{
 						equipo.map((persona) => (
-							<a
-								href={persona.ruta}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="rounded-full border border-zinc-800 bg-zinc-900/40 px-4 py-2 text-sm text-zinc-300 transition-colors hover:border-zinc-600 hover:text-white"
+							<div
+								role="button"
+								tabindex="0"
+								data-preview-trigger
+								data-preview-img={persona.imagen}
+								data-preview-sector={persona.rol}
+								data-preview-title={persona.nombre}
+								data-preview-desc={persona.descripcion}
+								data-preview-href={persona.ruta}
+								data-preview-cta="Abrir esta tarjeta →"
+								class="flex cursor-pointer items-center gap-2.5 rounded-full border border-zinc-800 bg-zinc-900/40 py-1.5 pr-4 pl-1.5 transition-colors hover:border-zinc-600"
 							>
-								{persona.nombre} →
-							</a>
+								<img
+									src={persona.imagen}
+									alt={persona.nombre}
+									class="h-8 w-8 shrink-0 rounded-full object-cover"
+									loading="lazy"
+								/>
+								<span class="text-sm text-zinc-300">{persona.nombre}</span>
+							</div>
 						))
 					}
 				</div>

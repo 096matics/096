@@ -1,46 +1,39 @@
 ---
-const equipo = [
-	{ nombre: 'David Ferrer Herraiz', rol: 'Cofundador' },
-	{ nombre: 'Carlos Cantos Blasco', rol: 'Cofundador' },
+const pilares = [
+	{ titulo: 'Cercanía real', texto: 'Visitamos tu negocio en persona: bar, peluquería o taller, sea cual sea.' },
+	{ titulo: 'Sin jerga ni formularios', texto: 'Entendemos qué necesitas y volvemos con la tarjeta lista para usar.' },
+	{ titulo: 'Precisión técnica', texto: 'NFC bien configurado y landing propia, sin sorpresas ni letra pequeña.' },
 ];
 ---
 
 <section id="quienes-somos" data-page data-nav="Quiénes somos" class="flex min-h-dvh flex-col border-t border-zinc-800 py-16 sm:py-20">
-	<div class="m-auto grid w-full max-w-5xl gap-10 px-6 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+	<div class="m-auto grid w-full max-w-5xl gap-10 px-6 lg:grid-cols-[1fr_0.85fr] lg:items-center">
 		<div>
 			<p class="piece piece-top piece-d0 text-sm tracking-widest text-indigo-400 uppercase">Quiénes somos</p>
 			<h2 class="piece piece-left piece-d1 mt-3 text-3xl font-semibold text-white sm:text-4xl">
-				De aquí, para negocios de aquí
+				Una empresa de tarjetas NFC de aquí, para negocios de aquí
 			</h2>
 			<div class="piece piece-left piece-d2 mt-6 max-w-2xl space-y-3 text-zinc-300">
 				<p>
-					Detrás de 096matics están David Ferrer Herraiz y Carlos Cantos Blasco, instalando cada tarjeta
-					en persona, negocio a negocio, en la Comunidad Valenciana.
+					096matics diseña e instala tarjetas de contacto y reseñas para negocios y profesionales de la
+					Comunidad Valenciana, negocio a negocio, sin intermediarios.
 				</p>
 				<p>
-					Nada de formularios genéricos ni jerga de growth hacker: visitamos el bar, la peluquería o el
-					taller, entendemos qué necesitan y volvemos con la tarjeta lista.
+					No vendemos una plantilla genérica: cada tarjeta lleva su propia landing, a medida del sector y
+					de la marca, con mantenimiento incluido cuando algo cambia.
 				</p>
 			</div>
 		</div>
 
-		<div class="piece piece-right piece-d3 flex flex-col gap-4">
+		<div class="piece piece-right piece-d3 flex flex-col gap-3">
 			{
-				equipo.map((persona) => (
-					<div class="flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900/40 px-5 py-4">
-						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-sm font-semibold text-white">
-							{persona.nombre.charAt(0)}
-						</div>
-						<div>
-							<p class="text-sm font-medium text-white">{persona.nombre}</p>
-							<p class="text-xs text-zinc-500">{persona.rol}</p>
-						</div>
+				pilares.map((p) => (
+					<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 px-5 py-4">
+						<p class="text-sm font-medium text-white">{p.titulo}</p>
+						<p class="mt-1 text-xs text-zinc-500">{p.texto}</p>
 					</div>
 				))
 			}
-			<p class="text-xs text-zinc-500">
-				Precisión técnica detrás de un trato cercano: NFC bien configurado, landing lista, sin sorpresas.
-			</p>
 		</div>
 	</div>
 </section>

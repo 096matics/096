@@ -1,0 +1,271 @@
+---
+const whatsapp =
+	'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, me interesa la plantilla de Seguros (Póliza)');
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Marc Ferrer — 096matics</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				overflow: hidden;
+				overscroll-behavior: none;
+			}
+			body {
+				height: 100dvh;
+				background: #f4ecd8;
+				background-image:
+					radial-gradient(rgba(120, 90, 40, 0.05) 1px, transparent 1px),
+					radial-gradient(rgba(120, 90, 40, 0.04) 1px, transparent 1px);
+				background-size:
+					3px 3px,
+					7px 7px;
+				background-position:
+					0 0,
+					2px 3px;
+				font-family: 'IBM Plex Sans', sans-serif;
+				color: #2c2210;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 30px 16px;
+			}
+			.doc {
+				width: 100%;
+				max-width: 400px;
+				background: #fbf6ea;
+				border: 1px solid rgba(44, 34, 16, 0.25);
+				box-shadow:
+					0 2px 0 #fbf6ea,
+					0 0 0 5px #fbf6ea,
+					0 0 0 6px rgba(44, 34, 16, 0.3),
+					0 30px 60px -25px rgba(30, 20, 5, 0.45);
+				padding: 26px 26px 30px;
+				position: relative;
+				opacity: 0;
+				animation: unroll 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+			}
+			@keyframes unroll {
+				0% {
+					opacity: 0;
+					transform: scaleY(0.85);
+					transform-origin: top;
+				}
+				100% {
+					opacity: 1;
+					transform: scaleY(1);
+				}
+			}
+			.crest {
+				text-align: center;
+				font-family: 'Cormorant Garamond', serif;
+				font-size: 11px;
+				letter-spacing: 0.3em;
+				text-transform: uppercase;
+				color: #8a6a2f;
+				margin: 0 0 2px;
+			}
+			.ref {
+				text-align: center;
+				font-size: 10px;
+				letter-spacing: 0.1em;
+				color: rgba(44, 34, 16, 0.5);
+				margin: 0 0 16px;
+			}
+			.rule {
+				height: 1px;
+				background: repeating-linear-gradient(90deg, rgba(44, 34, 16, 0.35) 0 5px, transparent 5px 9px);
+				margin-bottom: 18px;
+			}
+			.name {
+				font-family: 'Cormorant Garamond', serif;
+				font-size: 30px;
+				font-weight: 600;
+				text-align: center;
+				margin: 0 0 2px;
+			}
+			.role {
+				text-align: center;
+				font-size: 13px;
+				font-style: italic;
+				color: rgba(44, 34, 16, 0.7);
+				margin: 0 0 18px;
+			}
+			.clauses {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 8px;
+				margin-bottom: 20px;
+			}
+			.clause {
+				border: 1px solid rgba(44, 34, 16, 0.2);
+				padding: 8px 10px;
+				font-size: 11.5px;
+			}
+			.clause b {
+				display: block;
+				font-family: 'Cormorant Garamond', serif;
+				font-size: 15px;
+			}
+			.seal-row {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 20px;
+			}
+			.sign-line {
+				flex: 1;
+				border-bottom: 1px solid rgba(44, 34, 16, 0.4);
+				margin-right: 14px;
+				padding-bottom: 4px;
+				font-size: 10px;
+				letter-spacing: 0.08em;
+				color: rgba(44, 34, 16, 0.5);
+			}
+			.seal {
+				width: 54px;
+				height: 54px;
+				border-radius: 50%;
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: radial-gradient(circle at 35% 30%, #b23b2e, #7a1f18);
+				color: #f4ecd8;
+				font-family: 'Cormorant Garamond', serif;
+				font-weight: 700;
+				font-size: 16px;
+				box-shadow: 0 6px 14px -4px rgba(122, 31, 24, 0.6);
+				transform: scale(0);
+				animation: stamp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+				position: relative;
+			}
+			.seal::after {
+				content: '';
+				position: absolute;
+				inset: -8px;
+				border-radius: 50%;
+				border: 1.5px solid rgba(122, 31, 24, 0.5);
+				opacity: 0;
+				animation: ring 0.6s ease-out 0.55s forwards;
+			}
+			@keyframes stamp {
+				0% {
+					transform: scale(2.2) rotate(-14deg);
+					opacity: 0;
+				}
+				60% {
+					transform: scale(0.9) rotate(4deg);
+					opacity: 1;
+				}
+				100% {
+					transform: scale(1) rotate(0deg);
+					opacity: 1;
+				}
+			}
+			@keyframes ring {
+				0% {
+					opacity: 0.6;
+					transform: scale(0.7);
+				}
+				100% {
+					opacity: 0;
+					transform: scale(1.6);
+				}
+			}
+			.icon-row {
+				display: flex;
+				gap: 8px;
+				margin-bottom: 14px;
+			}
+			.icon-btn {
+				flex: 1;
+				text-align: center;
+				padding: 10px;
+				border: 1px solid rgba(44, 34, 16, 0.3);
+				border-radius: 3px;
+				color: #2c2210;
+				text-decoration: none;
+				font-size: 11.5px;
+				font-weight: 500;
+			}
+			.save-link {
+				display: block;
+				text-align: center;
+				font-size: 11px;
+				color: #8a6a2f;
+				text-decoration: none;
+				margin-bottom: 16px;
+			}
+			.cta {
+				display: block;
+				text-align: center;
+				padding: 13px;
+				border: 1px solid #2c2210;
+				border-radius: 3px;
+				background: #2c2210;
+				color: #f4ecd8;
+				text-decoration: none;
+				font-family: 'Cormorant Garamond', serif;
+				font-weight: 600;
+				font-size: 16px;
+				letter-spacing: 0.03em;
+			}
+			.footer {
+				text-align: center;
+				margin-top: 14px;
+				font-size: 9.5px;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: rgba(44, 34, 16, 0.45);
+			}
+		</style>
+	</head>
+	<body>
+		<div style="width:100%;max-width:400px;">
+		<div class="doc">
+			<p class="crest">096matics · seguros</p>
+			<p class="ref">Póliza Nº 096-MF-2025</p>
+			<div class="rule"></div>
+			<h1 class="name">Marc Ferrer</h1>
+			<p class="role">Agente de seguros — Segurvida Correduría</p>
+			<div class="clauses">
+				<div class="clause"><b>Hogar</b>Cobertura total</div>
+				<div class="clause"><b>Vida</b>Cobertura total</div>
+				<div class="clause"><b>Auto</b>Cobertura total</div>
+				<div class="clause"><b>Salud</b>Cobertura total</div>
+			</div>
+			<div class="seal-row">
+				<div class="sign-line">Contacto directo verificado</div>
+				<div class="seal">MF</div>
+			</div>
+			<div class="icon-row">
+				<a class="icon-btn" href="tel:+34727700065">Llamar</a>
+				<a class="icon-btn" href="https://wa.me/34727700065" target="_blank">WhatsApp</a>
+			</div>
+			<a
+				class="save-link"
+				download="marc-ferrer.vcf"
+				href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3AFerrer%3BMarc%3B%3B%3B%0AFN%3AMarc%20Ferrer%0AORG%3ASegurvida%20Correduria%0ATITLE%3AAgente%20de%20seguros%0ATEL%3BTYPE%3DCELL%3A%2B34727700065%0AEND%3AVCARD"
+				>↓ Guardar contacto</a
+			>
+			<a class="cta" href={whatsapp} target="_blank">Solicitar presupuesto</a>
+		</div>
+		<p class="footer">096matics · Tarjeta digital</p>
+		</div>
+	</body>
+</html>

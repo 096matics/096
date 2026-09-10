@@ -4,24 +4,76 @@ import Logo from '../Logo.astro';
 
 <nav
 	id="landingSideNav"
-	class="fixed top-1/2 left-5 z-40 flex -translate-y-1/2 flex-col items-start gap-4 opacity-0 transition-opacity duration-300 sm:left-8"
+	class="fixed top-1/2 left-5 z-40 flex -translate-y-1/2 flex-col items-start gap-5 opacity-0 transition-opacity duration-300 sm:left-8"
 	aria-label="Secciones"
 >
-	<button id="landingSideNavLogo" class="mb-2 text-lg" aria-label="Ir al inicio">
-		<Logo />
-	</button>
-	<ul id="landingSideNavList" class="flex flex-col gap-4"></ul>
+	<button id="landingSideNavLogo" class="text-lg" aria-label="Ir al inicio"><Logo /></button>
+	<div class="side-nav-track">
+		<span class="side-nav-rail"></span>
+		<span id="landingSideNavProgress" class="side-nav-progress"></span>
+		<span id="landingSideNavPill" class="side-nav-pill"></span>
+		<ul id="landingSideNavList" class="side-nav-list"></ul>
+	</div>
 </nav>
 
 <style>
+	.side-nav-track {
+		position: relative;
+		padding-left: 0;
+	}
+	.side-nav-list {
+		position: relative;
+		z-index: 2;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.side-nav-rail {
+		position: absolute;
+		left: 2.5px;
+		top: 10px;
+		bottom: 10px;
+		width: 1px;
+		background: rgba(228, 228, 231, 0.14);
+	}
+	.side-nav-progress {
+		position: absolute;
+		left: 2.5px;
+		top: 10px;
+		width: 1px;
+		height: 0;
+		background: linear-gradient(180deg, #3b82f6, #a855f7);
+		transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+	}
+	.side-nav-pill {
+		position: absolute;
+		left: -12px;
+		width: calc(100% + 24px);
+		height: 34px;
+		border-radius: 10px;
+		background: linear-gradient(90deg, rgba(59, 130, 246, 0.14), rgba(168, 85, 247, 0.08) 70%, transparent);
+		border-left: 2px solid transparent;
+		border-image: linear-gradient(180deg, #3b82f6, #a855f7) 1;
+		opacity: 0;
+		transform: translateY(0);
+		transition:
+			transform 0.4s cubic-bezier(0.19, 1, 0.22, 1),
+			opacity 0.25s ease;
+		z-index: 1;
+		pointer-events: none;
+	}
+	.side-nav-pill.is-visible {
+		opacity: 1;
+	}
 	.side-nav-item {
+		position: relative;
 		display: flex;
 		align-items: center;
-		gap: 10px;
+		gap: 11px;
 		background: none;
 		border: none;
 		cursor: pointer;
-		padding: 0;
+		padding: 6px 0;
 		font-size: 11px;
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
@@ -41,7 +93,8 @@ import Logo from '../Logo.astro';
 		flex-shrink: 0;
 		transition:
 			background 0.2s ease,
-			transform 0.2s ease;
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
 	}
 	.side-nav-item.active {
 		color: #fff;
@@ -51,13 +104,17 @@ import Logo from '../Logo.astro';
 	}
 	.side-nav-item.active::before {
 		background: linear-gradient(90deg, #3b82f6, #a855f7);
-		transform: scale(1.8);
+		transform: scale(2);
+		box-shadow: 0 0 12px rgba(139, 92, 246, 0.7);
 	}
 	#landingSideNavLogo {
 		cursor: pointer;
 	}
 	@media (max-width: 640px) {
 		.side-nav-label {
+			display: none;
+		}
+		.side-nav-pill {
 			display: none;
 		}
 	}

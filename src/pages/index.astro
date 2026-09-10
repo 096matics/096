@@ -13,6 +13,7 @@ import Contacto from '../components/landing/Contacto.astro';
 	<Pulso />
 	<Nav />
 	<main class="landing-pager">
+		<div id="diveOverlay" class="dive-overlay" aria-hidden="true"></div>
 		<Hero />
 
 		<ProductoBlock
@@ -79,6 +80,9 @@ import Contacto from '../components/landing/Contacto.astro';
 	const sideNav = document.getElementById('landingSideNav');
 	const sideNavList = document.getElementById('landingSideNavList');
 	const sideNavLogo = document.getElementById('landingSideNavLogo');
+	const sideNavProgress = document.getElementById('landingSideNavProgress');
+	const sideNavPill = document.getElementById('landingSideNavPill');
+	const diveOverlay = document.getElementById('diveOverlay');
 
 	if (root) {
 		const pages = Array.from(root.querySelectorAll<HTMLElement>('[data-page]'));
@@ -104,10 +108,21 @@ import Contacto from '../components/landing/Contacto.astro';
 
 		function setActiveNav(index: number) {
 			const label = pages[index]?.dataset.nav;
-			navButtons.forEach((btn) => {
+			const activeBtn = navButtons.find((btn) => {
 				const btnLabel = btn.querySelector('.side-nav-label')?.textContent;
-				btn.classList.toggle('active', !!label && btnLabel === label);
+				const isActive = !!label && btnLabel === label;
+				btn.classList.toggle('active', isActive);
+				return isActive;
 			});
+			if (activeBtn) {
+				const mid = activeBtn.offsetTop + activeBtn.offsetHeight / 2;
+				if (sideNavProgress) sideNavProgress.style.height = `${mid}px`;
+				if (sideNavPill) {
+					sideNavPill.style.transform = `translateY(${activeBtn.offsetTop}px)`;
+					sideNavPill.style.height = `${activeBtn.offsetHeight}px`;
+					sideNavPill.classList.add('is-visible');
+				}
+			}
 		}
 
 		function goToPage(index: number) {
@@ -130,6 +145,13 @@ import Contacto from '../components/landing/Contacto.astro';
 			oldPage.classList.add(goingBack ? 'stack-exit-back' : 'stack-exit-forward');
 			newPage.classList.add(goingBack ? 'stack-enter-back' : 'stack-enter-forward');
 			setActiveNav(current);
+
+			if (diveOverlay) {
+				diveOverlay.classList.remove('dive-forward', 'dive-back');
+				void diveOverlay.offsetWidth;
+				diveOverlay.classList.add(goingBack ? 'dive-back' : 'dive-forward');
+				window.setTimeout(() => diveOverlay.classList.remove('dive-forward', 'dive-back'), 650);
+			}
 
 			window.setTimeout(() => {
 				oldPage.classList.remove('stack-exit-forward', 'stack-exit-back', 'is-current');

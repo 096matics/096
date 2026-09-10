@@ -14,13 +14,20 @@ const whatsappHref =
 	'https://wa.me/34727700065?text=' + encodeURIComponent(`Hola, me interesa la plantilla "${nombre}"`);
 const href = ruta ?? whatsappHref;
 const accent = colorHex ?? '#f59e0b';
+const ctaLabel = ruta ? 'Ver página →' : 'Pídela por WhatsApp →';
 ---
 
-<a
-	href={href}
-	target="_blank"
-	rel="noopener noreferrer"
-	class="group block overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 transition-colors hover:border-zinc-600"
+<div
+	role="button"
+	tabindex="0"
+	data-preview-trigger
+	data-preview-img={imagen}
+	data-preview-sector={sector ?? 'Tarjeta personal'}
+	data-preview-title={nombre}
+	data-preview-desc={descripcion}
+	data-preview-href={href}
+	data-preview-cta={ctaLabel}
+	class="group block cursor-pointer overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 transition-colors hover:border-zinc-600"
 >
 	{
 		imagen ? (
@@ -38,8 +45,6 @@ const accent = colorHex ?? '#f59e0b';
 		<p class="text-xs tracking-wide uppercase" style={`color:${accent}`}>{sector ?? 'Tarjeta personal'}</p>
 		<h3 class="mt-1 text-lg font-medium text-white">{nombre}</h3>
 		<p class="mt-2 text-sm text-zinc-400">{descripcion}</p>
-		<span class="mt-4 inline-block text-sm text-zinc-300 group-hover:text-white">
-			{ruta ? 'Ver página →' : 'Pídela por WhatsApp →'}
-		</span>
+		<span class="mt-4 inline-block text-sm text-zinc-300 group-hover:text-white">{ctaLabel}</span>
 	</div>
-</a>
+</div>

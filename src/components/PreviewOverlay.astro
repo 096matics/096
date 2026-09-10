@@ -1,0 +1,206 @@
+---
+---
+
+<div id="previewOverlay" class="preview-overlay" aria-hidden="true">
+	<div class="preview-backdrop"></div>
+	<div class="preview-panel">
+		<button id="previewClose" class="preview-close" aria-label="Cerrar">
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+		</button>
+		<div class="preview-media">
+			<img id="previewImg" src="" alt="" />
+		</div>
+		<div class="preview-info">
+			<p id="previewSector" class="preview-sector"></p>
+			<h3 id="previewTitle" class="preview-title"></h3>
+			<p id="previewDesc" class="preview-desc"></p>
+			<a id="previewCta" class="preview-cta" href="#" target="_blank" rel="noopener noreferrer">Ver página →</a>
+		</div>
+	</div>
+</div>
+
+<style>
+	.preview-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 100;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 24px;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.25s ease;
+	}
+	.preview-overlay.is-open {
+		opacity: 1;
+		pointer-events: auto;
+	}
+	.preview-backdrop {
+		position: absolute;
+		inset: 0;
+		background: rgba(5, 5, 8, 0.8);
+		backdrop-filter: blur(6px);
+	}
+	.preview-panel {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		max-width: 720px;
+		max-height: 88vh;
+		background: #111114;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 20px;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		transform: scale(0.94) translateY(10px);
+		transition: transform 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+	}
+	@media (min-width: 720px) {
+		.preview-panel {
+			flex-direction: row;
+			max-height: 78vh;
+		}
+	}
+	.preview-overlay.is-open .preview-panel {
+		transform: scale(1) translateY(0);
+	}
+	.preview-close {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		z-index: 2;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0.5);
+		border: 1px solid rgba(255, 255, 255, 0.15);
+		color: #fff;
+		cursor: pointer;
+	}
+	.preview-close svg {
+		width: 16px;
+		height: 16px;
+	}
+	.preview-media {
+		flex-shrink: 0;
+		background: #000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		max-height: 40vh;
+		overflow: hidden;
+	}
+	@media (min-width: 720px) {
+		.preview-media {
+			width: 42%;
+			max-height: none;
+		}
+	}
+	.preview-media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top;
+	}
+	.preview-info {
+		padding: 28px 28px 30px;
+		overflow-y: auto;
+	}
+	.preview-sector {
+		font-size: 11px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #f59e0b;
+		margin: 0 0 8px;
+	}
+	.preview-title {
+		font-size: 22px;
+		font-weight: 600;
+		color: #fff;
+		margin: 0 0 10px;
+	}
+	.preview-desc {
+		font-size: 14px;
+		line-height: 1.6;
+		color: #a1a1aa;
+		margin: 0 0 22px;
+	}
+	.preview-cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 11px 18px;
+		border-radius: 999px;
+		background: linear-gradient(135deg, #3b82f6, #a855f7);
+		color: #fff;
+		text-decoration: none;
+		font-size: 13.5px;
+		font-weight: 500;
+	}
+</style>
+
+<script>
+	const overlay = document.getElementById('previewOverlay');
+	const img = document.getElementById('previewImg') as HTMLImageElement | null;
+	const sectorEl = document.getElementById('previewSector');
+	const titleEl = document.getElementById('previewTitle');
+	const descEl = document.getElementById('previewDesc');
+	const ctaEl = document.getElementById('previewCta') as HTMLAnchorElement | null;
+
+	function show(trigger: HTMLElement) {
+		if (!overlay) return;
+		const { previewImg, previewSector, previewTitle, previewDesc, previewHref, previewCta } = trigger.dataset;
+		if (img) {
+			if (previewImg) {
+				img.src = previewImg;
+				img.style.display = '';
+			} else {
+				img.style.display = 'none';
+			}
+		}
+		if (sectorEl) sectorEl.textContent = previewSector ?? '';
+		if (titleEl) titleEl.textContent = previewTitle ?? '';
+		if (descEl) descEl.textContent = previewDesc ?? '';
+		if (ctaEl && previewHref) {
+			ctaEl.href = previewHref;
+			ctaEl.textContent = previewCta ?? 'Ver página →';
+		}
+		overlay.classList.add('is-open');
+		overlay.setAttribute('aria-hidden', 'false');
+	}
+
+	function hide() {
+		overlay?.classList.remove('is-open');
+		overlay?.setAttribute('aria-hidden', 'true');
+	}
+
+	document.addEventListener('click', (e) => {
+		const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-preview-trigger]');
+		if (trigger) {
+			e.preventDefault();
+			show(trigger);
+			return;
+		}
+		if ((e.target as HTMLElement).closest('#previewClose')) {
+			hide();
+			return;
+		}
+		if (e.target === overlay) hide();
+	});
+
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			const trigger = (e.target as HTMLElement)?.closest?.<HTMLElement>('[data-preview-trigger]');
+			if (trigger) {
+				e.preventDefault();
+				show(trigger);
+			}
+		}
+		if (e.key === 'Escape') hide();
+	});
+</script>
