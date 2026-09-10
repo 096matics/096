@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
 import Pulso from '../components/landing/Pulso.astro';
 import Nav from '../components/landing/Nav.astro';
 import Hero from '../components/landing/Hero.astro';
@@ -13,11 +12,12 @@ import Contacto from '../components/landing/Contacto.astro';
 <Layout title="Tarjetas NFC para negocios locales">
 	<Pulso />
 	<Nav />
-	<main>
+	<main class="landing-pager">
 		<Hero />
 
 		<ProductoBlock
 			id="producto-personal"
+			navLabel="Tarjetas personales"
 			numero="Producto 1 · Tarjetas personales"
 			titulo="Tu contacto, en un toque"
 			descripcion="Una tarjeta NFC de presentación digital para profesionales: un toque y tu cliente guarda tu teléfono, email, redes o web, sin repartir tarjetas de papel."
@@ -43,6 +43,7 @@ import Contacto from '../components/landing/Contacto.astro';
 
 		<ProductoBlock
 			id="producto-google"
+			navLabel="Reseñas Google"
 			numero="Producto 2 · Reseñas de Google"
 			titulo="Reseñas de Google, sin fricción"
 			descripcion="Tu cliente acerca el móvil a la tarjeta y aterriza directo en la ventana de dejar una reseña en tu ficha de Google. Sin apps, sin buscar el nombre del negocio, sin escribir nada a mano."
@@ -71,36 +72,186 @@ import Contacto from '../components/landing/Contacto.astro';
 		<PortafolioPreview />
 		<Contacto />
 	</main>
-	<Footer />
 </Layout>
 
 <script>
-	let lastY = window.scrollY;
-	let direction: 'forward' | 'back' = 'forward';
+	const root = document.querySelector('.landing-pager') as HTMLElement | null;
+	const sideNav = document.getElementById('landingSideNav');
+	const sideNavList = document.getElementById('landingSideNavList');
+	const sideNavLogo = document.getElementById('landingSideNavLogo');
 
-	window.addEventListener(
-		'scroll',
-		() => {
-			const y = window.scrollY;
-			if (y > lastY) direction = 'forward';
-			else if (y < lastY) direction = 'back';
-			lastY = y;
-		},
-		{ passive: true }
-	);
+	if (root) {
+		const pages = Array.from(root.querySelectorAll<HTMLElement>('[data-page]'));
+		const DURATION = 2000; // debe coincidir con la duración de las animaciones stack-* en global.css
+		let current = 0;
+		let locked = false;
 
-	const pages = document.querySelectorAll('[data-page]');
-	const observer = new IntersectionObserver(
-		(entries) => {
-			for (const entry of entries) {
-				if (!entry.isIntersecting) continue;
-				const el = entry.target;
-				el.classList.remove('enter-forward', 'enter-back');
-				void (el as HTMLElement).offsetWidth;
-				el.classList.add(direction === 'back' ? 'enter-back' : 'enter-forward');
+		pages.forEach((p, i) => p.classList.toggle('is-current', i === 0));
+
+		const navButtons: HTMLButtonElement[] = [];
+		pages.forEach((p, i) => {
+			const label = p.dataset.nav;
+			if (!label || !sideNavList) return;
+			const li = document.createElement('li');
+			const btn = document.createElement('button');
+			btn.className = 'side-nav-item';
+			btn.innerHTML = `<span class="side-nav-label">${label}</span>`;
+			btn.addEventListener('click', () => goToPage(i));
+			li.appendChild(btn);
+			sideNavList.appendChild(li);
+			navButtons.push(btn);
+		});
+
+		function setActiveNav(index: number) {
+			const label = pages[index]?.dataset.nav;
+			navButtons.forEach((btn) => {
+				const btnLabel = btn.querySelector('.side-nav-label')?.textContent;
+				btn.classList.toggle('active', !!label && btnLabel === label);
+			});
+		}
+
+		sideNavLogo?.addEventListener('click', () => goToPage(0));
+
+		function playReveal(page: HTMLElement) {
+			const els = page.querySelectorAll('.reveal');
+			els.forEach((el, i) => {
+				(el as HTMLElement).style.animationDelay = 0.35 + (i % 3) * 0.12 + 's';
+			});
+		}
+
+		function goToPage(index: number) {
+			index = Math.max(0, Math.min(pages.length - 1, index));
+			if (index === current || locked) return;
+			locked = true;
+
+			const goingBack = index < current;
+			const oldPage = pages[current];
+			const newPage = pages[index];
+			current = index;
+
+			oldPage.classList.remove('stack-enter-forward', 'stack-enter-back');
+			newPage.classList.remove('stack-exit-forward', 'stack-exit-back', 'stack-enter-forward', 'stack-enter-back');
+
+			newPage.classList.add('is-current');
+			newPage.scrollTop = 0;
+			void newPage.offsetWidth;
+
+			oldPage.classList.add(goingBack ? 'stack-exit-back' : 'stack-exit-forward');
+			newPage.classList.add(goingBack ? 'stack-enter-back' : 'stack-enter-forward');
+			playReveal(newPage);
+			setActiveNav(current);
+
+			window.setTimeout(() => {
+				oldPage.classList.remove('stack-exit-forward', 'stack-exit-back', 'is-current');
+				locked = false;
+			}, DURATION + 60);
+		}
+
+		function atTop(page: HTMLElement) {
+			return page.scrollTop <= 1;
+		}
+		function atBottom(page: HTMLElement) {
+			return Math.ceil(page.scrollTop + page.clientHeight) >= page.scrollHeight - 1;
+		}
+
+		let wheelBuffer = 0;
+		window.addEventListener(
+			'wheel',
+			(e) => {
+				const page = pages[current];
+				if (locked) {
+					e.preventDefault();
+					return;
+				}
+				if (e.deltaY > 0 && !atBottom(page)) return;
+				if (e.deltaY < 0 && !atTop(page)) return;
+				e.preventDefault();
+				wheelBuffer += e.deltaY;
+				if (Math.abs(wheelBuffer) > 34) {
+					goToPage(current + (wheelBuffer > 0 ? 1 : -1));
+					wheelBuffer = 0;
+				}
+			},
+			{ passive: false }
+		);
+
+		let touchStartY: number | null = null;
+		let touchStartedAtEdge = false;
+		window.addEventListener(
+			'touchstart',
+			(e) => {
+				touchStartY = e.touches[0].clientY;
+				const page = pages[current];
+				touchStartedAtEdge = atTop(page) || atBottom(page);
+			},
+			{ passive: true }
+		);
+		window.addEventListener(
+			'touchmove',
+			(e) => {
+				if (locked) {
+					e.preventDefault();
+					return;
+				}
+				if (touchStartY === null) return;
+				const page = pages[current];
+				const dy = touchStartY - e.touches[0].clientY;
+				const goingDown = dy > 0;
+				if (goingDown && !atBottom(page)) return;
+				if (!goingDown && !atTop(page)) return;
+				e.preventDefault();
+			},
+			{ passive: false }
+		);
+		window.addEventListener(
+			'touchend',
+			(e) => {
+				if (touchStartY === null || locked) {
+					touchStartY = null;
+					return;
+				}
+				const page = pages[current];
+				const dy = touchStartY - e.changedTouches[0].clientY;
+				const goingDown = dy > 0;
+				const canAdvance = goingDown ? atBottom(page) : atTop(page);
+				if (canAdvance && Math.abs(dy) > 40) {
+					goToPage(current + (goingDown ? 1 : -1));
+				}
+				touchStartY = null;
+			},
+			{ passive: true }
+		);
+
+		window.addEventListener('keydown', (e) => {
+			if (locked) return;
+			const page = pages[current];
+			if ((e.key === 'ArrowDown' || e.key === 'PageDown') && atBottom(page)) {
+				e.preventDefault();
+				goToPage(current + 1);
 			}
-		},
-		{ threshold: 0.35 }
-	);
-	pages.forEach((p) => observer.observe(p));
+			if ((e.key === 'ArrowUp' || e.key === 'PageUp') && atTop(page)) {
+				e.preventDefault();
+				goToPage(current - 1);
+			}
+		});
+
+		// enlaces internos (#producto-personal, etc.) navegan por el paginador en vez de saltar
+		document.querySelectorAll('a[href^="#"]').forEach((a) => {
+			a.addEventListener('click', (e) => {
+				const href = a.getAttribute('href');
+				const idx = pages.findIndex((p) => `#${p.id}` === href);
+				if (idx === -1) return;
+				e.preventDefault();
+				goToPage(idx);
+			});
+		});
+
+		window.addEventListener('pulso:dismissed', () => {
+			sideNav?.classList.remove('opacity-0');
+			const first = pages[0];
+			first.classList.add('stack-enter-forward');
+			playReveal(first);
+			setActiveNav(0);
+		});
+	}
 </script>

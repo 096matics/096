@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { ORDEN_SECTORES } from '../../lib/ordenSectores';
 
 interface Props {
 	titulo: string;
@@ -14,7 +15,13 @@ const WHATSAPP_BASE = 'https://wa.me/34727700065?text=';
 
 const plantillas = await getCollection('plantillas');
 const personalItems = plantillas.filter((p) => p.data.categoria === 'personal' && p.data.estado === 'publico');
-const sectorItems = plantillas.filter((p) => p.data.categoria === 'sector' && p.data.estado !== 'privado');
+const sectorItems = plantillas
+	.filter((p) => p.data.categoria === 'sector' && p.data.estado !== 'privado')
+	.sort((a, b) => {
+		const iA = ORDEN_SECTORES.indexOf(a.data.sector ?? '');
+		const iB = ORDEN_SECTORES.indexOf(b.data.sector ?? '');
+		return (iA === -1 ? ORDEN_SECTORES.length : iA) - (iB === -1 ? ORDEN_SECTORES.length : iB);
+	});
 
 interface Slide {
 	tipo: 'imagen' | 'cta';

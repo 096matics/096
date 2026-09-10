@@ -2,24 +2,53 @@
 import Logo from '../Logo.astro';
 ---
 
-<header class="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
-	<div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-		<a href="#top" class="text-lg">
-			<Logo />
-		</a>
-		<nav class="hidden items-center gap-6 text-sm text-zinc-300 sm:flex">
-			<a href="#producto-personal" class="transition-colors hover:text-white">Tarjetas personales</a>
-			<a href="#producto-google" class="transition-colors hover:text-white">Reseñas Google</a>
-			<a href="#quienes-somos" class="transition-colors hover:text-white">Quiénes somos</a>
-			<a href="#portafolio" class="transition-colors hover:text-white">Portafolio</a>
-		</nav>
-		<a
-			href="https://wa.me/34727700065?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20096matics"
-			target="_blank"
-			rel="noopener noreferrer"
-			class="rounded-full bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:from-blue-500 hover:to-purple-500"
-		>
-			WhatsApp
-		</a>
-	</div>
-</header>
+<nav
+	id="landingSideNav"
+	class="fixed top-1/2 left-5 z-40 flex -translate-y-1/2 flex-col items-start gap-4 opacity-0 transition-opacity duration-300 sm:left-8"
+	aria-label="Secciones"
+>
+	<button id="landingSideNavLogo" class="mb-2 text-lg" aria-label="Ir al inicio">
+		<Logo />
+	</button>
+	<ul id="landingSideNavList" class="flex flex-col gap-4"></ul>
+</nav>
+
+<style>
+	.side-nav-item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		font-size: 11px;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: rgba(228, 228, 231, 0.45);
+		text-align: left;
+	}
+	.side-nav-item::before {
+		content: '';
+		width: 6px;
+		height: 6px;
+		border-radius: 999px;
+		background: rgba(228, 228, 231, 0.35);
+		flex-shrink: 0;
+		transition:
+			background 0.2s ease,
+			transform 0.2s ease;
+	}
+	.side-nav-item.active {
+		color: #fff;
+	}
+	.side-nav-item.active::before {
+		background: linear-gradient(90deg, #3b82f6, #a855f7);
+		transform: scale(1.6);
+	}
+	@media (max-width: 640px) {
+		.side-nav-label {
+			display: none;
+		}
+	}
+</style>

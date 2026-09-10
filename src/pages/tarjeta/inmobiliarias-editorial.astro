@@ -37,19 +37,31 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 				color: var(--white);
 				display: flex;
 				flex-direction: column;
-				animation: pageIn 0.6s ease forwards;
 			}
-			@keyframes pageIn {
+			@keyframes dropFromTop {
 				from {
 					opacity: 0;
+					transform: translateY(-6%);
 				}
 				to {
 					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+			@keyframes riseFromBottom {
+				from {
+					opacity: 0;
+					transform: translateY(8%);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
 				}
 			}
 			.photo {
 				position: relative;
 				flex: 1 1 56%;
+				animation: dropFromTop 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 				background: linear-gradient(150deg, #c9c2ae, #a7a08d);
 				display: flex;
 				align-items: center;
@@ -114,6 +126,8 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 				padding: 22px 22px 18px;
 				display: flex;
 				flex-direction: column;
+				animation: riseFromBottom 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+				opacity: 0;
 			}
 			.name {
 				font-family: 'Archivo Black', sans-serif;

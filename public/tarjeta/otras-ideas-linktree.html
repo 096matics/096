@@ -80,11 +80,7 @@ body{
   max-height: 88vh;
   max-height: 88dvh;
   aspect-ratio: 375 / 812;
-  animation: phoneIn 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-@keyframes phoneIn{
-  from{ opacity:0; transform:translateY(22px) scale(0.97); }
-  to{ opacity:1; transform:translateY(0) scale(1); }
+  animation: phoneIn 1.7s cubic-bezier(0.16,1,0.3,1) forwards;
   border-radius: var(--phone-radius);
   padding: 5px;
   background:
@@ -100,6 +96,10 @@ body{
     0 10px 30px rgba(0,0,0,0.45),
     0 0 0 1px rgba(0,0,0,0.6),
     0 0 0 2.5px rgba(120,122,128,0.5) inset;
+}
+@keyframes phoneIn{
+  from{ opacity:0; filter:brightness(2.4); transform:translateY(26px) scale(0.94); }
+  to{ opacity:1; filter:brightness(1); transform:translateY(0) scale(1); }
 }
 
 /* botones físicos: sobresalen ligeramente del marco */

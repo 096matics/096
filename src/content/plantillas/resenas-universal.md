@@ -1,6 +1,6 @@
 ---
 categoria: "sector"
-sector: "Reseñas Google · Cualquier negocio local"
+sector: "Reseñas Google"
 nombre: "Ficha universal"
 descripcion: "Foto, valoración, horario y contacto — vale para cualquier negocio."
 estado: "proximamente"

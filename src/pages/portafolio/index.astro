@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PlantillaCard from '../../components/PlantillaCard.astro';
+import { ordenarPorSector } from '../../lib/ordenSectores';
 
 const plantillas = await getCollection('plantillas');
 const personalItems = plantillas.filter((p) => p.data.categoria === 'personal' && p.data.estado === 'publico');
@@ -18,7 +19,7 @@ function agruparPorSector(items: typeof sectorItems) {
 	}
 	return grupos;
 }
-const grupos = agruparPorSector(sectorItems);
+const grupos = ordenarPorSector([...agruparPorSector(sectorItems).entries()]);
 ---
 
 <Layout title="Portafolio">
@@ -50,7 +51,7 @@ const grupos = agruparPorSector(sectorItems);
 		}
 
 		{
-			[...grupos.entries()].map(([sector, items]) => (
+			grupos.map(([sector, items]) => (
 				<section class="mt-12">
 					<h2 class="text-sm font-medium tracking-wide text-zinc-500 uppercase">{sector}</h2>
 					<div class="mt-4 grid gap-4 sm:grid-cols-3">
