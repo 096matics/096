@@ -151,7 +151,11 @@ import Contacto from '../components/landing/Contacto.astro';
 				if (isActive) activeBtn = btn;
 			});
 			if (activeBtn && sideNavIndicator) {
+				// el tamaño/hueco del item activo también transiciona; medimos su posición FINAL
+				// desactivando esas transiciones un instante (sin repintar) para no calcular sobre un valor a medias
+				sideNavTrack?.classList.add('nav-measuring');
 				const mid = activeBtn.offsetTop + activeBtn.offsetHeight / 2;
+				sideNavTrack?.classList.remove('nav-measuring');
 				sideNavIndicator.style.transform = `translateY(${mid - 4}px)`;
 				sideNavIndicator.classList.add('is-visible');
 			}
@@ -169,9 +173,6 @@ import Contacto from '../components/landing/Contacto.astro';
 			current = index;
 
 			newPage.scrollTop = 0;
-			track.style.transitionDuration = `${duration}ms`;
-			track.style.transform = `translateY(-${newPage.offsetTop}px)`;
-			if (sideNavIndicator) sideNavIndicator.style.transitionDuration = `${duration}ms`;
 			setActiveNav(current);
 			updateAccent(newPage, duration);
 
@@ -179,9 +180,29 @@ import Contacto from '../components/landing/Contacto.astro';
 			void newPage.offsetWidth;
 			newPage.classList.add('is-revealing');
 
+			// viaje en dos tramos: aceleramos hasta el punto intermedio (la página vacía), una pequeña
+			// pausa ahí, y frenamos hasta el destino — así se siente que se pasa por algo, no un único deslizamiento
+			const midOffset = (oldPage.offsetTop + newPage.offsetTop) / 2;
+			const PAUSE_MS = 90;
+			const phase1 = Math.max(250, duration * 0.42);
+			const phase2 = Math.max(300, duration - phase1 - PAUSE_MS);
+			const total = phase1 + PAUSE_MS + phase2;
+
+			if (sideNavIndicator) sideNavIndicator.style.transitionDuration = `${total}ms`;
+
+			track.style.transitionTimingFunction = 'cubic-bezier(0.6, 0, 1, 0.4)';
+			track.style.transitionDuration = `${phase1}ms`;
+			track.style.transform = `translateY(-${midOffset}px)`;
+
+			window.setTimeout(() => {
+				track.style.transitionTimingFunction = 'cubic-bezier(0, 0.6, 0.4, 1)';
+				track.style.transitionDuration = `${phase2}ms`;
+				track.style.transform = `translateY(-${newPage.offsetTop}px)`;
+			}, phase1 + PAUSE_MS);
+
 			window.setTimeout(() => {
 				locked = false;
-			}, duration);
+			}, total);
 		}
 
 		// El logo del lateral te devuelve al principio: reaparece el pulso de entrada

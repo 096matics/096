@@ -47,6 +47,11 @@ import Logo from '../Logo.astro';
 	.side-nav-list li:has(.side-nav-item.active) {
 		padding: 9px 0;
 	}
+	/* mientras medimos la posición final del punto activo, anulamos las transiciones que cambian su tamaño/hueco */
+	.side-nav-track.nav-measuring .side-nav-item,
+	.side-nav-track.nav-measuring li {
+		transition: none !important;
+	}
 	.side-nav-rail {
 		position: absolute;
 		left: -3.5px;
