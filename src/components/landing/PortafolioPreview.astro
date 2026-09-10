@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content';
 import PlantillaCard from '../PlantillaCard.astro';
 
 const plantillas = await getCollection('plantillas');
-const preview = plantillas
-	.filter((p) => p.data.categoria !== 'cliente' && p.data.estado !== 'privado' && p.data.imagen)
-	.slice(0, 3);
+const destacadas = ['inmobiliarias-blueprint', 'seguros-poliza', 'otras-ideas-linktree'];
+const preview = destacadas
+	.map((id) => plantillas.find((p) => p.id === id))
+	.filter((p): p is NonNullable<typeof p> => !!p);
 ---
 
 <section
@@ -44,9 +45,10 @@ const preview = plantillas
 
 		<a
 			href="/portafolio"
-			class="piece piece-bottom piece-d6 mt-8 inline-block text-sm font-medium text-zinc-300 transition-colors hover:text-white"
+			class="piece piece-bottom piece-d6 group mt-8 inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20"
 		>
-			Ver todo el portafolio →
+			Ver todo el portafolio
+			<span class="transition-transform group-hover:translate-x-0.5">→</span>
 		</a>
 	</div>
 </section>

@@ -96,6 +96,7 @@ import Contacto from '../components/landing/Contacto.astro';
 	const sideNavList = document.getElementById('landingSideNavList');
 	const sideNavLogo = document.getElementById('landingSideNavLogo');
 	const sideNavIndicator = document.getElementById('landingSideNavIndicator');
+	const sideNavRail = document.querySelector('.side-nav-rail') as HTMLElement | null;
 
 	if (root && track) {
 		const pages = Array.from(track.querySelectorAll<HTMLElement>('[data-page]'));
@@ -150,14 +151,26 @@ import Contacto from '../components/landing/Contacto.astro';
 				btn.classList.toggle('active', isActive);
 				if (isActive) activeBtn = btn;
 			});
-			if (activeBtn && sideNavIndicator) {
-				// el tamaño/hueco del item activo también transiciona; medimos su posición FINAL
-				// desactivando esas transiciones un instante (sin repintar) para no calcular sobre un valor a medias
+			if (navButtons.length > 0) {
+				// el tamaño/hueco de los items también transiciona (el activo crece y empuja a los demás);
+				// medimos las posiciones FINALES desactivando esas transiciones un instante, sin repintar
 				sideNavTrack?.classList.add('nav-measuring');
-				const mid = activeBtn.offsetTop + activeBtn.offsetHeight / 2;
+				const first = navButtons[0];
+				const last = navButtons[navButtons.length - 1];
+				const firstMid = first.offsetTop + first.offsetHeight / 2;
+				const lastMid = last.offsetTop + last.offsetHeight / 2;
+				const activeMid = activeBtn ? activeBtn.offsetTop + activeBtn.offsetHeight / 2 : null;
 				sideNavTrack?.classList.remove('nav-measuring');
-				sideNavIndicator.style.transform = `translateY(${mid - 4}px)`;
-				sideNavIndicator.classList.add('is-visible');
+
+				if (sideNavRail) {
+					sideNavRail.style.top = `${firstMid}px`;
+					sideNavRail.style.bottom = 'auto';
+					sideNavRail.style.height = `${lastMid - firstMid}px`;
+				}
+				if (activeMid !== null && sideNavIndicator) {
+					sideNavIndicator.style.transform = `translateY(${activeMid - 5}px)`;
+					sideNavIndicator.classList.add('is-visible');
+				}
 			}
 		}
 
