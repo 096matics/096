@@ -17,6 +17,7 @@ import Contacto from '../components/landing/Contacto.astro';
 		<div class="grain-overlay" aria-hidden="true"></div>
 		<div class="pager-track" id="pagerTrack">
 			<Hero />
+			<div class="pager-spacer" aria-hidden="true"></div>
 
 			<ProductoBlock
 				id="producto-personal"
@@ -45,6 +46,7 @@ import Contacto from '../components/landing/Contacto.astro';
 					},
 				]}
 			/>
+			<div class="pager-spacer" aria-hidden="true"></div>
 
 			<ProductoBlock
 				id="producto-google"
@@ -75,8 +77,11 @@ import Contacto from '../components/landing/Contacto.astro';
 				]}
 			/>
 
+			<div class="pager-spacer" aria-hidden="true"></div>
 			<QuienesSomos />
+			<div class="pager-spacer" aria-hidden="true"></div>
 			<PortafolioPreview />
+			<div class="pager-spacer" aria-hidden="true"></div>
 			<Contacto />
 		</div>
 	</main>
@@ -86,6 +91,7 @@ import Contacto from '../components/landing/Contacto.astro';
 	const root = document.querySelector('.landing-pager') as HTMLElement | null;
 	const track = document.getElementById('pagerTrack');
 	const ambientGlow = document.querySelector('.ambient-glow') as HTMLElement | null;
+	const sideNavTrack = document.querySelector('.side-nav-track') as HTMLElement | null;
 	const sideNav = document.getElementById('landingSideNav');
 	const sideNavList = document.getElementById('landingSideNavList');
 	const sideNavLogo = document.getElementById('landingSideNavLogo');
@@ -93,17 +99,33 @@ import Contacto from '../components/landing/Contacto.astro';
 
 	if (root && track) {
 		const pages = Array.from(track.querySelectorAll<HTMLElement>('[data-page]'));
-		const DURATION = 1500; // debe coincidir con la transición del carril y del indicador lateral
+		const MS_PER_100VH = 950; // ritmo del "viaje": ms por cada 100dvh recorrido
+		const MIN_DURATION = 1100;
+		const MAX_DURATION = 2400;
 
 		let current = 0;
 		let locked = false;
 
-		function updateGlow(page: HTMLElement) {
-			if (!ambientGlow) return;
-			ambientGlow.style.setProperty('--glow-a', page.dataset.glowA ?? '#6366f1');
-			ambientGlow.style.setProperty('--glow-b', page.dataset.glowB ?? '#a855f7');
+		function durationFor(distancePx: number) {
+			const ratio = distancePx / window.innerHeight;
+			return Math.min(MAX_DURATION, Math.max(MIN_DURATION, ratio * MS_PER_100VH));
 		}
-		updateGlow(pages[0]);
+
+		function updateAccent(page: HTMLElement, durationMs: number) {
+			const a = page.dataset.glowA ?? '#6366f1';
+			const b = page.dataset.glowB ?? '#a855f7';
+			if (ambientGlow) {
+				ambientGlow.style.transitionDuration = `${durationMs}ms`;
+				ambientGlow.style.setProperty('--glow-a', a);
+				ambientGlow.style.setProperty('--glow-b', b);
+			}
+			if (sideNavTrack) {
+				sideNavTrack.style.transitionDuration = `${durationMs}ms`;
+				sideNavTrack.style.setProperty('--dot-a', a);
+				sideNavTrack.style.setProperty('--dot-b', b);
+			}
+		}
+		updateAccent(pages[0], 0);
 
 		const navButtons: HTMLButtonElement[] = [];
 		pages.forEach((p, i) => {
@@ -140,13 +162,18 @@ import Contacto from '../components/landing/Contacto.astro';
 			if (index === current || locked) return;
 			locked = true;
 
+			const oldPage = pages[current];
 			const newPage = pages[index];
+			const distance = Math.abs(newPage.offsetTop - oldPage.offsetTop);
+			const duration = durationFor(distance);
 			current = index;
 
 			newPage.scrollTop = 0;
-			track.style.transform = `translateY(-${index * 100}dvh)`;
+			track.style.transitionDuration = `${duration}ms`;
+			track.style.transform = `translateY(-${newPage.offsetTop}px)`;
+			if (sideNavIndicator) sideNavIndicator.style.transitionDuration = `${duration}ms`;
 			setActiveNav(current);
-			updateGlow(newPage);
+			updateAccent(newPage, duration);
 
 			newPage.classList.remove('is-revealing');
 			void newPage.offsetWidth;
@@ -154,7 +181,7 @@ import Contacto from '../components/landing/Contacto.astro';
 
 			window.setTimeout(() => {
 				locked = false;
-			}, DURATION);
+			}, duration);
 		}
 
 		// El logo del lateral te devuelve al principio: reaparece el pulso de entrada
@@ -167,7 +194,7 @@ import Contacto from '../components/landing/Contacto.astro';
 			current = 0;
 			locked = false;
 			setActiveNav(0);
-			updateGlow(pages[0]);
+			updateAccent(pages[0], 0);
 			sideNav?.classList.add('opacity-0');
 			const pulso = document.getElementById('pulso');
 			if (pulso) {
@@ -283,5 +310,33 @@ import Contacto from '../components/landing/Contacto.astro';
 			first.classList.add('is-revealing');
 			setActiveNav(current);
 		});
+
+		// Si llegamos desde un enlace tipo /#contacto, nos saltamos el pulso y vamos directos a esa sección
+		const hashTarget = window.location.hash
+			? pages.findIndex((p) => `#${p.id}` === window.location.hash)
+			: -1;
+		if (hashTarget > 0) {
+			const jumpToHash = () => {
+				current = hashTarget;
+				const target = pages[hashTarget];
+				// el navegador hace su propio scroll nativo al hash antes de que corra este script; lo anulamos
+				root.scrollTop = 0;
+				target.scrollTop = 0;
+				track.style.transition = 'none';
+				track.style.transform = `translateY(-${target.offsetTop}px)`;
+				void track.offsetWidth;
+				track.style.transition = '';
+				updateAccent(target, 0);
+				document.getElementById('pulso')?.click();
+			};
+			// el viewport (dvh) puede tardar un poco en asentarse tras la carga inicial; esperamos a que
+			// la página esté totalmente cargada y a un par de frames más antes de medir posiciones
+			const runJump = () => requestAnimationFrame(() => requestAnimationFrame(jumpToHash));
+			if (document.readyState === 'complete') {
+				runJump();
+			} else {
+				window.addEventListener('load', runJump);
+			}
+		}
 	}
 </script>

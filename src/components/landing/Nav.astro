@@ -15,9 +15,24 @@ import Logo from '../Logo.astro';
 	</div>
 </nav>
 
-<style>
+<style is:global>
+	@property --dot-a {
+		syntax: '<color>';
+		inherits: true;
+		initial-value: #6366f1;
+	}
+	@property --dot-b {
+		syntax: '<color>';
+		inherits: true;
+		initial-value: #a855f7;
+	}
 	.side-nav-track {
 		position: relative;
+		--dot-a: #6366f1;
+		--dot-b: #a855f7;
+		transition:
+			--dot-a 1.8s ease,
+			--dot-b 1.8s ease;
 	}
 	.side-nav-list {
 		position: relative;
@@ -26,9 +41,15 @@ import Logo from '../Logo.astro';
 		flex-direction: column;
 		gap: 15px;
 	}
+	.side-nav-list li {
+		transition: padding 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+	}
+	.side-nav-list li:has(.side-nav-item.active) {
+		padding: 9px 0;
+	}
 	.side-nav-rail {
 		position: absolute;
-		left: 2.5px;
+		left: -3.5px;
 		top: 10px;
 		bottom: 10px;
 		width: 1px;
@@ -36,12 +57,12 @@ import Logo from '../Logo.astro';
 	}
 	.side-nav-indicator {
 		position: absolute;
-		left: -1px;
+		left: -7px;
 		top: 0;
 		width: 8px;
 		height: 8px;
 		border-radius: 999px;
-		background: linear-gradient(90deg, #3b82f6, #a855f7);
+		background: linear-gradient(90deg, var(--dot-a), var(--dot-b));
 		opacity: 0;
 		transform: translateY(0);
 		transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
@@ -67,7 +88,7 @@ import Logo from '../Logo.astro';
 		color: rgba(228, 228, 231, 0.45);
 		text-align: left;
 		transition:
-			color 0.25s ease,
+			color 0.3s ease,
 			font-size 0.25s ease,
 			letter-spacing 0.25s ease,
 			gap 0.35s cubic-bezier(0.19, 1, 0.22, 1),
@@ -88,10 +109,10 @@ import Logo from '../Logo.astro';
 		color: rgba(228, 228, 231, 0.75);
 	}
 	.side-nav-item.active {
-		color: #fff;
-		font-size: 13.5px;
-		font-weight: 600;
-		letter-spacing: 0.08em;
+		color: var(--dot-a);
+		font-size: 14.5px;
+		font-weight: 700;
+		letter-spacing: 0.09em;
 		gap: 20px;
 		transform: translateX(4px);
 	}
@@ -101,10 +122,10 @@ import Logo from '../Logo.astro';
 	@keyframes side-dot-pulse {
 		0%,
 		100% {
-			box-shadow: 0 0 6px rgba(139, 92, 246, 0.55);
+			box-shadow: 0 0 6px color-mix(in srgb, var(--dot-a) 55%, transparent);
 		}
 		50% {
-			box-shadow: 0 0 15px rgba(139, 92, 246, 0.95);
+			box-shadow: 0 0 15px color-mix(in srgb, var(--dot-a) 95%, transparent);
 		}
 	}
 	#landingSideNavLogo {
@@ -118,7 +139,7 @@ import Logo from '../Logo.astro';
 	@media (prefers-reduced-motion: reduce) {
 		.side-nav-indicator {
 			animation: none;
-			box-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+			box-shadow: 0 0 10px color-mix(in srgb, var(--dot-a) 80%, transparent);
 		}
 	}
 </style>

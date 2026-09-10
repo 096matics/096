@@ -34,7 +34,24 @@
 	display: none;
 }
 
+/* páginas vacías entre secciones: refuerzan la sensación de pasar por un hueco al desplazarse */
+.pager-spacer {
+	flex: 0 0 60dvh;
+	width: 100%;
+}
+
 /* ============ Resplandor ambiental: vida de fondo continua, teñida según la sección ============ */
+
+@property --glow-a {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #6366f1;
+}
+@property --glow-b {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #a855f7;
+}
 
 .ambient-glow {
 	position: absolute;
@@ -44,6 +61,9 @@
 	pointer-events: none;
 	--glow-a: #6366f1;
 	--glow-b: #a855f7;
+	transition:
+		--glow-a 1.8s ease,
+		--glow-b 1.8s ease;
 }
 .ambient-glow::before,
 .ambient-glow::after {
@@ -52,20 +72,31 @@
 	width: 60vmax;
 	height: 60vmax;
 	border-radius: 50%;
-	filter: blur(90px);
-	opacity: 0.16;
-	transition:
-		background 1s ease,
-		opacity 1s ease;
+	filter: blur(95px);
+	opacity: 0.22;
 }
 .ambient-glow::before {
-	background: radial-gradient(circle, var(--glow-a), transparent 70%);
+	background: radial-gradient(
+		circle,
+		color-mix(in srgb, var(--glow-a) 95%, transparent) 0%,
+		color-mix(in srgb, var(--glow-a) 60%, transparent) 22%,
+		color-mix(in srgb, var(--glow-a) 30%, transparent) 42%,
+		color-mix(in srgb, var(--glow-a) 10%, transparent) 62%,
+		transparent 80%
+	);
 	top: -20%;
 	left: -12%;
 	animation: ambient-drift-a 24s ease-in-out infinite alternate;
 }
 .ambient-glow::after {
-	background: radial-gradient(circle, var(--glow-b), transparent 70%);
+	background: radial-gradient(
+		circle,
+		color-mix(in srgb, var(--glow-b) 95%, transparent) 0%,
+		color-mix(in srgb, var(--glow-b) 60%, transparent) 22%,
+		color-mix(in srgb, var(--glow-b) 30%, transparent) 42%,
+		color-mix(in srgb, var(--glow-b) 10%, transparent) 62%,
+		transparent 80%
+	);
 	bottom: -25%;
 	right: -15%;
 	animation: ambient-drift-b 28s ease-in-out infinite alternate;

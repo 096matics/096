@@ -42,7 +42,7 @@ const VCARD =
 			<WhatsAppCTA texto="Escríbenos por WhatsApp" mensaje="Hola, quiero información sobre 096matics" />
 		</div>
 
-		<div class="mt-14 grid gap-10 sm:grid-cols-2">
+		<div class="mt-14 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-stretch">
 			<div class="piece piece-left piece-d3">
 				<p class="text-xs tracking-widest text-zinc-500 uppercase">Nuestro equipo</p>
 				<div class="mt-4 grid max-w-xs grid-cols-2 gap-3">
@@ -76,7 +76,7 @@ const VCARD =
 					}
 				</div>
 			</div>
-			<div class="piece piece-right piece-d4">
+			<div class="piece piece-right piece-d4 flex flex-col rounded-2xl border border-zinc-800 bg-zinc-900/30 p-6">
 				<p class="text-xs tracking-widest text-zinc-500 uppercase">Contacto directo</p>
 				<div class="contact-icons mt-5 flex items-end gap-6">
 					<a
@@ -114,12 +114,11 @@ const VCARD =
 				<a download="096matics.vcf" href={VCARD} class="mt-4 inline-block text-xs text-zinc-600 hover:text-zinc-300"
 					>↓ Guardar contacto de 096matics</a
 				>
+				<div class="mt-auto flex flex-col gap-1 border-t border-zinc-800/70 pt-4 text-sm text-zinc-400 sm:flex-row sm:items-center sm:justify-between">
+					<p>096matics · Sagunto, Valencia</p>
+					<a href="https://wa.me/34727700065" class="transition-colors hover:text-white">+34 727 700 065</a>
+				</div>
 			</div>
-		</div>
-
-		<div class="piece piece-bottom piece-d5 mt-14 flex flex-col gap-2 border-t border-zinc-800 pt-8 text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
-			<p>096matics · Sagunto, Valencia</p>
-			<a href="https://wa.me/34727700065" class="transition-colors hover:text-zinc-300">+34 727 700 065</a>
 		</div>
 	</div>
 </section>
