@@ -25,7 +25,38 @@ const styles =
 	href={href}
 	target="_blank"
 	rel="noopener noreferrer"
-	class={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-colors ${styles} ${className}`}
+	class={`whatsapp-cta relative inline-flex items-center gap-2 overflow-hidden rounded-full px-5 py-3 text-sm font-medium transition-colors ${styles} ${className}`}
 >
 	{texto}
 </a>
+
+<style>
+	.whatsapp-cta {
+		isolation: isolate;
+	}
+	.whatsapp-cta::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+		background-size: 200% 100%;
+		background-position: 150% 0;
+		animation: cta-sheen 3.5s ease-in-out infinite;
+		pointer-events: none;
+	}
+	@keyframes cta-sheen {
+		0%,
+		40% {
+			background-position: 150% 0;
+		}
+		100% {
+			background-position: -50% 0;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.whatsapp-cta::after {
+			animation: none;
+			display: none;
+		}
+	}
+</style>

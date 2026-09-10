@@ -13,6 +13,11 @@ import Contacto from '../components/landing/Contacto.astro';
 	<Pulso />
 	<Nav />
 	<main class="landing-pager">
+		<div class="ambient-glow" aria-hidden="true"></div>
+		<div id="floorIndicator" class="floor-indicator" aria-hidden="true">
+			<span class="floor-indicator-dot"></span>
+			<span id="floorIndicatorLabel" class="floor-indicator-label"></span>
+		</div>
 		<Hero />
 
 		<ProductoBlock
@@ -79,6 +84,9 @@ import Contacto from '../components/landing/Contacto.astro';
 	const sideNav = document.getElementById('landingSideNav');
 	const sideNavList = document.getElementById('landingSideNavList');
 	const sideNavLogo = document.getElementById('landingSideNavLogo');
+	const sideNavIndicator = document.getElementById('landingSideNavIndicator');
+	const floorIndicator = document.getElementById('floorIndicator');
+	const floorIndicatorLabel = document.getElementById('floorIndicatorLabel');
 
 	if (root) {
 		const pages = Array.from(root.querySelectorAll<HTMLElement>('[data-page]'));
@@ -104,10 +112,18 @@ import Contacto from '../components/landing/Contacto.astro';
 
 		function setActiveNav(index: number) {
 			const label = pages[index]?.dataset.nav;
+			let activeBtn: HTMLButtonElement | null = null;
 			navButtons.forEach((btn) => {
 				const btnLabel = btn.querySelector('.side-nav-label')?.textContent;
-				btn.classList.toggle('active', !!label && btnLabel === label);
+				const isActive = !!label && btnLabel === label;
+				btn.classList.toggle('active', isActive);
+				if (isActive) activeBtn = btn;
 			});
+			if (activeBtn && sideNavIndicator) {
+				const mid = activeBtn.offsetTop + activeBtn.offsetHeight / 2;
+				sideNavIndicator.style.transform = `translateY(${mid - 4}px)`;
+				sideNavIndicator.classList.add('is-visible');
+			}
 		}
 
 		function goToPage(index: number) {
@@ -130,6 +146,14 @@ import Contacto from '../components/landing/Contacto.astro';
 			oldPage.classList.add(goingBack ? 'stack-exit-back' : 'stack-exit-forward');
 			newPage.classList.add(goingBack ? 'stack-enter-back' : 'stack-enter-forward');
 			setActiveNav(current);
+
+			if (floorIndicator && floorIndicatorLabel) {
+				floorIndicatorLabel.textContent = newPage.dataset.nav ?? '';
+				floorIndicator.classList.remove('is-active');
+				void floorIndicator.offsetWidth;
+				floorIndicator.classList.add('is-active');
+				window.setTimeout(() => floorIndicator.classList.remove('is-active'), DURATION);
+			}
 
 			window.setTimeout(() => {
 				oldPage.classList.remove('stack-exit-forward', 'stack-exit-back', 'is-current');
