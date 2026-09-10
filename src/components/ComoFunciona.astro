@@ -39,18 +39,17 @@ const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber
 	.step-card {
 		opacity: 0;
 	}
-	:global([data-page].stack-enter-forward) .step-card,
-	:global([data-page].stack-enter-back) .step-card {
-		animation: step-flip-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	:global([data-page].is-revealing) .step-card {
+		animation: step-flip-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 	}
 	.step-card:nth-child(1) {
-		animation-delay: 0.55s;
+		animation-delay: 0.4s;
 	}
 	.step-card:nth-child(2) {
-		animation-delay: 0.66s;
+		animation-delay: 0.5s;
 	}
 	.step-card:nth-child(3) {
-		animation-delay: 0.77s;
+		animation-delay: 0.6s;
 	}
 	@keyframes step-flip-in {
 		0% {
@@ -63,8 +62,7 @@ const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		:global([data-page].stack-enter-forward) .step-card,
-		:global([data-page].stack-enter-back) .step-card {
+		:global([data-page].is-revealing) .step-card {
 			animation: none;
 			opacity: 1;
 			transform: none;

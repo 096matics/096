@@ -22,21 +22,20 @@ const stats = [
 	.stat-card {
 		opacity: 0;
 	}
-	:global([data-page].stack-enter-forward) .stat-card,
-	:global([data-page].stack-enter-back) .stat-card {
-		animation: stat-pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	:global([data-page].is-revealing) .stat-card {
+		animation: stat-pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 	}
 	.stat-card:nth-child(1) {
-		animation-delay: 0.6s;
-	}
-	.stat-card:nth-child(2) {
 		animation-delay: 0.68s;
 	}
+	.stat-card:nth-child(2) {
+		animation-delay: 0.75s;
+	}
 	.stat-card:nth-child(3) {
-		animation-delay: 0.76s;
+		animation-delay: 0.82s;
 	}
 	.stat-card:nth-child(4) {
-		animation-delay: 0.84s;
+		animation-delay: 0.89s;
 	}
 	@keyframes stat-pop-in {
 		0% {
@@ -49,8 +48,7 @@ const stats = [
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		:global([data-page].stack-enter-forward) .stat-card,
-		:global([data-page].stack-enter-back) .stat-card {
+		:global([data-page].is-revealing) .stat-card {
 			animation: none;
 			opacity: 1;
 			transform: none;

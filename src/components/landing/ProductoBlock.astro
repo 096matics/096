@@ -18,6 +18,8 @@ interface Props {
 	paraQuien: string;
 	accent?: 'amber' | 'brand';
 	accentHex: string;
+	glowA?: string;
+	glowB?: string;
 	mockupTipo: 'resena' | 'contacto';
 	mockupNegocio: string;
 	pasos: Paso[];
@@ -35,6 +37,8 @@ const {
 	paraQuien,
 	accent = 'brand',
 	accentHex,
+	glowA,
+	glowB,
 	mockupTipo,
 	mockupNegocio,
 	pasos,
@@ -56,6 +60,8 @@ const social =
 	id={id}
 	data-page
 	data-nav={navLabel}
+	data-glow-a={glowA}
+	data-glow-b={glowB}
 	class="flex min-h-dvh flex-col border-t border-zinc-800 px-6 py-10 sm:py-12"
 >
 	<div class="m-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
