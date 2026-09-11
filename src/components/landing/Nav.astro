@@ -100,8 +100,7 @@ import Logo from '../Logo.astro';
 			color 0.3s ease,
 			font-size 0.25s ease,
 			letter-spacing 0.25s ease,
-			gap 0.35s cubic-bezier(0.19, 1, 0.22, 1),
-			transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+			gap 0.35s cubic-bezier(0.19, 1, 0.22, 1);
 	}
 	.side-nav-item::before {
 		content: '';
@@ -123,10 +122,17 @@ import Logo from '../Logo.astro';
 		font-weight: 700;
 		letter-spacing: 0.09em;
 		gap: 20px;
-		transform: translateX(4px);
 	}
 	.side-nav-item.active::before {
 		background: var(--dot-a);
+	}
+	/* el desplazamiento "se hace sitio" solo afecta a la palabra: el punto se queda quieto sobre la línea guía */
+	.side-nav-label {
+		display: inline-block;
+		transition: transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+	}
+	.side-nav-item.active .side-nav-label {
+		transform: translateX(4px);
 	}
 	@keyframes side-dot-pulse {
 		0%,

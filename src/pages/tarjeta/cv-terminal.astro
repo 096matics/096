@@ -32,6 +32,7 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 				padding: 24px 14px;
 			}
 			.window {
+				position: relative;
 				width: 100%;
 				max-width: 410px;
 				background: #10151d;
@@ -41,6 +42,13 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 				overflow: hidden;
 				opacity: 0;
 				animation: boot 0.5s ease forwards;
+			}
+			.window::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: repeating-linear-gradient(0deg, rgba(79, 209, 197, 0.05) 0 1px, transparent 1px 3px);
+				pointer-events: none;
 			}
 			@keyframes boot {
 				from {

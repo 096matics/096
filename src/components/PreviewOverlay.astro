@@ -260,6 +260,7 @@
 
 		overlay.classList.add('is-open');
 		overlay.setAttribute('aria-hidden', 'false');
+		document.documentElement.classList.add('overflow-hidden');
 	}
 
 	function step(delta: number) {
@@ -271,6 +272,7 @@
 	function hide() {
 		overlay?.classList.remove('is-open');
 		overlay?.setAttribute('aria-hidden', 'true');
+		document.documentElement.classList.remove('overflow-hidden');
 	}
 
 	prevBtn?.addEventListener('click', () => step(-1));

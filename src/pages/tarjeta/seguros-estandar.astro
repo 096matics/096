@@ -69,6 +69,19 @@
 				opacity: 0.06;
 				pointer-events: none;
 				z-index: 0;
+				animation: shieldBreathe 6s ease-in-out infinite;
+				transform-origin: center;
+			}
+			@keyframes shieldBreathe {
+				0%,
+				100% {
+					transform: scale(1) rotate(0deg);
+					opacity: 0.06;
+				}
+				50% {
+					transform: scale(1.05) rotate(2deg);
+					opacity: 0.1;
+				}
 			}
 			.glass {
 				position: relative;

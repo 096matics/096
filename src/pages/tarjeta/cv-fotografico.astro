@@ -47,6 +47,14 @@
 				background: linear-gradient(180deg, rgba(10, 10, 10, 0.15) 0%, rgba(10, 10, 10, 0.55) 45%, rgba(10, 10, 10, 0.92) 100%);
 				pointer-events: none;
 			}
+			.grain {
+				position: fixed;
+				inset: 0;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+				opacity: 0.045;
+				mix-blend-mode: overlay;
+				pointer-events: none;
+			}
 			.page {
 				position: relative;
 				z-index: 1;
@@ -204,6 +212,7 @@
 	</head>
 	<body>
 		<div class="scrim"></div>
+		<div class="grain"></div>
 
 		<div class="page">
 			<span class="available-badge"><span class="dot"></span>Disponible para nueva incorporación</span>

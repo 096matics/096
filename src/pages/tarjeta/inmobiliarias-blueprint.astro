@@ -74,6 +74,16 @@ const whatsapp =
 				width: 14px;
 				height: 14px;
 				border: 1.5px solid var(--accent);
+				animation: cornerPulse 3s ease-in-out infinite;
+			}
+			@keyframes cornerPulse {
+				0%,
+				100% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.45;
+				}
 			}
 			.corner.tl {
 				top: -1px;

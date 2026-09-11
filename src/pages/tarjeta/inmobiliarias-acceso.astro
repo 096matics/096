@@ -286,17 +286,38 @@
 				filter: brightness(1.08);
 			}
 			.barcode {
+				position: relative;
 				display: flex;
 				align-items: flex-end;
 				gap: 2px;
 				height: 26px;
 				padding: 0 20px;
 				margin-bottom: 6px;
+				overflow: hidden;
 			}
 			.barcode span {
 				display: block;
 				width: 2px;
 				background: var(--ink-dim);
+			}
+			.barcode::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				width: 30%;
+				background: linear-gradient(90deg, transparent, rgba(198, 241, 53, 0.35), transparent);
+				animation: scanSweep 3.2s ease-in-out infinite;
+			}
+			@keyframes scanSweep {
+				0% {
+					transform: translateX(-100%);
+				}
+				60%,
+				100% {
+					transform: translateX(340%);
+				}
 			}
 			.serial {
 				padding: 0 20px;

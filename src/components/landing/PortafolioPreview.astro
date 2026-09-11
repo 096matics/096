@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import PlantillaCard from '../PlantillaCard.astro';
 
 const plantillas = await getCollection('plantillas');
-const destacadas = ['inmobiliarias-blueprint', 'seguros-poliza', 'otras-ideas-linktree'];
+const destacadas = ['seguros-estandar', 'resenas-ticket', 'otras-ideas-linktree'];
 const preview = destacadas
 	.map((id) => plantillas.find((p) => p.id === id))
 	.filter((p): p is NonNullable<typeof p> => !!p);

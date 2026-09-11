@@ -91,6 +91,31 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 				margin: 0 0 16px;
 				text-shadow: 2px 2px 0 #ff2ec4;
 				line-height: 1.6;
+				animation: nameGlitch 5s ease-in-out infinite;
+			}
+			@keyframes nameGlitch {
+				0%,
+				92%,
+				100% {
+					text-shadow: 2px 2px 0 #ff2ec4;
+					transform: translate(0, 0);
+				}
+				93% {
+					text-shadow:
+						-2px 0 0 #ff2ec4,
+						2px 0 0 #00e5ff;
+					transform: translate(-1px, 0);
+				}
+				95% {
+					text-shadow:
+						2px 0 0 #ff2ec4,
+						-2px 0 0 #00e5ff;
+					transform: translate(1px, 0);
+				}
+				97% {
+					text-shadow: 2px 2px 0 #ff2ec4;
+					transform: translate(0, 0);
+				}
 			}
 			.screen {
 				background: #05020a;

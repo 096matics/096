@@ -57,12 +57,18 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 				aspect-ratio: 16 / 10;
 				background: linear-gradient(150deg, #e7d4b0, #c9ae7c);
 				display: flex;
+				flex-direction: column;
 				align-items: center;
 				justify-content: center;
+				gap: 6px;
 				font-size: 12px;
 				letter-spacing: 0.06em;
 				text-transform: uppercase;
 				color: rgba(43, 33, 26, 0.4);
+			}
+			.hero svg {
+				width: 30px;
+				height: 30px;
 			}
 			.category-tag {
 				position: absolute;
@@ -265,6 +271,12 @@ const whatsapp = 'https://wa.me/34727700065?text=' + encodeURIComponent('Hola, m
 		<div class="page">
 			<div class="hero">
 				<span class="category-tag">Cafetería</span>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+					><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"></path><circle
+						cx="12"
+						cy="13"
+						r="4"></circle></svg
+				>
 				Foto del negocio
 			</div>
 

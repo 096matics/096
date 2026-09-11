@@ -101,6 +101,20 @@ const whatsapp =
 				font-weight: 700;
 				font-size: 22px;
 				margin-bottom: 12px;
+				animation: badgeWiggle 3.4s ease-in-out 1s infinite;
+			}
+			@keyframes badgeWiggle {
+				0%,
+				85%,
+				100% {
+					transform: rotate(0deg) scale(1);
+				}
+				90% {
+					transform: rotate(-8deg) scale(1.05);
+				}
+				95% {
+					transform: rotate(6deg) scale(1.05);
+				}
 			}
 			.name {
 				font-family: 'Fredoka', sans-serif;
