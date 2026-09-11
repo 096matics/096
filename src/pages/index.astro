@@ -160,9 +160,11 @@ import Contacto from '../components/landing/Contacto.astro';
 				sideNavTrack?.classList.add('nav-measuring');
 				const first = navButtons[0];
 				const last = navButtons[navButtons.length - 1];
-				const firstMid = first.offsetTop + first.offsetHeight / 2;
-				const lastMid = last.offsetTop + last.offsetHeight / 2;
-				activeMid = activeBtn ? activeBtn.offsetTop + activeBtn.offsetHeight / 2 : null;
+				// redondeamos a px enteros: el punto (posicionado con transform) y la línea/palabra
+				// (en flujo normal) pueden redondear los subpíxeles de forma distinta y verse desalineados
+				const firstMid = Math.round(first.offsetTop + first.offsetHeight / 2);
+				const lastMid = Math.round(last.offsetTop + last.offsetHeight / 2);
+				activeMid = activeBtn ? Math.round(activeBtn.offsetTop + activeBtn.offsetHeight / 2) : null;
 				sideNavTrack?.classList.remove('nav-measuring');
 
 				if (sideNavRail) {
