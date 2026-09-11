@@ -19,16 +19,17 @@ const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber
 <div>
 	<p class={`text-xs tracking-widest uppercase ${accentText}`}>{kicker}</p>
 	<h3 class="mt-1 text-lg font-semibold text-white sm:mt-1.5">{titulo}</h3>
-	<ol class="mt-2 grid grid-cols-3 gap-2 sm:mt-4 sm:gap-3">
+	<ol class="steps-scroll mt-2 flex gap-2 sm:mt-4 sm:grid sm:grid-cols-3 sm:gap-3">
 		{
 			pasos.map((paso, i) => (
-				<li class="step-card rounded-xl border border-zinc-800 bg-zinc-900/40 p-2 sm:p-3">
+				<li class="step-card steps-scroll-item rounded-xl border border-zinc-800 bg-zinc-900/40 p-2.5 sm:p-3">
 					<span
 						class={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold ${accentBorder} ${accentText}`}
 					>
 						{i + 1}
 					</span>
 					<p class="mt-2 text-xs leading-snug font-medium text-white">{paso.titulo}</p>
+					<p class="step-desc mt-1 text-[11px] leading-snug text-zinc-500 sm:hidden">{paso.descripcion}</p>
 				</li>
 			))
 		}
@@ -36,6 +37,26 @@ const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber
 </div>
 
 <style>
+	.steps-scroll {
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+	}
+	.steps-scroll::-webkit-scrollbar {
+		display: none;
+	}
+	.steps-scroll-item {
+		width: 62%;
+		min-width: 0;
+		flex-shrink: 0;
+		scroll-snap-align: center;
+	}
+	@media (min-width: 640px) {
+		.steps-scroll-item {
+			width: auto;
+			flex-shrink: 1;
+		}
+	}
 	.step-card {
 		opacity: 0;
 	}

@@ -4,7 +4,7 @@ import Logo from '../Logo.astro';
 
 <nav
 	id="landingSideNav"
-	class="fixed top-1/2 left-5 z-40 flex -translate-y-1/2 flex-col items-start gap-5 opacity-0 transition-opacity duration-300 sm:left-8"
+	class="fixed inset-y-0 left-5 z-40 flex flex-col items-start justify-center gap-5 opacity-0 transition-opacity duration-300 sm:left-8"
 	aria-label="Secciones"
 >
 	<button id="landingSideNavLogo" class="text-lg" aria-label="Ir al inicio"><Logo /></button>
@@ -150,8 +150,37 @@ import Logo from '../Logo.astro';
 		.side-nav-label {
 			display: none;
 		}
+		/* en móvil el logo se separa del carril vertical (que sigue centrado) y se fija
+		   arriba a la izquierda, con una píldora de fondo para que nunca se confunda con
+		   el texto de la página que pasa debajo */
 		#landingSideNavLogo {
+			position: fixed;
+			top: max(16px, env(safe-area-inset-top));
+			left: 20px;
+			font-size: 13px;
+			padding: 5px 10px;
+			border-radius: 999px;
+			background: rgba(9, 9, 11, 0.55);
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
+		}
+		#landingSideNavLogo .bg-gradient-to-r {
 			display: none;
+		}
+		/* en móvil el punto es lo único visible del item: lo sacamos del flujo flex y lo
+		   clavamos al mismo x que el carril/indicador, para que nunca dependa del redondeo
+		   de subpíxeles del layout flex en cada dispositivo */
+		.side-nav-item {
+			position: relative;
+			height: 14px;
+			min-height: 14px;
+			padding: 0;
+		}
+		.side-nav-item::before {
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {

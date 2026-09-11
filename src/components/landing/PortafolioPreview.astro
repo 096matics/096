@@ -1,12 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import PlantillaCard from '../PlantillaCard.astro';
+import { ordenarPorSector } from '../../lib/ordenSectores';
 
 const plantillas = await getCollection('plantillas');
-const destacadas = ['seguros-estandar', 'resenas-ticket', 'otras-ideas-linktree'];
-const preview = destacadas
-	.map((id) => plantillas.find((p) => p.id === id))
-	.filter((p): p is NonNullable<typeof p> => !!p);
+const sectorItems = plantillas.filter((p) => p.data.categoria === 'sector' && p.data.estado !== 'privado');
+
+function agruparPorSector(items: typeof sectorItems) {
+	const grupos = new Map<string, typeof sectorItems>();
+	for (const item of items) {
+		const clave = item.data.sector ?? 'Otros';
+		if (!grupos.has(clave)) grupos.set(clave, []);
+		grupos.get(clave)!.push(item);
+	}
+	return grupos;
+}
+const preview = ordenarPorSector([...agruparPorSector(sectorItems).entries()]).flatMap(([, items]) => items);
 ---
 
 <section
@@ -15,38 +24,54 @@ const preview = destacadas
 	data-nav="Portafolio"
 	data-glow-a="#a855f7"
 	data-glow-b="#f59e0b"
-	class="flex min-h-dvh flex-col border-t border-zinc-800 py-8 sm:py-20"
+	class="flex min-h-dvh flex-col border-t border-zinc-800 py-4 sm:py-10"
 >
-	<div class="m-auto max-w-5xl px-6">
+	<div class="m-auto w-full max-w-5xl px-6">
 		<p class="piece piece-top piece-d0 text-sm tracking-widest text-indigo-400 uppercase">Portafolio</p>
-		<h2 class="piece piece-left piece-d1 mt-3 text-3xl font-semibold text-white sm:text-4xl">
+		<h2 class="piece piece-left piece-d1 mt-2 text-3xl font-semibold text-white sm:mt-3 sm:text-4xl">
 			Plantillas y ejemplos reales
 		</h2>
-		<p class="piece piece-left piece-d1 mt-3 max-w-2xl text-zinc-400 sm:mt-4">
-			Así se ven nuestras tarjetas NFC en la práctica. Elige el sector o el estilo más parecido al tuyo.
+		<p class="piece piece-left piece-d1 mt-1.5 max-w-2xl text-zinc-400 sm:mt-3">
+			Así se ven nuestras tarjetas NFC en la práctica. Desliza para ver todos los estilos y sectores.
 		</p>
 
-		<div class="portfolio-scroll mt-5 flex gap-4 sm:mt-10 sm:grid sm:grid-cols-3">
-			{
-				preview.map((p, i) => (
-					<div class={`piece piece-bottom piece-d${Math.min(2 + i, 6)} portfolio-scroll-item`}>
-						<PlantillaCard
-							nombre={p.data.nombre}
-							descripcion={p.data.descripcion}
-							sector={p.data.sector}
-							colorHex={p.data.colorHex}
-							imagen={p.data.imagen}
-							ruta={p.data.ruta}
-						/>
-					</div>
-				))
-			}
+		<div class="portfolio-scroll-wrap piece piece-bottom piece-d2 mt-3 sm:mt-6">
+			<button
+				id="portfolioPrev"
+				class="portfolio-arrow portfolio-arrow-prev"
+				aria-label="Plantilla anterior"
+			>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg>
+			</button>
+			<div id="portfolioScroll" class="portfolio-scroll flex gap-4">
+				{
+					preview.map((p) => (
+						<div class="portfolio-scroll-item">
+							<PlantillaCard
+								nombre={p.data.nombre}
+								descripcion={p.data.descripcion}
+								sector={p.data.sector}
+								colorHex={p.data.colorHex}
+								imagen={p.data.imagen}
+								ruta={p.data.ruta}
+							/>
+						</div>
+					))
+				}
+			</div>
+			<button
+				id="portfolioNext"
+				class="portfolio-arrow portfolio-arrow-next"
+				aria-label="Siguiente plantilla"
+			>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg>
+			</button>
 		</div>
-		<p class="mt-2 text-xs text-zinc-600 sm:hidden">← Deslízate para ver las tres →</p>
+		<p class="mt-1.5 text-xs text-zinc-600 sm:hidden">← Desliza para ver todas las plantillas →</p>
 
 		<a
 			href="/portafolio"
-			class="piece piece-bottom piece-d6 group mt-4 inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20 sm:mt-8"
+			class="piece piece-bottom piece-d6 group mt-2 inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20 sm:mt-4 sm:px-5 sm:py-2.5"
 		>
 			Ver todo el portafolio
 			<span class="transition-transform group-hover:translate-x-0.5">→</span>
@@ -55,6 +80,9 @@ const preview = destacadas
 </section>
 
 <style>
+	.portfolio-scroll-wrap {
+		position: relative;
+	}
 	.portfolio-scroll {
 		overflow-x: auto;
 		scroll-snap-type: x mandatory;
@@ -70,12 +98,15 @@ const preview = destacadas
 	}
 	.portfolio-scroll-item {
 		width: 78%;
+		min-width: 0;
 		flex-shrink: 0;
 		scroll-snap-align: center;
 	}
+	.portfolio-arrow {
+		display: none;
+	}
 	@media (min-width: 640px) {
 		.portfolio-scroll {
-			overflow-x: visible;
 			margin-left: 0;
 			margin-right: 0;
 			padding-left: 0;
@@ -83,8 +114,68 @@ const preview = destacadas
 			padding-bottom: 0;
 		}
 		.portfolio-scroll-item {
-			width: auto;
-			flex-shrink: 1;
+			width: 230px;
+		}
+		.portfolio-arrow {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 2;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			border-radius: 999px;
+			background: rgba(20, 20, 24, 0.85);
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			color: #fff;
+			cursor: pointer;
+			transition:
+				background-color 0.2s ease,
+				opacity 0.2s ease;
+		}
+		.portfolio-arrow:hover {
+			background: rgba(40, 40, 46, 0.95);
+		}
+		.portfolio-arrow:disabled {
+			opacity: 0.25;
+			cursor: default;
+		}
+		.portfolio-arrow svg {
+			width: 18px;
+			height: 18px;
+		}
+		.portfolio-arrow-prev {
+			left: -20px;
+		}
+		.portfolio-arrow-next {
+			right: -20px;
 		}
 	}
 </style>
+
+<script>
+	const track = document.getElementById('portfolioScroll');
+	const prevBtn = document.getElementById('portfolioPrev') as HTMLButtonElement | null;
+	const nextBtn = document.getElementById('portfolioNext') as HTMLButtonElement | null;
+
+	function updateArrows() {
+		if (!track || !prevBtn || !nextBtn) return;
+		prevBtn.disabled = track.scrollLeft <= 4;
+		nextBtn.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+	}
+
+	function scrollByCard(delta: number) {
+		if (!track) return;
+		const item = track.querySelector('.portfolio-scroll-item');
+		const step = item ? item.clientWidth + 16 : track.clientWidth * 0.8;
+		track.scrollBy({ left: delta * step, behavior: 'smooth' });
+	}
+
+	prevBtn?.addEventListener('click', () => scrollByCard(-1));
+	nextBtn?.addEventListener('click', () => scrollByCard(1));
+	track?.addEventListener('scroll', updateArrows, { passive: true });
+	window.addEventListener('resize', updateArrows);
+	updateArrows();
+</script>
