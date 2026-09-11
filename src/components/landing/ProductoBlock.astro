@@ -62,27 +62,29 @@ const social =
 	data-nav={navLabel}
 	data-glow-a={glowA}
 	data-glow-b={glowB}
-	class="flex min-h-dvh flex-col border-t border-zinc-800 px-6 py-10 sm:py-12"
+	class="flex min-h-dvh flex-col border-t border-zinc-800 px-6 py-6 sm:py-12"
 >
-	<div class="m-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
+	<div class="m-auto grid w-full max-w-6xl gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
 		<div>
 			<p class={`piece piece-top piece-d0 text-sm tracking-widest uppercase ${accentText}`}>{numero}</p>
-			<h2 class="piece piece-left piece-d1 mt-2 text-3xl font-semibold text-white sm:text-4xl">{titulo}</h2>
-			<p class="piece piece-left piece-d2 mt-3 max-w-xl text-lg text-zinc-400">{descripcion}</p>
-			<p class="piece piece-left piece-d2 mt-2 text-sm text-zinc-500">{paraQuien}</p>
+			<h2 class="piece piece-left piece-d1 mt-1.5 text-3xl font-semibold text-white sm:mt-2 sm:text-4xl">
+				{titulo}
+			</h2>
+			<p class="piece piece-left piece-d2 mt-2 max-w-xl text-lg text-zinc-400 sm:mt-3">{descripcion}</p>
+			<p class="piece piece-left piece-d2 mt-1.5 text-sm text-zinc-500 sm:mt-2">{paraQuien}</p>
 
-			<div class="piece piece-bottom piece-d3 mt-5 flex flex-wrap items-center gap-4">
+			<div class="piece piece-bottom piece-d3 mt-3 flex flex-wrap items-center gap-4 sm:mt-5">
 				<WhatsAppCTA texto={ctaTexto} mensaje={ctaMensaje} variant={ctaVariant} />
 				<p class="text-xs text-zinc-500">{social}</p>
 			</div>
 
-			<div class="piece piece-bottom piece-d4 mt-6">
+			<div class="piece piece-bottom piece-d4 mt-4 sm:mt-6">
 				<ComoFunciona kicker="Cómo funciona" titulo="En 3 pasos" pasos={pasos} accent={accent} />
 			</div>
 
 			{
 				conStats && (
-					<div class="piece piece-bottom piece-d5 mt-3">
+					<div class="piece piece-bottom piece-d5 mt-2 sm:mt-3">
 						<StatsGrid />
 					</div>
 				)

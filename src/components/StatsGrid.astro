@@ -10,8 +10,8 @@ const stats = [
 <dl class="grid grid-cols-2 gap-2 sm:grid-cols-4">
 	{
 		stats.map((stat) => (
-			<div class="stat-card rounded-xl border border-zinc-800 bg-zinc-900/40 px-3 py-2.5">
-				<dd class="text-lg font-semibold text-amber-400">{stat.valor}</dd>
+			<div class="stat-card rounded-xl border border-zinc-800 bg-zinc-900/40 px-3 py-2">
+				<dd class="text-base font-semibold text-amber-400 sm:text-lg">{stat.valor}</dd>
 				<dt class="mt-0.5 text-[11px] leading-tight font-normal text-zinc-500">{stat.etiqueta}</dt>
 			</div>
 		))

@@ -18,11 +18,11 @@ const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber
 
 <div>
 	<p class={`text-xs tracking-widest uppercase ${accentText}`}>{kicker}</p>
-	<h3 class="mt-1.5 text-lg font-semibold text-white">{titulo}</h3>
-	<ol class="mt-4 grid grid-cols-3 gap-3">
+	<h3 class="mt-1 text-lg font-semibold text-white sm:mt-1.5">{titulo}</h3>
+	<ol class="mt-2 grid grid-cols-3 gap-2 sm:mt-4 sm:gap-3">
 		{
 			pasos.map((paso, i) => (
-				<li class="step-card rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">
+				<li class="step-card rounded-xl border border-zinc-800 bg-zinc-900/40 p-2 sm:p-3">
 					<span
 						class={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold ${accentBorder} ${accentText}`}
 					>

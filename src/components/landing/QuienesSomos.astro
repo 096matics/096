@@ -12,15 +12,15 @@ const pilares = [
 	data-nav="Quiénes somos"
 	data-glow-a="#6366f1"
 	data-glow-b="#22d3ee"
-	class="flex min-h-dvh flex-col border-t border-zinc-800 py-16 sm:py-20"
+	class="flex min-h-dvh flex-col border-t border-zinc-800 py-8 sm:py-20"
 >
-	<div class="m-auto grid w-full max-w-5xl gap-10 px-6 lg:grid-cols-[1fr_0.85fr] lg:items-center">
+	<div class="m-auto grid w-full max-w-5xl gap-5 px-6 sm:gap-10 lg:grid-cols-[1fr_0.85fr] lg:items-center">
 		<div>
 			<p class="piece piece-top piece-d0 text-sm tracking-widest text-indigo-400 uppercase">Quiénes somos</p>
 			<h2 class="piece-materialize piece-d1 mt-3 text-3xl font-semibold text-white sm:text-4xl">
 				Una empresa de tarjetas NFC de aquí, para negocios de aquí
 			</h2>
-			<div class="piece piece-left piece-d2 mt-6 max-w-2xl space-y-3 text-zinc-300">
+			<div class="piece piece-left piece-d2 mt-3 max-w-2xl space-y-2 text-zinc-300 sm:mt-6 sm:space-y-3">
 				<p>
 					096matics diseña e instala tarjetas de contacto y reseñas para negocios y profesionales de la
 					Comunidad Valenciana, negocio a negocio, sin intermediarios.
@@ -32,10 +32,10 @@ const pilares = [
 			</div>
 		</div>
 
-		<div class="piece piece-right piece-d3 flex flex-col gap-3">
+		<div class="piece piece-right piece-d3 flex flex-col gap-2 sm:gap-3">
 			{
 				pilares.map((p) => (
-					<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 px-5 py-4">
+					<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 px-4 py-3 sm:px-5 sm:py-4">
 						<p class="text-sm font-medium text-white">{p.titulo}</p>
 						<p class="mt-1 text-xs text-zinc-500">{p.texto}</p>
 					</div>
