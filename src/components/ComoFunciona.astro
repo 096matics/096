@@ -29,7 +29,9 @@ const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber
 						{i + 1}
 					</span>
 					<p class="mt-2 text-xs leading-snug font-medium text-white">{paso.titulo}</p>
-					<p class="step-desc mt-1 text-[11px] leading-snug text-zinc-500 sm:hidden">{paso.descripcion}</p>
+					<p class="step-desc mt-1 text-[11px] leading-snug text-zinc-500 sm:hidden [@media(max-width:639px)_and_(max-height:780px)]:hidden">
+						{paso.descripcion}
+					</p>
 				</li>
 			))
 		}
@@ -41,6 +43,11 @@ const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber
 		overflow-x: auto;
 		scroll-snap-type: x mandatory;
 		scrollbar-width: none;
+		margin-left: -1.5rem;
+		margin-right: -1.5rem;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
+		padding-bottom: 2px;
 	}
 	.steps-scroll::-webkit-scrollbar {
 		display: none;
@@ -51,7 +58,19 @@ const accentBorder = accent === 'brand' ? 'border-indigo-400/40' : 'border-amber
 		flex-shrink: 0;
 		scroll-snap-align: center;
 	}
+	@media (max-width: 639px) {
+		.steps-scroll {
+			mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+			-webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+		}
+	}
 	@media (min-width: 640px) {
+		.steps-scroll {
+			margin-left: 0;
+			margin-right: 0;
+			padding-left: 0;
+			padding-right: 0;
+		}
 		.steps-scroll-item {
 			width: auto;
 			flex-shrink: 1;

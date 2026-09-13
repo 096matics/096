@@ -24,18 +24,18 @@ const preview = ordenarPorSector([...agruparPorSector(sectorItems).entries()]).f
 	data-nav="Portafolio"
 	data-glow-a="#a855f7"
 	data-glow-b="#f59e0b"
-	class="flex min-h-dvh flex-col border-t border-zinc-800 py-4 sm:py-10"
+	class="flex min-h-dvh flex-col border-t border-zinc-800 py-4 sm:py-10 [@media(max-width:639px)_and_(max-height:780px)]:py-2"
 >
 	<div class="m-auto w-full max-w-5xl px-6">
 		<p class="piece piece-top piece-d0 text-sm tracking-widest text-indigo-400 uppercase">Portafolio</p>
-		<h2 class="piece piece-left piece-d1 mt-2 text-3xl font-semibold text-white sm:mt-3 sm:text-4xl">
+		<h2 class="piece piece-left piece-d1 mt-2 text-3xl font-semibold text-white sm:mt-3 sm:text-4xl [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
 			Plantillas y ejemplos reales
 		</h2>
-		<p class="piece piece-left piece-d1 mt-1.5 max-w-2xl text-zinc-400 sm:mt-3">
+		<p class="piece piece-left piece-d1 mt-1.5 max-w-2xl text-zinc-400 sm:mt-3 [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
 			Así se ven nuestras tarjetas NFC en la práctica. Desliza para ver todos los estilos y sectores.
 		</p>
 
-		<div class="portfolio-scroll-wrap piece piece-bottom piece-d2 mt-3 sm:mt-6">
+		<div class="portfolio-scroll-wrap piece piece-bottom piece-d2 mt-3 sm:mt-6 [@media(max-width:639px)_and_(max-height:780px)]:mt-2">
 			<button
 				id="portfolioPrev"
 				class="portfolio-arrow portfolio-arrow-prev"
@@ -54,6 +54,7 @@ const preview = ordenarPorSector([...agruparPorSector(sectorItems).entries()]).f
 								colorHex={p.data.colorHex}
 								imagen={p.data.imagen}
 								ruta={p.data.ruta}
+								compact
 							/>
 						</div>
 					))
@@ -67,11 +68,13 @@ const preview = ordenarPorSector([...agruparPorSector(sectorItems).entries()]).f
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg>
 			</button>
 		</div>
-		<p class="mt-1.5 text-xs text-zinc-600 sm:hidden">← Desliza para ver todas las plantillas →</p>
+		<p class="mt-1.5 text-xs text-zinc-600 sm:hidden [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
+			← Desliza para ver todas las plantillas →
+		</p>
 
 		<a
 			href="/portafolio"
-			class="piece piece-bottom piece-d6 group mt-2 inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20 sm:mt-4 sm:px-5 sm:py-2.5"
+			class="piece piece-bottom piece-d6 group mt-2 inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20 sm:mt-4 sm:px-5 sm:py-2.5 [@media(max-width:639px)_and_(max-height:780px)]:mt-1"
 		>
 			Ver todo el portafolio
 			<span class="transition-transform group-hover:translate-x-0.5">→</span>
@@ -104,6 +107,12 @@ const preview = ordenarPorSector([...agruparPorSector(sectorItems).entries()]).f
 	}
 	.portfolio-arrow {
 		display: none;
+	}
+	@media (max-width: 639px) {
+		.portfolio-scroll {
+			mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+			-webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+		}
 	}
 	@media (min-width: 640px) {
 		.portfolio-scroll {

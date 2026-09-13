@@ -62,7 +62,7 @@ const social =
 	data-nav={navLabel}
 	data-glow-a={glowA}
 	data-glow-b={glowB}
-	class="flex min-h-dvh flex-col border-t border-zinc-800 px-6 py-6 sm:py-12"
+	class="flex min-h-dvh flex-col border-t border-zinc-800 px-6 py-6 sm:py-12 [@media(max-width:639px)_and_(max-height:780px)]:py-3"
 >
 	<div class="m-auto grid w-full max-w-6xl gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
 		<div>
@@ -70,21 +70,25 @@ const social =
 			<h2 class="piece piece-left piece-d1 mt-1.5 text-3xl font-semibold text-white sm:mt-2 sm:text-4xl">
 				{titulo}
 			</h2>
-			<p class="piece piece-left piece-d2 mt-2 max-w-xl text-lg text-zinc-400 sm:mt-3">{descripcion}</p>
-			<p class="piece piece-left piece-d2 mt-1.5 text-sm text-zinc-500 sm:mt-2">{paraQuien}</p>
+			<p class="piece piece-left piece-d2 mt-2 max-w-xl text-lg text-zinc-400 sm:mt-3 [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
+				{descripcion}
+			</p>
+			<p class="piece piece-left piece-d2 mt-1.5 text-sm text-zinc-500 sm:mt-2 [@media(max-width:639px)_and_(max-height:780px)]:mt-0.5">
+				{paraQuien}
+			</p>
 
-			<div class="piece piece-bottom piece-d3 mt-3 flex flex-wrap items-center gap-4 sm:mt-5">
+			<div class="piece piece-bottom piece-d3 mt-3 flex flex-wrap items-center gap-4 sm:mt-5 [@media(max-width:639px)_and_(max-height:780px)]:mt-2">
 				<WhatsAppCTA texto={ctaTexto} mensaje={ctaMensaje} variant={ctaVariant} />
 				<p class="text-xs text-zinc-500">{social}</p>
 			</div>
 
-			<div class="piece piece-bottom piece-d4 mt-4 sm:mt-6">
+			<div class="piece piece-bottom piece-d4 mt-4 sm:mt-6 [@media(max-width:639px)_and_(max-height:780px)]:mt-2">
 				<ComoFunciona kicker="Cómo funciona" titulo="En 3 pasos" pasos={pasos} accent={accent} />
 			</div>
 
 			{
 				conStats && (
-					<div class="piece piece-bottom piece-d5 mt-2 sm:mt-3">
+					<div class="piece piece-bottom piece-d5 mt-2 sm:mt-3 [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
 						<StatsGrid />
 					</div>
 				)
