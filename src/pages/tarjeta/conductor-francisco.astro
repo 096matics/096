@@ -66,16 +66,32 @@
 			}
 			@media (min-width: 640px) {
 				.bg {
-					/* escritorio: "cover" ya deja de sobra margen vertical para encuadrar (la
-					   pantalla es ancha, no alta), sin necesidad de zoom extra — así no se ven
-					   márgenes a los lados ni se pierde calidad ampliando de más la foto */
-					background-position: center 47%;
+					/* "cover" a pantalla completa obliga a un zoom mínimo bastante alto en
+					   escritorio (imagen ancha contra pantalla ancha). En vez de eso, la foto
+					   vive en un panel centrado de ancho limitado — así "cover" se calcula
+					   contra un cuadro más estrecho y podemos alejar mucho más el zoom sin que
+					   aparezcan márgenes: fuera del panel solo se ve el mismo fondo oscuro de
+					   la página, así que no se nota como un corte */
+					top: 0;
+					bottom: 0;
+					left: 50%;
+					right: auto;
+					width: min(800px, 100vw);
+					transform: translateX(-50%);
+					background-position: center 98%;
 					background-size: cover;
 				}
 			}
 			body.expanded .bg {
 				filter: blur(14px) brightness(0.72);
 				transform: scale(1.08);
+			}
+			/* misma especificidad que la regla de arriba: al ir después en el CSS, esta
+			   gana en escritorio y conserva el centrado (translateX) al hacer zoom */
+			@media (min-width: 640px) {
+				body.expanded .bg {
+					transform: translateX(-50%) scale(1.08);
+				}
 			}
 
 			.scrim {
@@ -164,10 +180,15 @@
 			}
 			@media (min-width: 640px) {
 				.photo-space {
-					/* "cover" hace más zoom cuanto más ancha es la ventana, así que reservamos
-					   más alto proporcionalmente al ancho para que la barbilla no se cuele
-					   detrás del texto en pantallas muy anchas (1920px y más) */
-					min-height: max(480px, 30vw);
+					min-height: 460px;
+					/* mismo ancho que el panel de la foto (.bg), para que el badge de
+					   disponibilidad (posicionado dentro de este bloque) quede alineado con
+					   la foto en vez de pegado al borde de una pantalla ancha. "width" (no
+					   max-width): este bloque no tiene contenido propio que le dé un ancho
+					   natural (el badge va con position:absolute), así que con max-width se
+					   queda en 0 al centrarlo con margin:auto */
+					width: min(800px, 100vw);
+					margin: 0 auto;
 				}
 			}
 
