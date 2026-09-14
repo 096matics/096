@@ -98,16 +98,14 @@
 					transform: translateX(-50%);
 					background-position: center 50%;
 					background-size: cover;
-					/* difumina los bordes izquierdo/derecho del panel para que se funda con
-					   el fondo desenfocado en vez de cortar en seco */
-					mask-image: linear-gradient(to right, transparent 0, black 64px, black calc(100% - 64px), transparent 100%);
-					-webkit-mask-image: linear-gradient(
-						to right,
-						transparent 0,
-						black 64px,
-						black calc(100% - 64px),
-						transparent 100%
-					);
+				}
+				/* viñeta por encima de la foto nítida y el fondo borroso: funde ambas
+				   capas entre sí y contra el fondo de la página con un degradado, en vez
+				   de depender de que los colores del fondo borroso "encajen" con el
+				   negro — así el borde queda suave pase lo que pase en esa zona de la
+				   foto */
+				.vignette {
+					display: block;
 				}
 			}
 			body.expanded .bg {
@@ -119,6 +117,26 @@
 			@media (min-width: 640px) {
 				body.expanded .bg {
 					transform: translateX(-50%) scale(1.08);
+				}
+			}
+
+			/* viñeta por delante de la foto nítida y el fondo borroso: funde ambas
+			   capas entre sí y contra el negro de la página con un degradado propio, en
+			   vez de depender de que los colores del fondo borroso "encajen" — así el
+			   borde queda suave pase lo que pase en esa zona de la foto. Solo hace
+			   falta en escritorio, donde el panel nítido es más estrecho que la
+			   pantalla; en móvil la foto ya llega de borde a borde */
+			.vignette {
+				display: none;
+			}
+			@media (min-width: 640px) {
+				.vignette {
+					display: block;
+					position: fixed;
+					inset: 0;
+					z-index: -1;
+					pointer-events: none;
+					background: radial-gradient(ellipse 62% 68% at center, transparent 45%, rgba(10, 10, 10, 0.5) 75%, var(--bg-deep) 100%);
 				}
 			}
 
@@ -518,6 +536,7 @@
 	<body>
 		<div class="bg-blur"></div>
 		<div class="bg"></div>
+		<div class="vignette"></div>
 		<div class="scrim"></div>
 		<div class="scrim scrim-strong"></div>
 
