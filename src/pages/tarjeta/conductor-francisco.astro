@@ -71,16 +71,27 @@
 				}
 			}
 
-			.photo {
+			.hero {
 				position: relative;
-				aspect-ratio: 16 / 10;
-				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 22% / cover;
+				min-height: 340px;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+				padding: 0 20px 14px;
+				overflow: hidden;
+				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 15% / cover;
 			}
-			.photo::after {
+			.hero::after {
 				content: '';
 				position: absolute;
 				inset: 0;
-				background: linear-gradient(180deg, rgba(10, 10, 10, 0) 60%, var(--panel) 100%);
+				/* la foto se alarga por debajo del nombre y se difumina hasta el color
+				   sólido del panel, para que el texto nunca quede sobre la cara */
+				background: linear-gradient(180deg, rgba(10, 10, 10, 0) 32%, var(--panel) 82%);
+			}
+			.hero-text {
+				position: relative;
+				z-index: 1;
 			}
 
 			.available-badge {
@@ -120,7 +131,7 @@
 			}
 
 			.panel {
-				padding: 16px 20px 20px;
+				padding: 14px 20px 20px;
 			}
 
 			.name {
@@ -128,17 +139,20 @@
 				font-size: 24px;
 				font-weight: 600;
 				margin: 0 0 3px;
+				text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
 			}
 			.role {
 				font-size: 13px;
 				color: var(--ink-dim);
 				margin: 0 0 3px;
+				text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
 			}
 			.current-company {
 				font-size: 11px;
 				color: var(--ink-dim);
-				opacity: 0.75;
-				margin: 0 0 14px;
+				opacity: 0.85;
+				margin: 0;
+				text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
 			}
 
 			.stats-row {
@@ -244,11 +258,11 @@
 				body {
 					padding: 12px 16px;
 				}
-				.photo {
-					aspect-ratio: 16 / 8;
+				.hero {
+					min-height: 270px;
 				}
 				.panel {
-					padding: 12px 18px 16px;
+					padding: 10px 18px 16px;
 				}
 				.current-company {
 					margin-bottom: 10px;
@@ -272,15 +286,16 @@
 	</head>
 	<body>
 		<div class="card">
-			<div class="photo">
+			<div class="hero">
 				<span class="available-badge"><span class="dot"></span>Disponible para nueva incorporación</span>
+				<div class="hero-text">
+					<h1 class="name">Francisco Ferrer Castilla</h1>
+					<p class="role">Conductor profesional · Petres, Valencia</p>
+					<p class="current-company">Actualmente en Campillo Transportes, Paterna</p>
+				</div>
 			</div>
 
 			<div class="panel">
-				<h1 class="name">Francisco Ferrer Castilla</h1>
-				<p class="role">Conductor profesional · Petres, Valencia</p>
-				<p class="current-company">Actualmente en Campillo Transportes, Paterna</p>
-
 				<div class="stats-row">
 					<div class="stat"><b>20</b><span>Años exp.</span></div>
 					<div class="stat"><b>C+E</b><span>Carnet</span></div>
