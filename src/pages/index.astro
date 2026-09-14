@@ -6,6 +6,7 @@ import Hero from '../components/landing/Hero.astro';
 import ProductoBlock from '../components/landing/ProductoBlock.astro';
 import QuienesSomos from '../components/landing/QuienesSomos.astro';
 import PortafolioPreview from '../components/landing/PortafolioPreview.astro';
+import Objeciones from '../components/landing/Objeciones.astro';
 import Contacto from '../components/landing/Contacto.astro';
 ---
 
@@ -24,8 +25,8 @@ import Contacto from '../components/landing/Contacto.astro';
 				navLabel="Tarjetas personales"
 				numero="Producto 1 · Tarjetas personales"
 				titulo="Tu contacto, en un toque"
-				descripcion="Una tarjeta NFC de presentación digital para profesionales: un toque y tu cliente guarda tu teléfono, email, redes o web, sin repartir tarjetas de papel."
-				paraQuien="Para autónomos, comerciales y equipos que quieren dar una buena primera impresión."
+				descripcion="El 90% de las tarjetas de papel acaban en la basura antes de que te llamen. Una tarjeta NFC guarda tu contacto en el móvil de tu cliente al instante."
+				paraQuien="Pensada para autónomos, comerciales y equipos que se juegan la primera impresión en cada reunión."
 				accent="brand"
 				accentHex="#6366f1"
 				glowA="#6366f1"
@@ -54,7 +55,7 @@ import Contacto from '../components/landing/Contacto.astro';
 				numero="Producto 2 · Reseñas de Google"
 				titulo="Reseñas de Google, sin fricción"
 				descripcion="Tu cliente acerca el móvil a la tarjeta y aterriza directo en la ventana de dejar una reseña en tu ficha de Google. Sin apps, sin buscar el nombre del negocio, sin escribir nada a mano."
-				paraQuien="Pensado para negocios con pocas reseñas que necesitan reputación online rápido."
+				paraQuien="Pocas reseñas y pierdes clientes frente al de al lado — la gente decide en Google."
 				accent="amber"
 				accentHex="#f59e0b"
 				glowA="#f59e0b"
@@ -81,6 +82,8 @@ import Contacto from '../components/landing/Contacto.astro';
 			<QuienesSomos />
 			<div class="pager-spacer" aria-hidden="true"></div>
 			<PortafolioPreview />
+			<div class="pager-spacer" aria-hidden="true"></div>
+			<Objeciones />
 			<div class="pager-spacer" aria-hidden="true"></div>
 			<Contacto />
 		</div>
