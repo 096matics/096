@@ -12,9 +12,10 @@
 			rel="stylesheet"
 		/>
 		<style>
-			@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
-
 			:root {
+				--bg-deep: #0a0a0a;
+				--panel: #121212;
+				--panel-border: rgba(255, 255, 255, 0.08);
 				--ink: #f3f5f8;
 				--ink-dim: rgba(243, 245, 248, 0.68);
 				--accent: #f0b94d;
@@ -32,59 +33,74 @@
 				height: 100%;
 				overflow: hidden;
 				overscroll-behavior: none;
-				background: #0a0a0a;
+				background: var(--bg-deep);
 			}
 
 			body {
 				height: 100dvh;
+				background:
+					radial-gradient(ellipse 700px 420px at 50% -10%, rgba(240, 185, 77, 0.1), transparent 60%),
+					linear-gradient(180deg, #0d0d0d 0%, var(--bg-deep) 55%);
 				font-family: 'IBM Plex Sans', sans-serif;
 				color: var(--ink);
 				display: flex;
-				align-items: flex-end;
+				align-items: center;
 				justify-content: center;
-				position: relative;
-
-				/* Foto real del conductor, a pantalla completa — con zoom en móvil para que la
-				   cara quede por encima del panel de texto, no solo la frente */
-				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 78% / auto 150%;
+				padding: 20px 16px;
 			}
-			@media (min-width: 640px) {
-				body {
-					/* en pantallas anchas el panel de texto ocupa mucha menos altura relativa,
-					   así que la cara ya queda visible con un encuadre normal a toda anchura */
-					background-position: center 20%;
-					background-size: cover;
+
+			.card {
+				width: 100%;
+				max-width: 400px;
+				border-radius: 22px;
+				overflow: hidden;
+				border: 1px solid var(--panel-border);
+				background: var(--panel);
+				box-shadow: 0 30px 70px -25px rgba(0, 0, 0, 0.7);
+				animation: cardIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+				opacity: 0;
+			}
+			@keyframes cardIn {
+				from {
+					opacity: 0;
+					transform: translateY(14px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
 				}
 			}
 
-			.scrim {
-				position: fixed;
-				inset: 0;
-				background: linear-gradient(180deg, rgba(10, 10, 10, 0.15) 0%, rgba(10, 10, 10, 0.55) 45%, rgba(10, 10, 10, 0.92) 100%);
-				pointer-events: none;
-			}
-
-			.page {
+			.photo {
 				position: relative;
-				z-index: 1;
-				width: 100%;
-				max-width: 420px;
-				padding: 0 20px 26px;
+				aspect-ratio: 16 / 10;
+				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 22% / cover;
+			}
+			.photo::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(180deg, rgba(10, 10, 10, 0) 60%, var(--panel) 100%);
 			}
 
 			.available-badge {
+				position: absolute;
+				top: 12px;
+				left: 12px;
+				z-index: 1;
 				display: inline-flex;
 				align-items: center;
 				gap: 6px;
-				background: rgba(63, 181, 106, 0.16);
+				background: rgba(10, 14, 11, 0.65);
+				backdrop-filter: blur(4px);
+				-webkit-backdrop-filter: blur(4px);
 				border: 1px solid rgba(63, 181, 106, 0.5);
 				color: var(--available);
-				font-size: 11px;
+				font-size: 10.5px;
 				font-weight: 600;
 				letter-spacing: 0.03em;
-				padding: 5px 11px;
+				padding: 5px 10px;
 				border-radius: 999px;
-				margin-bottom: 12px;
 			}
 			.available-badge .dot {
 				width: 6px;
@@ -103,95 +119,99 @@
 				}
 			}
 
+			.panel {
+				padding: 16px 20px 20px;
+			}
+
 			.name {
 				font-family: 'Chakra Petch', sans-serif;
-				font-size: 26px;
+				font-size: 24px;
 				font-weight: 600;
 				margin: 0 0 3px;
 			}
 			.role {
 				font-size: 13px;
 				color: var(--ink-dim);
-				margin: 0 0 4px;
+				margin: 0 0 3px;
 			}
 			.current-company {
 				font-size: 11px;
 				color: var(--ink-dim);
 				opacity: 0.75;
-				margin: 0 0 16px;
+				margin: 0 0 14px;
 			}
 
 			.stats-row {
 				display: flex;
-				gap: 10px;
-				margin-bottom: 16px;
+				gap: 8px;
+				margin-bottom: 14px;
 			}
 			.stat {
 				flex: 1;
-				background: rgba(255, 255, 255, 0.07);
-				border: 1px solid rgba(255, 255, 255, 0.14);
+				background: rgba(255, 255, 255, 0.06);
+				border: 1px solid rgba(255, 255, 255, 0.12);
 				border-radius: 12px;
-				padding: 10px 8px;
+				padding: 8px 6px;
 				text-align: center;
 			}
 			.stat b {
 				display: block;
 				font-family: 'Chakra Petch', sans-serif;
-				font-size: 17px;
+				font-size: 16px;
 				color: var(--accent);
 			}
 			.stat span {
-				font-size: 9.5px;
-				letter-spacing: 0.04em;
+				font-size: 9px;
+				letter-spacing: 0.03em;
 				text-transform: uppercase;
 				color: var(--ink-dim);
 			}
 
 			.section-label {
-				font-size: 10px;
-				letter-spacing: 0.14em;
+				font-size: 9.5px;
+				letter-spacing: 0.13em;
 				text-transform: uppercase;
 				color: var(--accent);
-				margin: 0 0 8px;
+				margin: 0 0 6px;
 			}
 
 			.badges {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 6px;
-				margin-bottom: 18px;
+				gap: 5px;
+				margin-bottom: 12px;
 			}
 			.badge {
-				font-size: 11px;
+				font-size: 10.5px;
 				font-weight: 600;
 				color: var(--ink);
 				border: 1px solid var(--accent-dim);
 				background: rgba(240, 185, 77, 0.08);
-				padding: 5px 11px;
+				padding: 4px 10px;
 				border-radius: 999px;
 			}
 
 			.quote {
-				font-size: 12.5px;
+				font-size: 12px;
 				font-style: italic;
 				color: var(--ink-dim);
 				border-left: 2px solid var(--accent-dim);
 				padding-left: 10px;
-				margin: 0 0 20px;
-				line-height: 1.5;
+				margin: 0 0 16px;
+				line-height: 1.45;
 			}
 
 			.contact-row {
 				display: flex;
-				gap: 10px;
+				gap: 8px;
 			}
 			.btn {
 				flex: 1;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				gap: 7px;
-				padding: 13px;
+				gap: 6px;
+				padding: 11px;
 				border-radius: 12px;
 				text-decoration: none;
 				font-weight: 600;
@@ -214,77 +234,108 @@
 			.save-link {
 				display: block;
 				text-align: center;
-				margin-top: 12px;
+				margin-top: 10px;
 				font-size: 11px;
 				color: var(--ink-dim);
 				text-decoration: underline;
 			}
+
+			@media (max-height: 780px) {
+				body {
+					padding: 12px 16px;
+				}
+				.photo {
+					aspect-ratio: 16 / 8;
+				}
+				.panel {
+					padding: 12px 18px 16px;
+				}
+				.current-company {
+					margin-bottom: 10px;
+				}
+				.stats-row {
+					margin-bottom: 10px;
+				}
+				.badges {
+					margin-bottom: 8px;
+				}
+				.quote {
+					margin-bottom: 12px;
+				}
+			}
+			@media (max-height: 680px) {
+				.quote {
+					display: none;
+				}
+			}
 		</style>
 	</head>
 	<body>
-		<div class="scrim"></div>
-
-		<div class="page">
-			<span class="available-badge"><span class="dot"></span>Disponible para nueva incorporación</span>
-
-			<h1 class="name">Francisco Ferrer Castilla</h1>
-			<p class="role">Conductor profesional · Petres, Valencia</p>
-			<p class="current-company">Actualmente en Campillo Transportes, Paterna</p>
-
-			<div class="stats-row">
-				<div class="stat"><b>20</b><span>Años exp.</span></div>
-				<div class="stat"><b>C+E</b><span>Carnet</span></div>
-				<div class="stat"><b>Nac./Com.</b><span>Rutas</span></div>
+		<div class="card">
+			<div class="photo">
+				<span class="available-badge"><span class="dot"></span>Disponible para nueva incorporación</span>
 			</div>
 
-			<p class="section-label">Experiencia con vehículos</p>
-			<div class="badges">
-				<span class="badge">Cisterna alimentaria (sin presión)</span>
-				<span class="badge">Frigorífico</span>
-				<span class="badge">Lonas</span>
-				<span class="badge">Portacontenedores</span>
+			<div class="panel">
+				<h1 class="name">Francisco Ferrer Castilla</h1>
+				<p class="role">Conductor profesional · Petres, Valencia</p>
+				<p class="current-company">Actualmente en Campillo Transportes, Paterna</p>
+
+				<div class="stats-row">
+					<div class="stat"><b>20</b><span>Años exp.</span></div>
+					<div class="stat"><b>C+E</b><span>Carnet</span></div>
+					<div class="stat"><b>Nac./Com.</b><span>Rutas</span></div>
+				</div>
+
+				<p class="section-label">Experiencia con vehículos</p>
+				<div class="badges">
+					<span class="badge">Cisterna alimentaria (sin presión)</span>
+					<span class="badge">Frigorífico</span>
+					<span class="badge">Lonas</span>
+					<span class="badge">Portacontenedores</span>
+				</div>
+
+				<p class="section-label">Carnets y certificados</p>
+				<div class="badges">
+					<span class="badge">B</span>
+					<span class="badge">C</span>
+					<span class="badge">C+E</span>
+					<span class="badge">A2</span>
+					<span class="badge">CAP vigente</span>
+					<span class="badge">Tacógrafo digital vigente</span>
+				</div>
+
+				<p class="quote">
+					"Puntual y profesional, con don de gentes y responsabilidad en cada ruta. Acostumbrado a todo tipo
+					de horarios."
+				</p>
+
+				<div class="contact-row">
+					<a class="btn primary" href="tel:+34614293415">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+							></path></svg
+						>
+						Llamar
+					</a>
+					<a class="btn secondary" href="https://wa.me/34614293415" target="_blank">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							><path
+								d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+							></path></svg
+						>
+						WhatsApp
+					</a>
+				</div>
+
+				<a
+					class="save-link"
+					download="francisco-ferrer.vcf"
+					href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3AFrancisco%20Ferrer%20Castilla%0ATITLE%3AConductor%20profesional%0ATEL%3BTYPE%3DCELL%3A%2B34614293415%0AEMAIL%3Afranciscorferrercastilla1978%40gmail.com%0AEND%3AVCARD"
+					>↓ Guardar contacto</a
+				>
 			</div>
-
-			<p class="section-label">Carnets y certificados</p>
-			<div class="badges">
-				<span class="badge">B</span>
-				<span class="badge">C</span>
-				<span class="badge">C+E</span>
-				<span class="badge">A2</span>
-				<span class="badge">CAP vigente</span>
-				<span class="badge">Tacógrafo digital vigente</span>
-			</div>
-
-			<p class="quote">
-				"Puntual y profesional, con don de gentes y responsabilidad en cada ruta. Acostumbrado a todo tipo
-				de horarios."
-			</p>
-
-			<div class="contact-row">
-				<a class="btn primary" href="tel:+34614293415">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-						><path
-							d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
-						></path></svg
-					>
-					Llamar
-				</a>
-				<a class="btn secondary" href="https://wa.me/34614293415" target="_blank">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-						><path
-							d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
-						></path></svg
-					>
-					WhatsApp
-				</a>
-			</div>
-
-			<a
-				class="save-link"
-				download="francisco-ferrer.vcf"
-				href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3AFrancisco%20Ferrer%20Castilla%0ATITLE%3AConductor%20profesional%0ATEL%3BTYPE%3DCELL%3A%2B34614293415%0AEMAIL%3Afranciscorferrercastilla1978%40gmail.com%0AEND%3AVCARD"
-				>↓ Guardar contacto</a
-			>
 		</div>
 	</body>
 </html>
