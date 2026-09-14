@@ -62,14 +62,14 @@
 				   y estrecha se ve la foto entera comprimida, sin margen para encuadrar) para
 				   que la cara + cuello queden por encima del texto, sin cortar el pelo de
 				   forma brusca */
-				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 88% / auto 150%;
+				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 82% / auto 150%;
 			}
 			@media (min-width: 640px) {
 				.bg {
 					/* escritorio: "cover" ya deja de sobra margen vertical para encuadrar (la
 					   pantalla es ancha, no alta), sin necesidad de zoom extra — así no se ven
 					   márgenes a los lados ni se pierde calidad ampliando de más la foto */
-					background-position: center 90%;
+					background-position: center 47%;
 					background-size: cover;
 				}
 			}
@@ -503,19 +503,30 @@
 
 		<script>
 			const introPulse = document.querySelector('.intro-pulse');
+			const page = document.querySelector('.page');
 			const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			let expanded = false;
 
-			function expand() {
-				if (expanded) return;
-				expanded = true;
+			function setExpanded(value: boolean) {
+				expanded = value;
 				introPulse?.classList.add('intro-exit');
-				document.body.classList.add('expanded');
+				document.body.classList.toggle('expanded', value);
 			}
 
-			document.body.addEventListener('click', expand);
+			function handleTap(target: Node | null) {
+				if (!expanded) {
+					setExpanded(true);
+					return;
+				}
+				// dentro de la tarjeta (texto, stats, botones...) no hace nada — solo
+				// tocar fuera de ella vuelve a la foto
+				if (target && page?.contains(target)) return;
+				setExpanded(false);
+			}
+
+			document.body.addEventListener('click', (e) => handleTap(e.target as Node));
 			document.body.addEventListener('keydown', (e) => {
-				if (e.key === 'Enter' || e.key === ' ') expand();
+				if (e.key === 'Enter' || e.key === ' ') handleTap(e.target as Node);
 			});
 
 			setTimeout(
