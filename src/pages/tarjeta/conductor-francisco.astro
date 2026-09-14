@@ -48,6 +48,24 @@
 				cursor: pointer;
 			}
 
+			/* capa de fondo extra, siempre a pantalla completa y muy desenfocada: en
+			   escritorio el panel nítido (.bg) es más estrecho que la pantalla, así que
+			   esto se ve detrás, a los lados, dando un degradado ambiental en vez de un
+			   corte seco contra el negro plano. En móvil queda totalmente tapada por .bg
+			   (que sí cubre toda la pantalla ahí), así que no molesta */
+			.bg-blur {
+				position: fixed;
+				inset: 0;
+				z-index: -2;
+				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center center / cover;
+				filter: blur(70px) brightness(0.32) saturate(1.15);
+				transform: scale(1.15);
+				transition: filter 0.7s ease;
+			}
+			body.expanded .bg-blur {
+				filter: blur(70px) brightness(0.22) saturate(1.15);
+			}
+
 			/* la foto vive en su propia capa fija a pantalla completa, independiente del
 			   flujo del contenido, para poder desenfocarla al abrir la carta sin afectar
 			   al texto que va encima */
@@ -70,8 +88,8 @@
 					   escritorio (imagen ancha contra pantalla ancha). En vez de eso, la foto
 					   vive en un panel centrado de ancho limitado — así "cover" se calcula
 					   contra un cuadro más estrecho y podemos alejar mucho más el zoom sin que
-					   aparezcan márgenes: fuera del panel solo se ve el mismo fondo oscuro de
-					   la página, así que no se nota como un corte */
+					   aparezcan márgenes: fuera del panel solo se ve el fondo desenfocado
+					   (.bg-blur) de detrás, así que no se nota como un corte */
 					top: 0;
 					bottom: 0;
 					left: 50%;
@@ -80,6 +98,16 @@
 					transform: translateX(-50%);
 					background-position: center 98%;
 					background-size: cover;
+					/* difumina los bordes izquierdo/derecho del panel para que se funda con
+					   el fondo desenfocado en vez de cortar en seco */
+					mask-image: linear-gradient(to right, transparent 0, black 64px, black calc(100% - 64px), transparent 100%);
+					-webkit-mask-image: linear-gradient(
+						to right,
+						transparent 0,
+						black 64px,
+						black calc(100% - 64px),
+						transparent 100%
+					);
 				}
 			}
 			body.expanded .bg {
@@ -190,6 +218,11 @@
 					width: min(800px, 100vw);
 					margin: 0 auto;
 				}
+				/* en escritorio el panel es ancho de sobra para que quepan uno al lado
+				   del otro */
+				.cv-download {
+					top: 14px;
+				}
 			}
 
 			.available-badge {
@@ -226,6 +259,47 @@
 				50% {
 					opacity: 0.4;
 				}
+			}
+
+			/* solo visible con la tarjeta abierta (la "página de información"), no sobre
+			   la foto sola */
+			.cv-download {
+				position: absolute;
+				/* en móvil el badge de disponibilidad ya ocupa casi todo el ancho, así que
+				   el botón de CV va debajo en vez de al lado para no solaparse */
+				top: 48px;
+				right: 20px;
+				z-index: 1;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				background: rgba(10, 14, 11, 0.65);
+				backdrop-filter: blur(4px);
+				-webkit-backdrop-filter: blur(4px);
+				border: 1px solid var(--accent-dim);
+				color: var(--accent);
+				font-size: 11px;
+				font-weight: 600;
+				letter-spacing: 0.03em;
+				padding: 5px 11px;
+				border-radius: 999px;
+				text-decoration: none;
+				opacity: 0;
+				pointer-events: none;
+				transform: translateY(-4px);
+				transition:
+					opacity 0.4s ease,
+					transform 0.4s ease;
+			}
+			body.expanded .cv-download {
+				opacity: 1;
+				pointer-events: auto;
+				transform: translateY(0);
+				transition-delay: 0.2s;
+			}
+			.cv-download svg {
+				width: 13px;
+				height: 13px;
 			}
 
 			.page {
@@ -442,6 +516,7 @@
 		</style>
 	</head>
 	<body>
+		<div class="bg-blur"></div>
 		<div class="bg"></div>
 		<div class="scrim"></div>
 		<div class="scrim scrim-strong"></div>
@@ -454,6 +529,12 @@
 
 		<div class="photo-space">
 			<span class="available-badge"><span class="dot"></span>Disponible para nueva incorporación</span>
+			<a class="cv-download" href="/tarjeta/conductor-francisco/cv-francisco.pdf" download>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+					><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"></path></svg
+				>
+				Descargar CV
+			</a>
 		</div>
 
 		<div class="page">
@@ -525,6 +606,7 @@
 		<script>
 			const introPulse = document.querySelector('.intro-pulse');
 			const page = document.querySelector('.page');
+			const cvDownload = document.querySelector('.cv-download');
 			const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			let expanded = false;
 
@@ -539,9 +621,9 @@
 					setExpanded(true);
 					return;
 				}
-				// dentro de la tarjeta (texto, stats, botones...) no hace nada — solo
-				// tocar fuera de ella vuelve a la foto
-				if (target && page?.contains(target)) return;
+				// dentro de la tarjeta (texto, stats, botones...) o sobre el botón de
+				// descargar CV no hace nada — solo tocar fuera vuelve a la foto
+				if (target && (page?.contains(target) || cvDownload?.contains(target))) return;
 				setExpanded(false);
 			}
 
