@@ -43,7 +43,7 @@ const preview = ordenarPorSector([...agruparPorSector(sectorItems).entries()]).f
 			>
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg>
 			</button>
-			<div id="portfolioScroll" class="portfolio-scroll flex gap-4">
+			<div id="portfolioScroll" data-hscroll class="portfolio-scroll flex gap-4">
 				{
 					preview.map((p) => (
 						<div class="portfolio-scroll-item">

@@ -6,6 +6,7 @@ import Hero from '../components/landing/Hero.astro';
 import ProductoBlock from '../components/landing/ProductoBlock.astro';
 import QuienesSomos from '../components/landing/QuienesSomos.astro';
 import PortafolioPreview from '../components/landing/PortafolioPreview.astro';
+import ProductoFuturo from '../components/landing/ProductoFuturo.astro';
 import Objeciones from '../components/landing/Objeciones.astro';
 import Contacto from '../components/landing/Contacto.astro';
 ---
@@ -23,7 +24,7 @@ import Contacto from '../components/landing/Contacto.astro';
 			<ProductoBlock
 				id="producto-personal"
 				navLabel="Tarjetas personales"
-				numero="Producto 1 · Tarjetas personales"
+				numero="Tarjetas personales"
 				titulo="Tu contacto, en un toque"
 				descripcion="El 90% de las tarjetas de papel acaban en la basura antes de que te llamen. Una tarjeta NFC guarda tu contacto en el móvil de tu cliente al instante."
 				paraQuien="Pensada para autónomos, comerciales y equipos que se juegan la primera impresión en cada reunión."
@@ -52,9 +53,9 @@ import Contacto from '../components/landing/Contacto.astro';
 			<ProductoBlock
 				id="producto-google"
 				navLabel="Reseñas Google"
-				numero="Producto 2 · Reseñas de Google"
+				numero="Reseñas de Google"
 				titulo="Reseñas de Google, sin fricción"
-				descripcion="Tu cliente acerca el móvil a la tarjeta y aterriza directo en la ventana de dejar una reseña en tu ficha de Google. Sin apps, sin buscar el nombre del negocio, sin escribir nada a mano."
+				descripcion="Tu cliente acerca el móvil a la tarjeta y aterriza directo en la ventana de dejar una reseña en tu ficha de Google — sin apps, sin buscar, sin escribir nada."
 				paraQuien="Pocas reseñas y pierdes clientes frente al de al lado — la gente decide en Google."
 				accent="amber"
 				accentHex="#f59e0b"
@@ -64,7 +65,6 @@ import Contacto from '../components/landing/Contacto.astro';
 				mockupNegocio="tu negocio"
 				ctaTexto="Pide tu tarjeta de reseñas"
 				ctaMensaje="Hola, quiero tarjetas NFC para reseñas de Google"
-				conStats={true}
 				pasos={[
 					{ titulo: 'Acerca la tarjeta', descripcion: 'Un toque del móvil de tu cliente sobre la tarjeta NFC.' },
 					{
@@ -78,6 +78,8 @@ import Contacto from '../components/landing/Contacto.astro';
 				]}
 			/>
 
+			<div class="pager-spacer" aria-hidden="true"></div>
+			<ProductoFuturo />
 			<div class="pager-spacer" aria-hidden="true"></div>
 			<QuienesSomos />
 			<div class="pager-spacer" aria-hidden="true"></div>
@@ -293,6 +295,12 @@ import Contacto from '../components/landing/Contacto.astro';
 			return Math.ceil(page.scrollTop + page.clientHeight) >= page.scrollHeight - 1;
 		}
 
+		// los carruseles horizontales (portfolio, pasos, pilares, preguntas) llevan data-hscroll:
+		// el paginador nunca debe robarles el gesto, o el usuario no podría deslizarlos en el móvil
+		function isHScroll(target: EventTarget | null) {
+			return !!(target as HTMLElement | null)?.closest?.('[data-hscroll]');
+		}
+
 		let wheelBuffer = 0;
 		window.addEventListener(
 			'wheel',
@@ -302,6 +310,7 @@ import Contacto from '../components/landing/Contacto.astro';
 					e.preventDefault();
 					return;
 				}
+				if (isHScroll(e.target) && Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;
 				if (e.deltaY > 0 && !atBottom(page)) return;
 				if (e.deltaY < 0 && !atTop(page)) return;
 				e.preventDefault();
@@ -315,19 +324,19 @@ import Contacto from '../components/landing/Contacto.astro';
 		);
 
 		let touchStartY: number | null = null;
-		let touchStartedAtEdge = false;
+		let touchInHScroll = false;
 		window.addEventListener(
 			'touchstart',
 			(e) => {
 				touchStartY = e.touches[0].clientY;
-				const page = pages[current];
-				touchStartedAtEdge = atTop(page) || atBottom(page);
+				touchInHScroll = isHScroll(e.target);
 			},
 			{ passive: true }
 		);
 		window.addEventListener(
 			'touchmove',
 			(e) => {
+				if (touchInHScroll) return;
 				if (locked) {
 					e.preventDefault();
 					return;
@@ -345,6 +354,11 @@ import Contacto from '../components/landing/Contacto.astro';
 		window.addEventListener(
 			'touchend',
 			(e) => {
+				if (touchInHScroll) {
+					touchStartY = null;
+					touchInHScroll = false;
+					return;
+				}
 				if (touchStartY === null || locked) {
 					touchStartY = null;
 					return;
