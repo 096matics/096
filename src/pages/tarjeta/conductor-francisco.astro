@@ -44,8 +44,17 @@
 				justify-content: center;
 				position: relative;
 
-				/* Foto real del conductor, a pantalla completa */
-				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 20% / cover;
+				/* Foto real del conductor, a pantalla completa — con zoom en móvil para que la
+				   cara quede por encima del panel de texto, no solo la frente */
+				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 78% / auto 150%;
+			}
+			@media (min-width: 640px) {
+				body {
+					/* en pantallas anchas el panel de texto ocupa mucha menos altura relativa,
+					   así que la cara ya queda visible con un encuadre normal a toda anchura */
+					background-position: center 20%;
+					background-size: cover;
+				}
 			}
 
 			.scrim {
