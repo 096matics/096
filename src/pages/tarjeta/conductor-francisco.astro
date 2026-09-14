@@ -48,24 +48,6 @@
 				cursor: pointer;
 			}
 
-			/* capa de fondo extra, siempre a pantalla completa y muy desenfocada: en
-			   escritorio el panel nítido (.bg) es más estrecho que la pantalla, así que
-			   esto se ve detrás, a los lados, dando un degradado ambiental en vez de un
-			   corte seco contra el negro plano. En móvil queda totalmente tapada por .bg
-			   (que sí cubre toda la pantalla ahí), así que no molesta */
-			.bg-blur {
-				position: fixed;
-				inset: 0;
-				z-index: -2;
-				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center center / cover;
-				filter: blur(70px) brightness(0.32) saturate(1.15);
-				transform: scale(1.15);
-				transition: filter 0.7s ease;
-			}
-			body.expanded .bg-blur {
-				filter: blur(70px) brightness(0.22) saturate(1.15);
-			}
-
 			/* la foto vive en su propia capa fija a pantalla completa, independiente del
 			   flujo del contenido, para poder desenfocarla al abrir la carta sin afectar
 			   al texto que va encima */
@@ -84,60 +66,17 @@
 			}
 			@media (min-width: 640px) {
 				.bg {
-					/* "cover" a pantalla completa obliga a un zoom mínimo bastante alto en
-					   escritorio (imagen ancha contra pantalla ancha). En vez de eso, la foto
-					   vive en un panel centrado de ancho limitado — así "cover" se calcula
-					   contra un cuadro más estrecho y podemos alejar mucho más el zoom sin que
-					   aparezcan márgenes: fuera del panel solo se ve el fondo desenfocado
-					   (.bg-blur) de detrás, así que no se nota como un corte */
-					top: 0;
-					bottom: 0;
-					left: 50%;
-					right: auto;
-					width: min(800px, 100vw);
-					transform: translateX(-50%);
-					background-position: center 50%;
+					/* a pantalla completa (no en un panel más estrecho): "cover" ya deja de
+					   sobra margen vertical para encuadrar en una pantalla ancha, sin
+					   necesidad de zoom extra — así no se ven márgenes a los lados ni se
+					   pierde calidad ampliando de más la foto */
+					background-position: center 47%;
 					background-size: cover;
-				}
-				/* viñeta por encima de la foto nítida y el fondo borroso: funde ambas
-				   capas entre sí y contra el fondo de la página con un degradado, en vez
-				   de depender de que los colores del fondo borroso "encajen" con el
-				   negro — así el borde queda suave pase lo que pase en esa zona de la
-				   foto */
-				.vignette {
-					display: block;
 				}
 			}
 			body.expanded .bg {
 				filter: blur(14px) brightness(0.72);
 				transform: scale(1.08);
-			}
-			/* misma especificidad que la regla de arriba: al ir después en el CSS, esta
-			   gana en escritorio y conserva el centrado (translateX) al hacer zoom */
-			@media (min-width: 640px) {
-				body.expanded .bg {
-					transform: translateX(-50%) scale(1.08);
-				}
-			}
-
-			/* viñeta por delante de la foto nítida y el fondo borroso: funde ambas
-			   capas entre sí y contra el negro de la página con un degradado propio, en
-			   vez de depender de que los colores del fondo borroso "encajen" — así el
-			   borde queda suave pase lo que pase en esa zona de la foto. Solo hace
-			   falta en escritorio, donde el panel nítido es más estrecho que la
-			   pantalla; en móvil la foto ya llega de borde a borde */
-			.vignette {
-				display: none;
-			}
-			@media (min-width: 640px) {
-				.vignette {
-					display: block;
-					position: fixed;
-					inset: 0;
-					z-index: -1;
-					pointer-events: none;
-					background: radial-gradient(ellipse 62% 68% at center, transparent 45%, rgba(10, 10, 10, 0.5) 75%, var(--bg-deep) 100%);
-				}
 			}
 
 			.scrim {
@@ -226,18 +165,12 @@
 			}
 			@media (min-width: 640px) {
 				.photo-space {
-					min-height: 460px;
-					/* mismo ancho que el panel de la foto (.bg), para que el badge de
-					   disponibilidad (posicionado dentro de este bloque) quede alineado con
-					   la foto en vez de pegado al borde de una pantalla ancha. "width" (no
-					   max-width): este bloque no tiene contenido propio que le dé un ancho
-					   natural (el badge va con position:absolute), así que con max-width se
-					   queda en 0 al centrarlo con margin:auto */
-					width: min(800px, 100vw);
-					margin: 0 auto;
+					/* "cover" hace más zoom cuanto más ancha es la ventana, así que reservamos
+					   más alto proporcionalmente al ancho para que la barbilla no se cuele
+					   detrás del texto en pantallas muy anchas (1920px y más) */
+					min-height: max(480px, 30vw);
 				}
-				/* en escritorio el panel es ancho de sobra para que quepan uno al lado
-				   del otro */
+				/* en escritorio hay ancho de sobra para que quepan uno al lado del otro */
 				.cv-download {
 					top: 14px;
 				}
@@ -534,9 +467,7 @@
 		</style>
 	</head>
 	<body>
-		<div class="bg-blur"></div>
 		<div class="bg"></div>
-		<div class="vignette"></div>
 		<div class="scrim"></div>
 		<div class="scrim scrim-strong"></div>
 
