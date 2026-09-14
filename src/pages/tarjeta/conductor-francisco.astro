@@ -41,36 +41,126 @@
 				display: flex;
 				flex-direction: column;
 				position: relative;
+				/* z-index explícito para que body cree su propio contexto de apilamiento:
+				   si no, su propio fondo negro (stack level 0) se pinta POR DELANTE del
+				   .bg de la foto (z-index:-1), en vez de detrás */
+				z-index: 0;
+				cursor: pointer;
+			}
 
-				/* foto real a pantalla completa, sin recuadro — en móvil hace falta algo de zoom
-				   (si no, con "cover" en una pantalla tan alta y estrecha se ve la foto entera
-				   comprimida, sin margen para encuadrar) para que la cara + cuello queden por
-				   encima del texto, sin cortar el pelo de forma brusca */
+			/* la foto vive en su propia capa fija a pantalla completa, independiente del
+			   flujo del contenido, para poder desenfocarla al abrir la carta sin afectar
+			   al texto que va encima */
+			.bg {
+				position: fixed;
+				inset: 0;
+				z-index: -1;
+				transition:
+					filter 0.7s ease,
+					transform 0.7s ease;
+				/* móvil: hace falta algo de zoom (si no, con "cover" en una pantalla tan alta
+				   y estrecha se ve la foto entera comprimida, sin margen para encuadrar) para
+				   que la cara + cuello queden por encima del texto, sin cortar el pelo de
+				   forma brusca */
 				background: url('/tarjeta/conductor-francisco/foto.jpg') no-repeat center 88% / auto 150%;
 			}
 			@media (min-width: 640px) {
-				body {
-					/* en escritorio "cover" ya deja de sobra margen vertical para encuadrar
-					   (la pantalla es ancha, no alta), sin necesidad de zoom extra — así no se
-					   ven márgenes a los lados ni se pierde calidad ampliando de más la foto */
+				.bg {
+					/* escritorio: "cover" ya deja de sobra margen vertical para encuadrar (la
+					   pantalla es ancha, no alta), sin necesidad de zoom extra — así no se ven
+					   márgenes a los lados ni se pierde calidad ampliando de más la foto */
 					background-position: center 90%;
 					background-size: cover;
 				}
+			}
+			body.expanded .bg {
+				filter: blur(14px) brightness(0.72);
+				transform: scale(1.08);
 			}
 
 			.scrim {
 				position: fixed;
 				inset: 0;
 				pointer-events: none;
-				/* la foto se ve nítida casi todo el recorrido; solo se oscurece al final de
-				   la página, como remate visual detrás de los botones y el enlace de guardar */
+				transition: opacity 0.7s ease;
 				background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 0) 62%, rgba(10, 10, 10, 0.55) 82%, rgba(10, 10, 10, 0.88) 100%);
+			}
+			.scrim-strong {
+				opacity: 0;
+				background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 0.18) 38%, rgba(10, 10, 10, 0.68) 75%, rgba(10, 10, 10, 0.93) 100%);
+			}
+			body.expanded .scrim-strong {
+				opacity: 1;
+			}
+
+			/* --- animación de apertura: los mismos anillos "toca para entrar" de la home,
+			   pero en modo ráfaga única (como si ese toque ya hubiera ocurrido) --- */
+			.intro-pulse {
+				position: fixed;
+				inset: 0;
+				z-index: 5;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				pointer-events: none;
+				background: rgba(10, 10, 10, 0.22);
+				transition:
+					opacity 0.5s ease,
+					transform 0.5s ease;
+			}
+			.intro-pulse.intro-exit {
+				opacity: 0;
+				transform: scale(1.06);
+			}
+			.intro-pulse .ring {
+				position: absolute;
+				width: 4rem;
+				height: 4rem;
+				border-radius: 9999px;
+				border: 1px solid rgba(59, 130, 246, 0.55);
+				animation: intro-ring 1s ease-out both;
+			}
+			.intro-pulse .ring:nth-child(2) {
+				border-color: rgba(168, 85, 247, 0.55);
+				animation-delay: 0.16s;
+			}
+			.intro-pulse .dot {
+				position: relative;
+				width: 1rem;
+				height: 1rem;
+				border-radius: 50%;
+				background: linear-gradient(135deg, #3b82f6, #a855f7);
+				animation: intro-dot 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+			}
+			@keyframes intro-ring {
+				0% {
+					transform: scale(0.5);
+					opacity: 0.9;
+				}
+				100% {
+					transform: scale(3.4);
+					opacity: 0;
+				}
+			}
+			@keyframes intro-dot {
+				0% {
+					transform: scale(0.4);
+					opacity: 0;
+				}
+				60% {
+					transform: scale(1.15);
+					opacity: 1;
+				}
+				100% {
+					transform: scale(1);
+					opacity: 1;
+				}
 			}
 
 			.photo-space {
 				position: relative;
+				flex: 1 1 auto;
 				min-height: 400px;
-				flex-shrink: 0;
 			}
 			@media (min-width: 640px) {
 				.photo-space {
@@ -124,7 +214,8 @@
 				max-width: 420px;
 				margin: 0 auto;
 				padding: 0 20px 26px;
-				animation: pageIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+				flex-shrink: 0;
+				animation: pageIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
 				opacity: 0;
 			}
 			@keyframes pageIn {
@@ -148,14 +239,34 @@
 			.role {
 				font-size: 13px;
 				color: var(--ink-dim);
-				margin: 0 0 3px;
+				margin: 0;
 				text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.9);
 			}
+
+			/* --- todo lo que se abre al tocar la tarjeta --- */
+			.page-extra {
+				display: grid;
+				grid-template-rows: 0fr;
+				transition: grid-template-rows 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+			}
+			body.expanded .page-extra {
+				grid-template-rows: 1fr;
+			}
+			.page-extra-inner {
+				overflow: hidden;
+				min-height: 0;
+				opacity: 0;
+				transition: opacity 0.5s ease 0.15s;
+			}
+			body.expanded .page-extra-inner {
+				opacity: 1;
+			}
+
 			.current-company {
 				font-size: 11px;
 				color: var(--ink-dim);
 				opacity: 0.9;
-				margin: 0 0 16px;
+				margin: 14px 0 16px;
 				text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.9);
 			}
 
@@ -166,8 +277,10 @@
 			}
 			.stat {
 				flex: 1;
-				background: rgba(255, 255, 255, 0.07);
+				background: rgba(8, 8, 10, 0.6);
 				border: 1px solid rgba(255, 255, 255, 0.14);
+				backdrop-filter: blur(6px);
+				-webkit-backdrop-filter: blur(6px);
 				border-radius: 12px;
 				padding: 10px 8px;
 				text-align: center;
@@ -205,7 +318,9 @@
 				font-weight: 600;
 				color: var(--ink);
 				border: 1px solid var(--accent-dim);
-				background: rgba(240, 185, 77, 0.08);
+				background: rgba(8, 8, 10, 0.6);
+				backdrop-filter: blur(6px);
+				-webkit-backdrop-filter: blur(6px);
 				padding: 5px 11px;
 				border-radius: 999px;
 			}
@@ -214,9 +329,11 @@
 				font-size: 12.5px;
 				font-style: italic;
 				color: var(--ink-dim);
+				background: rgba(8, 8, 10, 0.4);
 				border-left: 2px solid var(--accent-dim);
-				padding-left: 10px;
+				padding: 8px 10px;
 				margin: 0 0 20px;
+				border-radius: 0 8px 8px 0;
 				line-height: 1.5;
 				text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.95);
 			}
@@ -246,7 +363,9 @@
 				color: #2a1d08;
 			}
 			.btn.secondary {
-				background: rgba(255, 255, 255, 0.1);
+				background: rgba(10, 10, 12, 0.6);
+				backdrop-filter: blur(6px);
+				-webkit-backdrop-filter: blur(6px);
 				color: var(--ink);
 				border: 1px solid rgba(255, 255, 255, 0.18);
 			}
@@ -265,7 +384,7 @@
 					min-height: 230px;
 				}
 				.current-company {
-					margin-bottom: 10px;
+					margin: 10px 0;
 				}
 				.stats-row {
 					margin-bottom: 10px;
@@ -285,10 +404,32 @@
 					min-height: 190px;
 				}
 			}
+
+			@media (prefers-reduced-motion: reduce) {
+				.intro-pulse .ring,
+				.intro-pulse .dot {
+					animation: none;
+				}
+				.intro-pulse {
+					transition: opacity 0.2s ease;
+				}
+				.page {
+					animation: none;
+					opacity: 1;
+				}
+			}
 		</style>
 	</head>
 	<body>
+		<div class="bg"></div>
 		<div class="scrim"></div>
+		<div class="scrim scrim-strong"></div>
+
+		<div class="intro-pulse" aria-hidden="true">
+			<span class="ring"></span>
+			<span class="ring"></span>
+			<span class="dot"></span>
+		</div>
 
 		<div class="photo-space">
 			<span class="available-badge"><span class="dot"></span>Disponible para nueva incorporación</span>
@@ -297,62 +438,92 @@
 		<div class="page">
 			<h1 class="name">Francisco Ferrer Castilla</h1>
 			<p class="role">Conductor profesional · Petres, Valencia</p>
-			<p class="current-company">Actualmente en Campillo Transportes, Paterna</p>
 
-			<div class="stats-row">
-				<div class="stat"><b>20</b><span>Años exp.</span></div>
-				<div class="stat"><b>C+E</b><span>Carnet</span></div>
-				<div class="stat"><b>Nac./Com.</b><span>Rutas</span></div>
-			</div>
+			<div class="page-extra">
+				<div class="page-extra-inner">
+					<p class="current-company">Actualmente en Campillo Transportes, Paterna</p>
 
-			<p class="section-label">Experiencia con vehículos</p>
-			<div class="badges">
-				<span class="badge">Cisterna alimentaria (sin presión)</span>
-				<span class="badge">Frigorífico</span>
-				<span class="badge">Lonas</span>
-				<span class="badge">Portacontenedores</span>
-			</div>
+					<div class="stats-row">
+						<div class="stat"><b>20</b><span>Años exp.</span></div>
+						<div class="stat"><b>C+E</b><span>Carnet</span></div>
+						<div class="stat"><b>Nac./Com.</b><span>Rutas</span></div>
+					</div>
 
-			<p class="section-label">Carnets y certificados</p>
-			<div class="badges">
-				<span class="badge">B</span>
-				<span class="badge">C</span>
-				<span class="badge">C+E</span>
-				<span class="badge">A2</span>
-				<span class="badge">CAP vigente</span>
-				<span class="badge">Tacógrafo digital vigente</span>
-			</div>
+					<p class="section-label">Experiencia con vehículos</p>
+					<div class="badges">
+						<span class="badge">Cisterna alimentaria (sin presión)</span>
+						<span class="badge">Frigorífico</span>
+						<span class="badge">Lonas</span>
+						<span class="badge">Portacontenedores</span>
+					</div>
 
-			<p class="quote">
-				"Puntual y profesional, con don de gentes y responsabilidad en cada ruta. Acostumbrado a todo tipo
-				de horarios."
-			</p>
+					<p class="section-label">Carnets y certificados</p>
+					<div class="badges">
+						<span class="badge">B</span>
+						<span class="badge">C</span>
+						<span class="badge">C+E</span>
+						<span class="badge">A2</span>
+						<span class="badge">CAP vigente</span>
+						<span class="badge">Tacógrafo digital vigente</span>
+					</div>
 
-			<div class="contact-row">
-				<a class="btn primary" href="tel:+34614293415">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-						><path
-							d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
-						></path></svg
+					<p class="quote">
+						"Puntual y profesional, con don de gentes y responsabilidad en cada ruta. Acostumbrado a todo
+						tipo de horarios."
+					</p>
+
+					<div class="contact-row">
+						<a class="btn primary" href="tel:+34614293415">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+								><path
+									d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+								></path></svg
+							>
+							Llamar
+						</a>
+						<a class="btn secondary" href="https://wa.me/34614293415" target="_blank">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+								><path
+									d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+								></path></svg
+							>
+							WhatsApp
+						</a>
+					</div>
+
+					<a
+						class="save-link"
+						download="francisco-ferrer.vcf"
+						href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3AFrancisco%20Ferrer%20Castilla%0ATITLE%3AConductor%20profesional%0ATEL%3BTYPE%3DCELL%3A%2B34614293415%0AEMAIL%3Afranciscorferrercastilla1978%40gmail.com%0AEND%3AVCARD"
+						>↓ Guardar contacto</a
 					>
-					Llamar
-				</a>
-				<a class="btn secondary" href="https://wa.me/34614293415" target="_blank">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-						><path
-							d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
-						></path></svg
-					>
-					WhatsApp
-				</a>
+				</div>
 			</div>
-
-			<a
-				class="save-link"
-				download="francisco-ferrer.vcf"
-				href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3AFrancisco%20Ferrer%20Castilla%0ATITLE%3AConductor%20profesional%0ATEL%3BTYPE%3DCELL%3A%2B34614293415%0AEMAIL%3Afranciscorferrercastilla1978%40gmail.com%0AEND%3AVCARD"
-				>↓ Guardar contacto</a
-			>
 		</div>
+
+		<script>
+			const introPulse = document.querySelector('.intro-pulse');
+			const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			let expanded = false;
+
+			function expand() {
+				if (expanded) return;
+				expanded = true;
+				introPulse?.classList.add('intro-exit');
+				document.body.classList.add('expanded');
+			}
+
+			document.body.addEventListener('click', expand);
+			document.body.addEventListener('keydown', (e) => {
+				if (e.key === 'Enter' || e.key === ' ') expand();
+			});
+
+			setTimeout(
+				() => {
+					introPulse?.classList.add('intro-exit');
+				},
+				reduceMotion ? 0 : 950
+			);
+		</script>
 	</body>
 </html>
