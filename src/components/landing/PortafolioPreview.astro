@@ -1,10 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
-import PlantillaCard from '../PlantillaCard.astro';
 import { ordenarPorSector } from '../../lib/ordenSectores';
 
+const ORDEN_DESTACADOS = ['hosteleria', 'peluqueria-estetica', 'comercio-local', 'talleres-automocion', 'clinicas-y-salud'];
+const sectoresRaw = await getCollection('sectores');
+const sectores = [...sectoresRaw].sort((a, b) => ORDEN_DESTACADOS.indexOf(a.id) - ORDEN_DESTACADOS.indexOf(b.id));
+
 const plantillas = await getCollection('plantillas');
-const sectorItems = plantillas.filter((p) => p.data.categoria === 'sector' && p.data.estado !== 'privado');
+// solo diseños ya entregados de verdad — las plantillas de "Reseñas Google" siguen en
+// desarrollo (estado: "proximamente") y no deben mezclarse aquí como si ya existieran
+const sectorItems = plantillas.filter((p) => p.data.categoria === 'sector' && p.data.estado === 'publico' && p.data.imagen);
 
 function agruparPorSector(items: typeof sectorItems) {
 	const grupos = new Map<string, typeof sectorItems>();
@@ -15,66 +20,109 @@ function agruparPorSector(items: typeof sectorItems) {
 	}
 	return grupos;
 }
-const preview = ordenarPorSector([...agruparPorSector(sectorItems).entries()]).flatMap(([, items]) => items);
+const galeria = ordenarPorSector([...agruparPorSector(sectorItems).entries()])
+	.flatMap(([, items]) => items)
+	.slice(0, 9);
+
+const ICONOS: Record<string, string> = {
+	hosteleria:
+		'<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+	'peluqueria-estetica':
+		'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/>',
+	'comercio-local': '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+	'talleres-automocion':
+		'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+	'clinicas-y-salud':
+		'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+};
+
 ---
 
-<section
-	id="portafolio"
-	data-page
-	data-nav="Portafolio"
-	data-glow-a="#a855f7"
-	data-glow-b="#f59e0b"
-	class="flex min-h-dvh flex-col border-t border-zinc-800 py-4 sm:py-10 [@media(max-width:639px)_and_(max-height:780px)]:py-2"
->
-	<div class="m-auto w-full max-w-5xl px-6">
-		<p class="piece piece-top piece-d0 text-sm tracking-widest text-indigo-400 uppercase">Portafolio</p>
-		<h2 class="piece piece-left piece-d1 mt-2 text-3xl font-semibold text-white sm:mt-3 sm:text-4xl [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
-			Plantillas y ejemplos reales
-		</h2>
-		<p class="piece piece-left piece-d1 mt-1.5 max-w-2xl text-zinc-400 sm:mt-3 [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
-			Así se ven nuestras tarjetas NFC en la práctica. Desliza para ver todos los estilos y sectores.
-		</p>
+<section id="portafolio" data-animate class="border-b border-zinc-800 py-24 sm:py-32">
+	<div class="mx-auto max-w-6xl px-5 sm:px-6">
+		<div data-reveal class="piece piece-top piece-d0 max-w-xl">
+			<p class="text-sm font-bold tracking-widest text-indigo-400 uppercase">Portafolio</p>
+			<h2 class="mt-2 text-3xl font-semibold text-white sm:text-4xl">No hay dos tarjetas iguales</h2>
+			<p class="mt-3 text-lg text-zinc-400">
+				Cada negocio tiene su propio sitio para la tarjeta y su propio momento para pedir la reseña — el diseño
+				sale de ahí, no de una plantilla que rellenamos con tu nombre.
+			</p>
+		</div>
 
-		<div class="portfolio-scroll-wrap piece piece-bottom piece-d2 mt-3 sm:mt-6 [@media(max-width:639px)_and_(max-height:780px)]:mt-2">
-			<button
-				id="portfolioPrev"
-				class="portfolio-arrow portfolio-arrow-prev"
-				aria-label="Plantilla anterior"
-			>
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg>
-			</button>
-			<div id="portfolioScroll" data-hscroll class="portfolio-scroll flex gap-4">
+		<div data-reveal class="piece piece-bottom piece-d1 mt-14">
+			<p class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Un ejemplo por sector</p>
+			<p class="mt-1 text-sm text-zinc-500">Como si repartiéramos las cartas — pasa el ratón por encima.</p>
+			<div class="fan-deck mt-6 flex items-end justify-start overflow-x-auto px-2 pt-4 pb-6 lg:justify-center">
 				{
-					preview.map((p) => (
-						<div class="portfolio-scroll-item">
-							<PlantillaCard
-								nombre={p.data.nombre}
-								descripcion={p.data.descripcion}
-								sector={p.data.sector}
-								colorHex={p.data.colorHex}
-								imagen={p.data.imagen}
-								ruta={p.data.ruta}
-								compact
-							/>
+					sectores.map((s, idx) => {
+						const centro = (sectores.length - 1) / 2;
+						const rot = (idx - centro) * 7;
+						const arco = Math.abs(idx - centro) * 13;
+						const delay = idx * 0.1;
+						return (
+							<div
+								class="fan-card relative shrink-0"
+								style={`--rot:${rot}deg; --arco:${arco}px; --delay:${delay}s; z-index:${idx}`}
+							>
+								<a href={`/portafolio/${s.id}`} class="fan-card-inner group block w-[172px] rounded-2xl border border-zinc-800 bg-zinc-900 p-4 shadow-xl shadow-black/40" style={`border-top: 2px solid ${s.data.colorHex}`}>
+									<span
+										class="grid h-9 w-9 place-items-center rounded-xl"
+										style={`background:color-mix(in srgb, ${s.data.colorHex} 16%, transparent); color:${s.data.colorHex}`}
+									>
+										<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={ICONOS[s.id] ?? ''} />
+									</span>
+									<p class="mt-2.5 text-[10px] font-bold tracking-wide text-zinc-500 uppercase">{s.data.titulo}</p>
+									<h3 class="mt-1 flex flex-wrap items-center gap-1.5 text-sm font-semibold text-white">
+										{s.data.negocioEjemplo}
+									</h3>
+									<span class="mt-2 inline-block rounded-full border border-zinc-800 bg-white/[0.06] px-2 py-0.5 text-[8.5px] font-bold tracking-wide text-zinc-500 uppercase">
+										Ejemplo
+									</span>
+								</a>
+							</div>
+						);
+					})
+				}
+			</div>
+		</div>
+
+		<div data-reveal class="piece piece-bottom piece-d2 mt-14">
+			<p class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Capturas reales, ya entregadas</p>
+			<p class="mt-1 text-sm text-zinc-500">Cada una a su propia profundidad — se mueven contigo al bajar.</p>
+			<div class="mosaico mt-6 columns-1 gap-4 sm:columns-2 lg:columns-3">
+				{
+					galeria.map((img, idx) => (
+						<div class="parallax-wrap" data-depth={[-26, 20, -16][idx % 3]}>
+							<div
+								role="button"
+								tabindex="0"
+								data-preview-trigger
+								data-preview-group="mosaico"
+								data-preview-img={img.data.imagen}
+								data-preview-sector={img.data.sector ?? 'Tarjeta personal'}
+								data-preview-title={img.data.nombre}
+								data-preview-desc={img.data.descripcion}
+								data-preview-href={img.data.ruta ?? '/portafolio'}
+								data-preview-cta="Ver página →"
+								class={`gallery-item group relative block cursor-pointer overflow-hidden rounded-2xl border border-zinc-800 ${idx % 2 === 0 ? 'tilt-a' : 'tilt-b'}`}
+							>
+								<img src={img.data.imagen} alt={img.data.nombre} class="block w-full" loading="lazy" />
+								<span class="absolute top-3 left-3 h-2 w-2 rounded-full shadow" style={`background:${img.data.colorHex ?? '#a1a1aa'}`} />
+								<div class="gallery-caption absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-3 pt-8 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+									<p class="text-xs font-semibold text-white">{img.data.nombre}</p>
+									<p class="text-[10px] text-zinc-400">{img.data.sector ?? 'Tarjeta personal'}</p>
+								</div>
+							</div>
 						</div>
 					))
 				}
 			</div>
-			<button
-				id="portfolioNext"
-				class="portfolio-arrow portfolio-arrow-next"
-				aria-label="Siguiente plantilla"
-			>
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg>
-			</button>
 		</div>
-		<p class="mt-1.5 text-xs text-zinc-600 sm:hidden [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
-			← Desliza para ver todas las plantillas →
-		</p>
 
 		<a
 			href="/portafolio"
-			class="piece piece-bottom piece-d6 group mt-2 inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20 sm:mt-4 sm:px-5 sm:py-2.5 [@media(max-width:639px)_and_(max-height:780px)]:mt-1"
+			data-reveal
+			class="piece piece-bottom piece-d3 group mt-4 inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20"
 		>
 			Ver todo el portafolio
 			<span class="transition-transform group-hover:translate-x-0.5">→</span>
@@ -83,108 +131,129 @@ const preview = ordenarPorSector([...agruparPorSector(sectorItems).entries()]).f
 </section>
 
 <style>
-	.portfolio-scroll-wrap {
-		position: relative;
+	/* ============ Mazo de sectores: reparte las cartas al revelarse, luego cada una se
+	   endereza y levanta al pasar el ratón — dos elementos por carta (fan-card exterior con
+	   el ángulo de reparto, fan-card-inner interior con el hover) para que ambas animaciones
+	   no compitan por la misma propiedad ============ */
+	.fan-card {
+		width: 172px;
+		margin-left: -40px;
+		transform-origin: bottom center;
+		opacity: 0;
 	}
-	.portfolio-scroll {
-		overflow-x: auto;
-		scroll-snap-type: x mandatory;
-		scrollbar-width: none;
-		margin-left: -1.5rem;
-		margin-right: -1.5rem;
-		padding-left: 1.5rem;
-		padding-right: 1.5rem;
-		padding-bottom: 4px;
+	.fan-card:first-child {
+		margin-left: 0;
 	}
-	.portfolio-scroll::-webkit-scrollbar {
-		display: none;
+	.is-revealing .fan-card {
+		animation: fan-deal calc(1s * var(--reveal-speed, 1)) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		animation-delay: calc(var(--delay, 0s) * var(--reveal-speed, 1));
 	}
-	.portfolio-scroll-item {
-		width: 78%;
-		min-width: 0;
-		flex-shrink: 0;
-		scroll-snap-align: center;
-	}
-	.portfolio-arrow {
-		display: none;
-	}
-	@media (max-width: 639px) {
-		.portfolio-scroll {
-			mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
-			-webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+	@keyframes fan-deal {
+		0% {
+			opacity: 0;
+			filter: blur(7px);
+			transform: rotate(0deg) translateY(50px) scale(0.8);
+		}
+		60% {
+			filter: blur(0);
+		}
+		100% {
+			opacity: 1;
+			filter: blur(0);
+			transform: rotate(var(--rot)) translateY(var(--arco)) scale(1);
 		}
 	}
-	@media (min-width: 640px) {
-		.portfolio-scroll {
-			margin-left: 0;
-			margin-right: 0;
-			padding-left: 0;
-			padding-right: 0;
-			padding-bottom: 0;
+	.fan-card-inner {
+		transition:
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+			box-shadow 0.4s ease,
+			border-color 0.3s ease;
+	}
+	.fan-card:hover {
+		z-index: 50 !important;
+	}
+	.fan-card:hover .fan-card-inner {
+		transform: translateY(-20px) rotate(calc(var(--rot) * -1));
+		border-color: rgba(255, 255, 255, 0.22);
+		box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.fan-card {
+			opacity: 1;
+			animation: none !important;
+			transform: none !important;
 		}
-		.portfolio-scroll-item {
-			width: 230px;
+		.fan-card:hover .fan-card-inner {
+			transform: translateY(-6px);
 		}
-		.portfolio-arrow {
-			position: absolute;
-			top: 50%;
-			transform: translateY(-50%);
-			z-index: 2;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 40px;
-			height: 40px;
-			border-radius: 999px;
-			background: rgba(20, 20, 24, 0.85);
-			border: 1px solid rgba(255, 255, 255, 0.12);
-			color: #fff;
-			cursor: pointer;
-			transition:
-				background-color 0.2s ease,
-				opacity 0.2s ease;
+	}
+
+	/* ============ Galería real: cada tarjeta se inclina un poco al pasar el ratón, y el
+	   wrapper exterior (sin tocar) recibe un desplazamiento de profundidad distinto por
+	   tarjeta, calculado en el script de abajo según el scroll ============ */
+	.parallax-wrap {
+		margin-bottom: 1rem;
+		break-inside: avoid;
+		will-change: transform;
+	}
+	.gallery-item {
+		transition:
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			border-color 0.3s ease;
+	}
+	.tilt-a:hover {
+		transform: translateY(-4px) rotate(-0.6deg);
+	}
+	.tilt-b:hover {
+		transform: translateY(-4px) rotate(0.6deg);
+	}
+	.gallery-item img {
+		transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.gallery-item:hover img {
+		transform: scale(1.04);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.tilt-a:hover,
+		.tilt-b:hover {
+			transform: none;
 		}
-		.portfolio-arrow:hover {
-			background: rgba(40, 40, 46, 0.95);
-		}
-		.portfolio-arrow:disabled {
-			opacity: 0.25;
-			cursor: default;
-		}
-		.portfolio-arrow svg {
-			width: 18px;
-			height: 18px;
-		}
-		.portfolio-arrow-prev {
-			left: -20px;
-		}
-		.portfolio-arrow-next {
-			right: -20px;
+		.parallax-wrap {
+			transform: none !important;
 		}
 	}
 </style>
 
 <script>
-	const track = document.getElementById('portfolioScroll');
-	const prevBtn = document.getElementById('portfolioPrev') as HTMLButtonElement | null;
-	const nextBtn = document.getElementById('portfolioNext') as HTMLButtonElement | null;
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const items = document.querySelectorAll<HTMLElement>('.parallax-wrap');
 
-	function updateArrows() {
-		if (!track || !prevBtn || !nextBtn) return;
-		prevBtn.disabled = track.scrollLeft <= 4;
-		nextBtn.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+	if (items.length && !prefersReducedMotion) {
+		let ticking = false;
+
+		function updateParallax() {
+			const vh = window.innerHeight;
+			items.forEach((el) => {
+				const rect = el.getBoundingClientRect();
+				if (rect.bottom < -200 || rect.top > vh + 200) return;
+				const center = rect.top + rect.height / 2;
+				const progress = (center - vh / 2) / vh;
+				const depth = parseFloat(el.dataset.depth ?? '0');
+				el.style.transform = `translateY(${(progress * depth).toFixed(1)}px)`;
+			});
+			ticking = false;
+		}
+
+		window.addEventListener(
+			'scroll',
+			() => {
+				if (!ticking) {
+					requestAnimationFrame(updateParallax);
+					ticking = true;
+				}
+			},
+			{ passive: true }
+		);
+		updateParallax();
 	}
-
-	function scrollByCard(delta: number) {
-		if (!track) return;
-		const item = track.querySelector('.portfolio-scroll-item');
-		const step = item ? item.clientWidth + 16 : track.clientWidth * 0.8;
-		track.scrollBy({ left: delta * step, behavior: 'smooth' });
-	}
-
-	prevBtn?.addEventListener('click', () => scrollByCard(-1));
-	nextBtn?.addEventListener('click', () => scrollByCard(1));
-	track?.addEventListener('scroll', updateArrows, { passive: true });
-	window.addEventListener('resize', updateArrows);
-	updateArrows();
 </script>

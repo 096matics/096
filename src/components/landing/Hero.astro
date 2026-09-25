@@ -1,31 +1,187 @@
 ---
 import WhatsAppCTA from '../WhatsAppCTA.astro';
+
+const sectores = ['Hostelería', 'Peluquería y estética', 'Talleres', 'Inmobiliarias', 'Clínicas y salud', 'Comercio local', 'Autónomos'];
+const marqueeItems = [...sectores, ...sectores];
 ---
 
-<section
-	id="top"
-	data-page
-	data-nav="Inicio"
-	data-glow-a="#6366f1"
-	data-glow-b="#a855f7"
-	class="flex min-h-dvh flex-col"
->
-	<div class="m-auto max-w-5xl px-6 py-20 text-center sm:py-28 [@media(max-width:639px)_and_(max-height:780px)]:py-8">
-		<p class="piece piece-top piece-d0 text-sm tracking-widest text-indigo-400 uppercase">
-			Tarjetas NFC para negocios locales
+<section id="top" data-animate class="relative overflow-hidden pt-28 pb-8 sm:pt-36">
+	<div data-reveal class="piece piece-top piece-d0 marquee-mask mx-auto max-w-3xl">
+		<div class="marquee-track">
+			{
+				marqueeItems.map((s) => (
+					<span class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-zinc-800 bg-white/[0.03] px-3 py-1 text-[11px] font-medium text-zinc-400">
+						<span class="h-1 w-1 shrink-0 rounded-full bg-indigo-400" />
+						{s}
+					</span>
+				))
+			}
+		</div>
+	</div>
+
+	<div class="mx-auto max-w-3xl px-5 text-center sm:px-6">
+		<p data-reveal class="piece piece-top piece-d1 mt-7 inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-bold text-indigo-300">
+			<span class="live-dot h-1.5 w-1.5 rounded-full bg-indigo-400"></span>
+			Ya instalando en negocios de la Comunitat Valenciana
 		</p>
-		<h1 class="piece-pixel piece-d1 mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl [@media(max-width:639px)_and_(max-height:780px)]:mt-2">
-			Tu reputación y tu contacto no esperan. Resuélvelos en un toque.
+		<h1 data-reveal class="piece-pixel piece-d2 mx-auto mt-5 max-w-2xl text-[13vw] leading-[0.98] font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
+			Tus tarjetas de papel van a la basura. <span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Las nuestras siempre van contigo.</span>
 		</h1>
-		<p class="piece piece-bottom piece-d2 mx-auto mt-6 max-w-2xl text-lg text-zinc-400 [@media(max-width:639px)_and_(max-height:780px)]:mt-3">
-			096matics instala tarjetas NFC en negocios y profesionales de la Comunidad Valenciana. Cada toque genera
-			una reseña de Google o guarda un contacto — sin apps, sin fricción.
+		<p data-reveal class="piece piece-bottom piece-d3 mx-auto mt-6 max-w-lg text-lg text-zinc-400">
+			Nada que guardar en un cajón, nada que tirar al salir del local. Con un toque, tu contacto o
+			tu reseña de Google se quedan guardados en su móvil para siempre — vayan donde vayan. Nosotros
+			traemos la tarjeta, la configuramos y la dejamos funcionando delante de ti.
 		</p>
-		<div class="piece piece-bottom piece-d3 mt-10 flex items-center justify-center gap-6 [@media(max-width:639px)_and_(max-height:780px)]:mt-4">
-			<WhatsAppCTA texto="Habla con nosotros" mensaje="Hola, quiero información sobre 096matics" />
-			<a href="#producto-personal" class="text-sm font-medium text-zinc-300 transition-colors hover:text-white">
-				Ver cómo funciona ↓
+		<div data-reveal class="piece piece-bottom piece-d4 mt-8 flex flex-wrap items-center justify-center gap-4">
+			<WhatsAppCTA texto="Habla por WhatsApp" mensaje="Hola, quiero información sobre 096matics" />
+			<a href="#productos" class="text-sm font-semibold text-zinc-300 transition-colors hover:text-white">
+				Ver qué se queda con ellos ↓
 			</a>
 		</div>
 	</div>
+
+	<div data-reveal class="piece piece-d5 connector-beam mx-auto mt-10 h-10 w-px" aria-hidden="true"></div>
+	<p data-reveal class="piece piece-d5 mx-auto -mt-1 text-center text-[11px] font-bold tracking-widest text-zinc-600 uppercase">
+		Esto es lo que se queda con ellos
+	</p>
+
+	<div data-reveal class="piece piece-pop piece-d6 pulse-stage relative mx-auto mt-6 h-[200px] max-w-4xl sm:h-[260px]" aria-hidden="true">
+		<svg viewBox="0 0 800 220" preserveAspectRatio="xMidYMax meet" class="h-full w-full">
+			{
+				[40, 88, 136, 184, 232, 280].map((r, i) => (
+					<circle
+						cx="400"
+						cy="220"
+						r={r}
+						fill="none"
+						stroke="#818cf8"
+						stroke-width="1"
+						stroke-opacity={0.55 - i * 0.08}
+						class="pulse-ring"
+						style={`animation-delay:${i * 0.4}s`}
+					/>
+				))
+			}
+			<circle cx="400" cy="220" r="5" fill="#c7d2fe" />
+		</svg>
+
+		<div class="pulse-label pulse-label-left absolute top-[28%] left-[14%] -translate-x-1/2 text-left sm:top-[22%] sm:left-[20%]">
+			<p class="text-[11px] font-semibold text-zinc-300">Guarda tu contacto</p>
+		</div>
+		<div class="pulse-label pulse-label-right absolute top-[28%] right-[14%] translate-x-1/2 text-right sm:top-[22%] sm:right-[20%]">
+			<p class="text-[11px] font-semibold text-zinc-300">Deja una reseña</p>
+		</div>
+	</div>
+
+	<ul data-reveal class="piece piece-bottom piece-d6 mx-auto mt-2 flex max-w-lg flex-wrap items-center justify-center gap-x-6 gap-y-3 px-5 sm:px-6">
+		<li class="flex items-center gap-1.5 text-xs text-zinc-500">
+			<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" class="shrink-0 text-indigo-400"><polyline points="20 6 9 17 4 12" /></svg>
+			No caduca ni se queda en un cajón
+		</li>
+		<li class="flex items-center gap-1.5 text-xs text-zinc-500">
+			<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" class="shrink-0 text-indigo-400"><polyline points="20 6 9 17 4 12" /></svg>
+			Tú eliges cuál de los dos toca
+		</li>
+		<li class="flex items-center gap-1.5 text-xs text-zinc-500">
+			<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" class="shrink-0 text-indigo-400"><polyline points="20 6 9 17 4 12" /></svg>
+			La dejamos activa antes de irnos
+		</li>
+	</ul>
 </section>
+
+<style>
+	.marquee-mask {
+		overflow: hidden;
+		mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+		-webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+	}
+	.marquee-track {
+		display: flex;
+		width: max-content;
+		gap: 0.5rem;
+		animation: marquee-scroll 26s linear infinite;
+	}
+	.marquee-mask:hover .marquee-track {
+		animation-play-state: paused;
+	}
+	@keyframes marquee-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+	.live-dot {
+		animation: live-dot-pulse 1.8s ease-in-out infinite;
+	}
+	@keyframes live-dot-pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.35;
+		}
+	}
+	.connector-beam {
+		background: linear-gradient(180deg, transparent, rgba(129, 140, 248, 0.55));
+	}
+	.pulse-stage {
+		overflow: hidden;
+	}
+	.pulse-ring {
+		transform-origin: 400px 220px;
+		animation: pulse-ring-grow 4.8s ease-out infinite;
+		opacity: 0;
+	}
+	@keyframes pulse-ring-grow {
+		0% {
+			opacity: 0;
+			transform: scale(0.75);
+		}
+		12% {
+			opacity: 0.9;
+		}
+		70% {
+			opacity: 0.15;
+		}
+		100% {
+			opacity: 0;
+			transform: scale(1.06);
+		}
+	}
+	.pulse-label {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	.is-revealing .pulse-label-left {
+		animation: pulse-label-in 0.6s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+	}
+	.is-revealing .pulse-label-right {
+		animation: pulse-label-in 0.6s 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
+	}
+	@keyframes pulse-label-in {
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+	@media (max-width: 420px) {
+		.pulse-label {
+			display: none;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.pulse-ring {
+			animation: none;
+			opacity: 0.35;
+		}
+		.marquee-track {
+			animation: none;
+		}
+		.live-dot {
+			animation: none;
+		}
+	}
+</style>

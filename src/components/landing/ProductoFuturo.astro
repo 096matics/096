@@ -2,35 +2,25 @@
 import WhatsAppCTA from '../WhatsAppCTA.astro';
 ---
 
-<section
-	id="scoring"
-	data-page
-	data-nav="Scoring de clientes"
-	data-glow-a="#f59e0b"
-	data-glow-b="#22d3ee"
-	class="flex min-h-dvh flex-col border-t border-zinc-800 px-6 py-6 sm:py-12 [@media(max-width:639px)_and_(max-height:780px)]:py-3"
->
-	<div class="m-auto w-full max-w-3xl text-center">
-		<span class="piece piece-top piece-d0 inline-flex items-center gap-2 rounded-full border border-dashed border-amber-400/50 px-3 py-1 text-xs font-semibold tracking-widest text-amber-400 uppercase">
-			<span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
-			En desarrollo — próximamente
-		</span>
-		<h2 class="piece piece-left piece-d1 mx-auto mt-3 max-w-xl text-3xl font-semibold text-white sm:mt-4 sm:text-4xl">
-			Scoring de clientes: sabrás a quién llamar primero
-		</h2>
-		<p class="piece piece-left piece-d2 mx-auto mt-3 max-w-xl text-zinc-400 sm:mt-4 sm:text-lg [@media(max-width:639px)_and_(max-height:780px)]:mt-2">
-			Un SaaS que analiza tus clientes y los clasifica según su probabilidad real de compra — para que dediques
-			el tiempo a quien va a decir que sí, no a quien no va a responder.
-		</p>
-		<p class="piece piece-left piece-d3 mx-auto mt-2 max-w-md text-sm text-zinc-500 [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
-			Todavía no está a la venta. Si quieres ser de los primeros en probarlo, dínoslo.
-		</p>
-		<div class="piece piece-bottom piece-d4 mt-5 flex justify-center sm:mt-8 [@media(max-width:639px)_and_(max-height:780px)]:mt-3">
-			<WhatsAppCTA
-				texto="Quiero que me avisen"
-				mensaje="Hola, quiero que me aviséis cuando esté listo el scoring de clientes"
-				variant="amber"
-			/>
+<section data-animate class="border-b border-zinc-800 bg-white/[0.015]">
+	<div data-reveal class="piece piece-d0 mx-auto flex max-w-6xl flex-col items-start gap-4 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+		<div class="flex items-start gap-3.5 sm:items-center">
+			<span class="mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-dashed border-amber-400/50 px-2.5 py-1 text-[10px] font-bold tracking-widest text-amber-400 uppercase sm:mt-0">
+				<span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+				Próximamente
+			</span>
+			<div>
+				<p class="font-semibold text-white">Scoring de clientes: sabrás a quién llamar primero</p>
+				<p class="mt-0.5 max-w-lg text-sm text-zinc-500">
+					Analizamos tus clientes y los clasificamos según su probabilidad real de compra.
+				</p>
+			</div>
 		</div>
+		<WhatsAppCTA
+			texto="Avísame cuando esté listo"
+			mensaje="Hola, quiero que me aviséis cuando esté listo el scoring de clientes"
+			variant="amber"
+			class="shrink-0"
+		/>
 	</div>
 </section>

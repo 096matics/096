@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+:root {
+	/* multiplicador de ritmo para el revelado al hacer scroll — lo actualiza Layout.astro
+	   según la velocidad de scroll justo antes de cada revelado: 1 = ritmo base (lento y
+	   vistoso), baja hacia 0.4 cuanto más rápido te desplazas, para que nunca se sienta lento */
+	--reveal-speed: 1;
+}
+
+body {
+	background: #09090b;
+}
+
 /* ============ Iconos de contacto: usados en el pie de la landing y en el de las páginas sueltas ============ */
 
 .contact-icon {
@@ -55,164 +66,87 @@
 	transform: translateY(-4px) rotate(-2deg) scale(1.08);
 }
 
-/* ============ Paginador de la landing: un único carril continuo que se traslada ============ */
-
-.landing-pager {
-	position: relative;
-	height: 100dvh;
-	overflow: hidden;
-	background: #09090b;
-}
-
-.pager-track {
-	display: flex;
-	flex-direction: column;
-	will-change: transform;
-	transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.landing-pager [data-page] {
-	position: relative;
-	flex: 0 0 100dvh;
-	width: 100%;
-	height: 100dvh;
-	overflow-y: auto;
-	-webkit-overflow-scrolling: touch;
-	scrollbar-width: none;
-	/* deja hueco a la barra lateral (los puntos) para que no se solape con el texto */
-	padding-left: 2.25rem;
-}
-@media (min-width: 640px) {
-	.landing-pager [data-page] {
-		padding-left: 11rem;
-	}
-}
-.landing-pager [data-page]::-webkit-scrollbar {
-	display: none;
-}
-
-/* páginas vacías entre secciones: refuerzan la sensación de pasar por un hueco al desplazarse */
-.pager-spacer {
-	flex: 0 0 60dvh;
-	width: 100%;
-}
-
-/* ============ Resplandor ambiental: vida de fondo continua, teñida según la sección ============ */
-
-@property --glow-a {
-	syntax: '<color>';
-	inherits: true;
-	initial-value: #6366f1;
-}
-@property --glow-b {
-	syntax: '<color>';
-	inherits: true;
-	initial-value: #a855f7;
-}
+/* ============ Fondo: un solo foco cenital cuidado + retícula técnica muy sutil,
+   en vez de dos manchas de color flotando (esto es intencionalmente comedido) ============ */
 
 .ambient-glow {
-	position: absolute;
+	position: fixed;
 	inset: 0;
-	z-index: 0;
+	z-index: -2;
 	overflow: hidden;
 	pointer-events: none;
-	--glow-a: #6366f1;
-	--glow-b: #a855f7;
-	transition:
-		--glow-a 1.8s ease,
-		--glow-b 1.8s ease;
-}
-.ambient-glow::before,
-.ambient-glow::after {
-	content: '';
-	position: absolute;
-	width: 46vmax;
-	height: 46vmax;
-	border-radius: 50%;
-	filter: blur(60px);
-	opacity: 0.22;
-	will-change: transform;
-}
-/* durante el viaje entre páginas paramos la deriva del fondo: dos animaciones pesadas a la vez
-   (el carril moviéndose + el resplandor difuminándose y desplazándose) es lo que rompía la fluidez */
-.ambient-glow.is-paused::before,
-.ambient-glow.is-paused::after {
-	animation-play-state: paused;
+	background:
+		radial-gradient(ellipse 900px 560px at 50% -8%, rgba(99, 102, 241, 0.16), transparent 62%),
+		radial-gradient(ellipse 640px 480px at 88% 18%, rgba(168, 85, 247, 0.08), transparent 60%),
+		radial-gradient(ellipse 620px 460px at 6% 62%, rgba(245, 158, 11, 0.045), transparent 60%),
+		#08080a;
 }
 .ambient-glow::before {
-	background: radial-gradient(
-		circle,
-		color-mix(in srgb, var(--glow-a) 95%, transparent) 0%,
-		color-mix(in srgb, var(--glow-a) 60%, transparent) 22%,
-		color-mix(in srgb, var(--glow-a) 30%, transparent) 42%,
-		color-mix(in srgb, var(--glow-a) 10%, transparent) 62%,
-		transparent 80%
-	);
-	top: -20%;
-	left: -12%;
-	animation: ambient-drift-a 24s ease-in-out infinite alternate;
+	content: '';
+	position: absolute;
+	inset: 0;
+	opacity: 0.5;
+	will-change: transform;
+	background: radial-gradient(ellipse 700px 420px at 50% 0%, rgba(129, 140, 248, 0.14), transparent 65%);
+	animation: ambient-breathe 16s ease-in-out infinite alternate;
 }
-.ambient-glow::after {
-	background: radial-gradient(
-		circle,
-		color-mix(in srgb, var(--glow-b) 95%, transparent) 0%,
-		color-mix(in srgb, var(--glow-b) 60%, transparent) 22%,
-		color-mix(in srgb, var(--glow-b) 30%, transparent) 42%,
-		color-mix(in srgb, var(--glow-b) 10%, transparent) 62%,
-		transparent 80%
-	);
-	bottom: -25%;
-	right: -15%;
-	animation: ambient-drift-b 28s ease-in-out infinite alternate;
-}
-@keyframes ambient-drift-a {
+@keyframes ambient-breathe {
 	0% {
-		transform: translate(0, 0) scale(1);
+		transform: translateY(0) scale(1);
+		opacity: 0.4;
 	}
 	100% {
-		transform: translate(6vw, 8vh) scale(1.15);
+		transform: translateY(2.5vh) scale(1.06);
+		opacity: 0.65;
 	}
 }
-@keyframes ambient-drift-b {
-	0% {
-		transform: translate(0, 0) scale(1);
-	}
-	100% {
-		transform: translate(-8vw, -6vh) scale(1.1);
-	}
+
+/* retícula de puntos: un guiño técnico discreto (red NFC), no un patrón decorativo genérico */
+.bg-grid {
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	opacity: 0.5;
+	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0.6px, transparent 0.6px);
+	background-size: 28px 28px;
+	background-position: 10px 10px;
+	mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 78%);
+	-webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 78%);
 }
 
 /* ============ Grano: rompe la sensación plana / cuadriculada con una textura sutil ============ */
 
 .grain-overlay {
-	position: absolute;
+	position: fixed;
 	inset: 0;
-	z-index: 40;
+	z-index: 30;
 	pointer-events: none;
-	opacity: 0.035;
+	opacity: 0.03;
 	mix-blend-mode: overlay;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 	background-size: 180px 180px;
 }
 
-/* ============ Piezas: cada elemento vuela desde un lado y encaja en su sitio ============ */
+/* ============ Revelado al hacer scroll: cualquier sección con data-animate dispara sus [data-reveal]
+   una vez, cuando entra en el viewport — ver el observer compartido en Layout.astro ============ */
 
-[data-page] .piece {
+[data-reveal] {
 	opacity: 0;
 	will-change: transform, opacity;
 }
 
-.landing-pager [data-page].is-revealing .piece {
-	animation: piece-settle 0.85s cubic-bezier(0.19, 1.32, 0.32, 1) forwards;
+.is-revealing .piece {
+	animation: piece-settle calc(1.05s * var(--reveal-speed, 1)) cubic-bezier(0.19, 1.24, 0.3, 1) forwards;
 }
 
 @keyframes piece-settle {
 	0% {
 		opacity: 0;
-		filter: blur(5px);
-		transform: translate(var(--tx, 0px), var(--ty, 22px)) rotate(var(--rot, 0deg)) scale(var(--sc, 0.94));
+		filter: blur(6px);
+		transform: translate(var(--tx, 0px), var(--ty, 26px)) rotate(var(--rot, 0deg)) scale(var(--sc, 0.94));
 	}
-	55% {
+	60% {
 		filter: blur(0);
 	}
 	100% {
@@ -244,36 +178,31 @@
 }
 
 .piece-d0 {
-	animation-delay: 0.05s;
+	animation-delay: calc(0.06s * var(--reveal-speed, 1));
 }
 .piece-d1 {
-	animation-delay: 0.15s;
+	animation-delay: calc(0.17s * var(--reveal-speed, 1));
 }
 .piece-d2 {
-	animation-delay: 0.25s;
+	animation-delay: calc(0.28s * var(--reveal-speed, 1));
 }
 .piece-d3 {
-	animation-delay: 0.35s;
+	animation-delay: calc(0.39s * var(--reveal-speed, 1));
 }
 .piece-d4 {
-	animation-delay: 0.45s;
+	animation-delay: calc(0.5s * var(--reveal-speed, 1));
 }
 .piece-d5 {
-	animation-delay: 0.55s;
+	animation-delay: calc(0.61s * var(--reveal-speed, 1));
 }
 .piece-d6 {
-	animation-delay: 0.65s;
+	animation-delay: calc(0.72s * var(--reveal-speed, 1));
 }
 
 /* ============ Piezas alternativas: texto que se construye a base de píxeles / que materializa ============ */
 
-.piece-pixel {
-	opacity: 0;
-	clip-path: inset(0 100% 0 0);
-	will-change: clip-path, opacity;
-}
-.landing-pager [data-page].is-revealing .piece-pixel {
-	animation: piece-pixel-reveal 0.8s steps(12, end) forwards;
+.is-revealing .piece-pixel {
+	animation: piece-pixel-reveal calc(1s * var(--reveal-speed, 1)) steps(12, end) forwards;
 }
 @keyframes piece-pixel-reveal {
 	0% {
@@ -291,12 +220,8 @@
 	}
 }
 
-.piece-materialize {
-	opacity: 0;
-	will-change: opacity, filter, transform;
-}
-.landing-pager [data-page].is-revealing .piece-materialize {
-	animation: piece-materialize 0.75s steps(7, end) forwards;
+.is-revealing .piece-materialize {
+	animation: piece-materialize calc(0.95s * var(--reveal-speed, 1)) steps(7, end) forwards;
 }
 @keyframes piece-materialize {
 	0% {
@@ -328,18 +253,55 @@
 		transform: scale(1);
 	}
 }
-@media (prefers-reduced-motion: reduce) {
-	.pager-track {
-		transition: none !important;
+
+/* stagger: hijos directos que aparecen en cascada al revelarse su contenedor */
+.stagger > * {
+	opacity: 0;
+	transform: translateY(20px);
+}
+.is-revealing .stagger > * {
+	animation: fade-up calc(0.8s * var(--reveal-speed, 1)) cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.is-revealing .stagger > *:nth-child(1) {
+	animation-delay: calc(0.06s * var(--reveal-speed, 1));
+}
+.is-revealing .stagger > *:nth-child(2) {
+	animation-delay: calc(0.15s * var(--reveal-speed, 1));
+}
+.is-revealing .stagger > *:nth-child(3) {
+	animation-delay: calc(0.24s * var(--reveal-speed, 1));
+}
+.is-revealing .stagger > *:nth-child(4) {
+	animation-delay: calc(0.33s * var(--reveal-speed, 1));
+}
+.is-revealing .stagger > *:nth-child(5) {
+	animation-delay: calc(0.42s * var(--reveal-speed, 1));
+}
+.is-revealing .stagger > *:nth-child(6) {
+	animation-delay: calc(0.51s * var(--reveal-speed, 1));
+}
+@keyframes fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
 	}
-	.landing-pager [data-page].is-revealing .piece,
-	.landing-pager [data-page].is-revealing .piece-pixel,
-	.landing-pager [data-page].is-revealing .piece-materialize {
-		animation: none;
+	to {
 		opacity: 1;
-		transform: none;
-		filter: none;
-		clip-path: none;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.is-revealing .piece,
+	.is-revealing .piece-pixel,
+	.is-revealing .piece-materialize,
+	.is-revealing .stagger > *,
+	[data-reveal] {
+		animation: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+		filter: none !important;
+		clip-path: none !important;
 	}
 	.ambient-glow::before,
 	.ambient-glow::after {

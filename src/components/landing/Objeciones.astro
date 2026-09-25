@@ -2,7 +2,8 @@
 const preguntas = [
 	{
 		pregunta: '¿Cuánto tarda la instalación?',
-		respuesta: 'Primera visita para conocer tu negocio, segunda con la tarjeta lista y configurada. Sin líos técnicos de tu parte.',
+		respuesta:
+			'Primera visita para conocer tu negocio, segunda con la tarjeta lista y configurada. Sin líos técnicos de tu parte.',
 	},
 	{
 		pregunta: '¿Necesito contratar algo o pagar cuota?',
@@ -12,75 +13,79 @@ const preguntas = [
 		pregunta: '¿Sirve con cualquier móvil?',
 		respuesta: 'Sí — cualquier móvil moderno con NFC, sin instalar ninguna app.',
 	},
+	{
+		pregunta: '¿Qué pasa si cambio de local o de datos?',
+		respuesta:
+			'Nos lo dices por WhatsApp y lo actualizamos nosotros — la tarjeta física no cambia, solo lo que hay detrás.',
+	},
 ];
 ---
 
-<section
-	id="preguntas"
-	data-page
-	data-nav="Preguntas"
-	data-glow-a="#22d3ee"
-	data-glow-b="#3b82f6"
-	class="flex min-h-dvh flex-col border-t border-zinc-800 py-4 sm:py-20 [@media(max-width:639px)_and_(max-height:780px)]:py-2"
->
-	<div class="m-auto w-full max-w-5xl px-6">
-		<p class="piece piece-top piece-d0 text-sm tracking-widest text-cyan-400 uppercase">Antes de escribirnos</p>
-		<h2 class="piece piece-left piece-d1 mt-2 text-3xl font-semibold text-white sm:mt-3 sm:text-4xl [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
-			Lo que la gente pregunta antes de decidirse
-		</h2>
+<section id="preguntas" data-animate class="border-b border-zinc-800 py-24 sm:py-32">
+	<div class="mx-auto max-w-6xl px-5 sm:px-6">
+		<div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+			<div data-reveal class="piece piece-left piece-d0">
+				<p class="text-sm font-bold tracking-widest text-cyan-400 uppercase">Antes de escribirnos</p>
+				<h2 class="mt-2 text-3xl font-semibold text-white sm:text-4xl">Lo que la gente pregunta antes de decidirse</h2>
+			</div>
 
-		<div data-hscroll class="preguntas-scroll piece piece-bottom piece-d2 mt-4 flex gap-3 sm:mt-8 sm:grid sm:grid-cols-3 sm:gap-4 [@media(max-width:639px)_and_(max-height:780px)]:mt-2">
-			{
-				preguntas.map((p) => (
-					<div class="preguntas-scroll-item rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4 sm:p-5">
-						<p class="text-sm font-medium text-white">{p.pregunta}</p>
-						<p class="mt-2 text-xs leading-relaxed text-zinc-500 sm:text-sm">{p.respuesta}</p>
-					</div>
-				))
-			}
+			<div data-reveal class="piece piece-right piece-d1 faq-grid border-t border-zinc-800">
+				{
+					preguntas.map((p, i) => (
+						<div class="faq border-b border-zinc-800">
+							<button
+								type="button"
+								id={`faq-q${i}`}
+								aria-expanded="false"
+								aria-controls={`faq-a${i}`}
+								class="flex w-full items-center justify-between gap-4 py-4.5 text-left text-[15px] font-semibold text-white"
+							>
+								<span>{p.pregunta}</span>
+								<span class="faq-icon text-lg text-indigo-400">+</span>
+							</button>
+							<div id={`faq-a${i}`} class="answer" role="region" aria-labelledby={`faq-q${i}`}>
+								<div class="min-h-0 overflow-hidden">
+									<p class="px-0 pb-4.5 text-sm leading-relaxed text-zinc-400">{p.respuesta}</p>
+								</div>
+							</div>
+						</div>
+					))
+				}
+			</div>
 		</div>
-		<p class="mt-2 text-xs text-zinc-600 sm:hidden [@media(max-width:639px)_and_(max-height:780px)]:mt-1">
-			← Desliza para ver las tres →
-		</p>
 	</div>
 </section>
 
 <style>
-	.preguntas-scroll {
-		overflow-x: auto;
-		scroll-snap-type: x mandatory;
-		scrollbar-width: none;
-		margin-left: -1.5rem;
-		margin-right: -1.5rem;
-		padding-left: 1.5rem;
-		padding-right: 1.5rem;
-		padding-bottom: 2px;
+	.faq {
+		transition: background-color 0.25s ease;
 	}
-	.preguntas-scroll::-webkit-scrollbar {
-		display: none;
+	.faq:hover {
+		background: rgba(255, 255, 255, 0.02);
 	}
-	.preguntas-scroll-item {
-		width: 78%;
-		min-width: 0;
+	.faq-icon {
 		flex-shrink: 0;
-		scroll-snap-align: center;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
-	@media (max-width: 639px) {
-		.preguntas-scroll {
-			mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
-			-webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
-		}
+	.faq.open .faq-icon {
+		transform: rotate(45deg);
 	}
-	@media (min-width: 640px) {
-		.preguntas-scroll {
-			margin-left: 0;
-			margin-right: 0;
-			padding-left: 0;
-			padding-right: 0;
-		}
-		.preguntas-scroll-item {
-			width: auto;
-			flex-shrink: 1;
-		}
+	.faq .answer {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.faq.open .answer {
+		grid-template-rows: 1fr;
 	}
 </style>
+
+<script>
+	document.querySelectorAll<HTMLButtonElement>('.faq > button').forEach((btn) => {
+		btn.addEventListener('click', () => {
+			const faq = btn.closest('.faq');
+			const open = faq?.classList.toggle('open');
+			btn.setAttribute('aria-expanded', String(!!open));
+		});
+	});
+</script>
