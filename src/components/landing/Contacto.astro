@@ -8,13 +8,15 @@ const equipo = [
 		ruta: '/tarjeta/personal-david',
 		imagen: '/plantillas/personal-david.jpg',
 		descripcion: 'Tarjeta digital personal · 096matics',
+		accent: '#6366f1',
 	},
 	{
 		nombre: 'Carlos Cantos Blasco',
 		rol: 'Cofundador',
 		ruta: '/tarjeta/personal-carlos',
-		imagen: '/plantillas/personal-carlos.jpg',
+		imagen: '/plantillas/personal-carlos.png',
 		descripcion: 'Tarjeta digital personal · 096matics',
+		accent: '#E8483A',
 	},
 ];
 
@@ -24,61 +26,66 @@ const VCARD =
 
 <section id="contacto" data-animate class="py-24 sm:py-32">
 	<div class="mx-auto max-w-5xl px-5 sm:px-6">
-		<p data-reveal class="piece piece-top piece-d0 text-sm tracking-widest text-indigo-400 uppercase">Contacto</p>
-		<h2 data-reveal class="piece-materialize piece-d1 mt-3 text-3xl font-semibold text-white sm:text-4xl">
-			Hablemos de tu negocio
-		</h2>
-		<p data-reveal class="piece piece-bottom piece-d1 mt-2 max-w-2xl text-zinc-400 sm:mt-4">
-			Te contamos en 5 minutos por WhatsApp si encajamos contigo — sin compromiso, sin formularios.
-		</p>
-		<ul data-reveal class="piece piece-bottom piece-d1 mt-4 grid gap-2 text-sm text-zinc-300 sm:mt-5">
-			{
-				[
-					'Respuesta directa por WhatsApp, sin esperas',
-					'Sin compromiso y sin letra pequeña',
-					'Visita en persona para conocer tu negocio',
-				].map((perk) => (
-					<li class="flex items-start gap-2">
-						<span class="mt-0.5 font-bold text-amber-400">✓</span>
-						{perk}
-					</li>
-				))
-			}
-		</ul>
-		<div data-reveal class="piece piece-bottom piece-d2 mt-4 sm:mt-8">
-			<WhatsAppCTA texto="Escríbenos por WhatsApp" mensaje="Hola, quiero información sobre 096matics" />
-		</div>
+		<div class="grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16">
+			<div>
+				<p data-reveal class="piece piece-top piece-d0 text-sm tracking-widest text-indigo-400 uppercase">Contacto</p>
+				<h2 data-reveal class="piece-materialize piece-d1 mt-3 text-3xl font-semibold text-white sm:text-4xl">
+					Hablemos de tu negocio
+				</h2>
+				<p data-reveal class="piece piece-bottom piece-d1 mt-2 max-w-md text-zinc-400 sm:mt-4">
+					Te contamos en 5 minutos por WhatsApp si encajamos contigo — sin compromiso, sin formularios.
+				</p>
+				<ul data-reveal class="piece piece-bottom piece-d1 mt-4 grid gap-2 text-sm text-zinc-300 sm:mt-5">
+					{
+						[
+							'Respuesta directa por WhatsApp, sin esperas',
+							'Sin compromiso y sin letra pequeña',
+							'Visita en persona para conocer tu negocio',
+						].map((perk) => (
+							<li class="flex items-start gap-2">
+								<span class="mt-0.5 font-bold text-amber-400">✓</span>
+								{perk}
+							</li>
+						))
+					}
+				</ul>
+				<div data-reveal class="piece piece-bottom piece-d2 mt-4 sm:mt-8">
+					<WhatsAppCTA texto="Escríbenos por WhatsApp" mensaje="Hola, quiero información sobre 096matics" />
+				</div>
+			</div>
 
-		<div data-reveal class="piece piece-bottom piece-d3 mt-6 sm:mt-10">
-			<p class="text-xs tracking-widest text-zinc-500 uppercase">Nuestro equipo</p>
-			<div class="mt-3 grid max-w-xs grid-cols-2 gap-3 sm:mt-4">
-				{
-					equipo.map((persona) => (
-						<div
-							role="button"
-							tabindex="0"
-							data-preview-trigger
-							data-preview-group="equipo"
-							data-preview-img={persona.imagen}
-							data-preview-sector={persona.rol}
-							data-preview-title={persona.nombre}
-							data-preview-desc={persona.descripcion}
-							data-preview-href={persona.ruta}
-							data-preview-cta="Abrir esta tarjeta →"
-							class="group cursor-pointer overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 transition-colors hover:border-zinc-600"
-						>
-							<img src={persona.imagen} alt={persona.nombre} class="aspect-square w-full object-cover" loading="lazy" />
-							<div class="p-2.5">
-								<p class="truncate text-xs font-medium text-white">{persona.nombre}</p>
-								<p class="text-[11px] text-zinc-500">{persona.rol}</p>
+			<div data-reveal class="piece piece-pop piece-d3">
+				<p class="text-center text-xs tracking-widest text-zinc-500 uppercase lg:text-left">Nuestro equipo</p>
+				<div class="team-stack relative mx-auto mt-5 h-[240px] w-full max-w-xs sm:h-[280px]">
+					{
+						equipo.map((persona, i) => (
+							<div
+								role="button"
+								tabindex="0"
+								data-preview-trigger
+								data-preview-group="equipo"
+								data-preview-img={persona.imagen}
+								data-preview-sector={persona.rol}
+								data-preview-title={persona.nombre}
+								data-preview-desc={persona.descripcion}
+								data-preview-href={persona.ruta}
+								data-preview-cta="Abrir esta tarjeta →"
+								class={`team-card team-card-${i === 0 ? 'a' : 'b'} group absolute w-[62%] cursor-pointer overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 shadow-2xl shadow-black/50 transition-colors hover:border-zinc-600`}
+								style={`--accent:${persona.accent}`}
+							>
+								<img src={persona.imagen} alt={persona.nombre} class="aspect-square w-full object-cover" loading="lazy" />
+								<div class="p-2.5">
+									<p class="truncate text-xs font-medium text-white">{persona.nombre}</p>
+									<p class="text-[11px] text-zinc-500">{persona.rol}</p>
+								</div>
 							</div>
-						</div>
-					))
-				}
+						))
+					}
+				</div>
 			</div>
 		</div>
 
-		<div data-reveal class="piece piece-bottom piece-d4 mt-6 flex flex-col gap-5 border-t border-zinc-800 pt-4 sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:pt-8">
+		<div data-reveal class="piece piece-bottom piece-d4 mt-14 flex flex-col gap-5 border-t border-zinc-800 pt-4 sm:mt-16 sm:flex-row sm:items-center sm:justify-between sm:pt-8">
 			<p class="text-sm text-zinc-500">096matics · Sagunto, Valencia</p>
 			<div class="flex items-center gap-6">
 				<div class="contact-icons flex items-end gap-5">
@@ -121,3 +128,61 @@ const VCARD =
 		</div>
 	</div>
 </section>
+
+<style>
+	.team-card {
+		transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.team-card-a {
+		top: 0;
+		left: 0;
+		transform: rotate(-7deg);
+		z-index: 1;
+	}
+	.team-card-b {
+		top: 16%;
+		left: 36%;
+		transform: rotate(6deg);
+		z-index: 2;
+	}
+	.team-stack:hover .team-card-a {
+		transform: rotate(-11deg) translate(-6%, 4%);
+	}
+	.team-stack:hover .team-card-b {
+		transform: rotate(10deg) translate(6%, -4%);
+	}
+	/* al tocar una de las dos tarjetas, se resalta la suya (color propio, al frente)
+	   y la otra se atenúa — cada uno con su acento */
+	.team-card.is-active {
+		transform: translate(0, 0) rotate(0deg) scale(1.06) !important;
+		z-index: 10 !important;
+		border-color: var(--accent) !important;
+		box-shadow:
+			0 0 0 2px color-mix(in srgb, var(--accent) 70%, transparent),
+			0 24px 48px -16px color-mix(in srgb, var(--accent) 65%, transparent);
+	}
+	.team-card.is-inactive {
+		opacity: 0.5;
+		filter: grayscale(0.4);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.team-card {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	// al tocar la tarjeta de David o Carlos, se resalta la suya y se atenúa la otra
+	// — útil sobre todo en móvil, donde no hay :hover que las separe.
+	const teamCards = document.querySelectorAll<HTMLElement>('.team-card');
+	teamCards.forEach((card) => {
+		card.addEventListener('click', () => {
+			teamCards.forEach((c) => c.classList.remove('is-active', 'is-inactive'));
+			card.classList.add('is-active');
+			teamCards.forEach((c) => {
+				if (c !== card) c.classList.add('is-inactive');
+			});
+		});
+	});
+</script>

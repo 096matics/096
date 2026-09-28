@@ -1,0 +1,536 @@
+---
+interface Demo {
+	sector: string;
+	negocio: string;
+	color: string;
+	imagen: string;
+	// posición real del enlace "Guardar contacto" dentro de esa plantilla en
+	// concreto — cada una lo tiene en un sitio distinto de la página, así que
+	// el punto de toque no puede ser una posición fija para las cuatro.
+	tapX?: number;
+	tapY?: number;
+}
+interface Props {
+	demos: Demo[];
+}
+const { demos } = Astro.props;
+
+// iconos genéricos de la pantalla de inicio — sin logos ni nombres, solo para
+// que se lea como un móvil de verdad antes del toque NFC, nunca como una app real
+const gridIcons = ['#818cf8', '#a78bfa', '#38bdf8', '#f472b6', '#818cf8', '#4ade80', '#a78bfa', '#38bdf8'];
+const dockIcons = ['#818cf8', '#f472b6', '#38bdf8', '#a78bfa'];
+---
+
+<div
+	class="demo-stage demo-contacto relative mx-auto flex h-[300px] w-full max-w-[280px] items-center justify-center sm:h-[340px]"
+	data-role="contacto"
+	data-total-steps={demos.length}
+	data-active-step="0"
+>
+	<span class="demo-flash pointer-events-none absolute top-1/2 left-1/2 z-20 h-14 w-14 rounded-full" aria-hidden="true"></span>
+
+	<div class="demo-phone relative z-10 h-64 w-32 shrink-0 rounded-[2rem] border-2 border-zinc-700 bg-zinc-950 p-2 shadow-2xl sm:h-72 sm:w-36">
+		<div class="absolute top-3 left-1/2 h-1.5 w-10 -translate-x-1/2 rounded-full bg-zinc-700"></div>
+		<div class="demo-clip relative h-full w-full overflow-hidden rounded-[1.6rem] bg-zinc-900">
+			<!-- pantalla de inicio real (no de bloqueo): iconos genéricos sin marca,
+			     solo para que se lea como un móvil normal antes del toque NFC -->
+			<div class="demo-screen-idle absolute inset-0 flex flex-col overflow-hidden bg-gradient-to-b from-indigo-950 via-zinc-900 to-black">
+				<div class="flex items-center justify-between px-4 pt-2.5 text-[8px] font-semibold text-white/60">
+					<span>9:41</span>
+					<div class="flex items-center gap-1">
+						<svg width="10" height="7" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="0.5" /><rect x="4.5" y="4" width="3" height="8" rx="0.5" /><rect x="9" y="1" width="3" height="11" rx="0.5" /></svg>
+						<svg width="12" height="8" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 4.5a10 10 0 0 1 14 0M3.5 7.5a6.3 6.3 0 0 1 9 0M6 10.3a2.6 2.6 0 0 1 4 0" stroke-linecap="round" /></svg>
+					</div>
+				</div>
+				<div class="grid flex-1 grid-cols-4 content-start gap-x-3 gap-y-5 px-4 pt-7">
+					{gridIcons.map((c) => (
+						<div class="flex flex-col items-center gap-1">
+							<span class="demo-app-icon aspect-square w-full rounded-[22%]" style={`background:linear-gradient(160deg, ${c}, color-mix(in srgb, ${c} 62%, #000))`}>
+								<span class="demo-app-icon-glyph" />
+							</span>
+							<span class="demo-app-label h-[3px] w-3/5 rounded-full bg-white/40" />
+						</div>
+					))}
+				</div>
+				<div class="mx-4 mb-3.5 flex justify-center">
+					<div class="demo-dock flex items-center gap-1 rounded-[10px] px-1.5 py-1.5">
+						{dockIcons.map((c) => (
+							<span class="demo-app-icon h-3.5 w-3.5 rounded-[22%]" style={`background:linear-gradient(160deg, ${c}, color-mix(in srgb, ${c} 62%, #000))`}>
+								<span class="demo-app-icon-glyph" />
+							</span>
+						))}
+					</div>
+				</div>
+				<div class="flex justify-center pb-2">
+					<span class="h-1 w-10 rounded-full bg-white/25"></span>
+				</div>
+			</div>
+
+			{
+				demos.map((d, i) => (
+					<div
+						class="demo-screen absolute inset-0 overflow-hidden bg-white text-zinc-900"
+						data-step={i}
+						style={`--tap-x:${d.tapX ?? 50}%; --tap-y:${d.tapY ?? 84}%`}
+					>
+						<img src={d.imagen} alt={d.negocio} class="h-full w-full object-cover object-top" loading="lazy" />
+						<span class="demo-tap-ping absolute rounded-full" aria-hidden="true"></span>
+						<span class="demo-tap-finger pointer-events-none absolute" aria-hidden="true"></span>
+
+						<!-- barra de direcciones del navegador, arriba como en cualquier Chrome
+						     de verdad — deja claro que esto es una web real abierta en el móvil,
+						     no una pantalla inventada -->
+						<div class="demo-address-bar absolute inset-x-2.5 top-2.5 flex items-center gap-1.5 rounded-full bg-white px-2.5 py-[4px] shadow-sm" aria-hidden="true">
+							<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2.6"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+							<span class="truncate text-[7px] font-medium text-zinc-600">{d.negocio.toLowerCase().replace(/[^a-z0-9]/g, '')}.com</span>
+							<svg class="ml-auto shrink-0" width="7" height="7" viewBox="0 0 24 24" fill="#5f6368"><circle cx="12" cy="5" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="12" cy="19" r="2" /></svg>
+						</div>
+
+						<!-- tras tocar "Guardar contacto", el propio navegador se encarga de
+						     descargar el vCard — igual que pasaría de verdad en Chrome, para
+						     que este segundo toque pese lo mismo que el de "Publicar" en el
+						     otro producto y las dos animaciones queden mejor acompasadas -->
+						<div class="demo-download-bar absolute inset-x-2 flex items-center gap-2 rounded-xl bg-zinc-900/95 px-2.5 py-2 shadow-xl ring-1 ring-black/10" aria-hidden="true">
+							<span class="demo-download-icon relative grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/15">
+								<svg class="demo-download-arrow absolute" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14" />
+								</svg>
+								<svg class="demo-download-check absolute" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="20 6 9 17 4 12" />
+								</svg>
+							</span>
+							<div class="min-w-0 flex-1">
+								<p class="truncate text-[9.5px] font-medium text-white/90">contacto.vcf</p>
+								<div class="mt-1 h-[3px] w-full overflow-hidden rounded-full bg-white/15">
+									<div class="demo-download-fill h-full rounded-full bg-emerald-400"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				))
+			}
+			<div class="demo-screen demo-screen-success absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white px-4 text-center text-zinc-900">
+				<div class="flex h-9 w-9 items-center justify-center rounded-full border border-emerald-400/60 bg-emerald-400/15 text-emerald-500">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12" /></svg>
+				</div>
+				<p class="text-[13px] font-semibold">Contacto guardado</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- tarjeta genérica, negra y lisa: no se sabe de quién es hasta que toca el móvil -->
+	<div class="demo-card absolute top-1/2 left-1/2 z-0 h-40 w-28 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black shadow-2xl shadow-black/50 sm:h-44 sm:w-32">
+		<span class="demo-card-sheen pointer-events-none absolute inset-0"></span>
+	</div>
+</div>
+
+<style>
+	/* ============ Todo el reloj de fases vive en @keyframes puro (ver el comentario
+	   largo sobre por qué, más abajo en el historial). 8800ms = la duración real de
+	   un ciclo completo (1450+1450+1300+1300+1900+1400) y cada % de abajo es ese
+	   punto exacto expresado sobre esa duración. Antes eran 10550ms: la tarjeta
+	   llegaba a los 1300ms y se quedaba quieta otros 1300ms más antes de que
+	   "soltara" el pulso de contacto — se notaba lento. Ahora el pulso salta nada
+	   más llegar (solo ~150ms de margen) y, sobre todo, ya no hay un hueco de 350ms
+	   con la pantalla completamente a oscuras entre que se apaga el inicio y
+	   aparece la plantilla — el pulso y el cruce de pantallas arrancan en el mismo
+	   instante, así que el destello tapa la transición en vez de dejar un bache. ============ */
+
+	/* la esquina redondeada + overflow:hidden a veces dejaba asomar un filo recto
+	   en la esquina mientras algo dentro animaba transform/opacity — un bug de
+	   composición de Chromium ya conocido en este proyecto (la misma razón por la
+	   que se evita backdrop-filter aquí al lado). Forzar su propia capa de
+	   composición aquí evita que el recorte se calcule mal contra capas hijas. */
+	.demo-clip {
+		transform: translateZ(0);
+		isolation: isolate;
+	}
+
+	.demo-screen-idle {
+		opacity: 1;
+	}
+	@keyframes demo-idle-cycle {
+		0% {
+			opacity: 1;
+		}
+		16.477% {
+			opacity: 1;
+		}
+		16.487% {
+			/* +0.01 pp (no +0%): dos paradas con el MISMO % exacto no crean el corte
+			   instantáneo que parecen — Chromium se queda solo con la última y
+			   convierte todo el tramo anterior (desde el 0%) en una rampa continua.
+			   Es justo lo que hacía que la pantalla de inicio pareciera "irse
+			   apagando" durante toda la aproximación en vez de quedarse encendida y
+			   cortar de golpe aquí. Con un % ligeramente distinto (imperceptible,
+			   ~0.9ms) el navegador ya no puede fundir las dos paradas en una. */
+			opacity: 0;
+		}
+		84.091% {
+			opacity: 0;
+		}
+		86.364% {
+			opacity: 0;
+		}
+		91.477% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+	.demo-screen-idle {
+		animation: demo-idle-cycle 8800ms linear infinite;
+	}
+
+	/* iconos de la pantalla de inicio: forma "squircle" (radio ~22%) igual que en
+	   iOS/Android de verdad, con solo una pizca de sombra para dar volumen — antes
+	   llevaban un brillo tan fuerte que parecían botones de plástico, no iconos */
+	.demo-app-icon {
+		position: relative;
+		overflow: hidden;
+		box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.22);
+	}
+	.demo-app-icon-glyph {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 42%;
+		height: 42%;
+		transform: translate(-50%, -50%);
+		border-radius: 30%;
+		background: rgba(255, 255, 255, 0.92);
+	}
+	/* raya en vez de texto: sugiere el nombre de la app bajo el icono sin inventar
+	   ningún nombre real */
+	.demo-app-label {
+		opacity: 0.8;
+	}
+	/* sin backdrop-filter: un blur tan cerca de una esquina redondeada con overflow
+	   recortado es justo el combo que hace que Chromium deje "rayas" o un borde
+	   recto donde no debería — con un fondo semitransparente normal se ve casi
+	   igual de "esmerilado" sin ese riesgo */
+	.demo-dock {
+		background: rgba(40, 40, 46, 0.55);
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+	}
+	/* solo fundido, sin escalar: dos capas que se cruzan a la vez con un `scale`
+	   distinto dejaban ver un borde de la capa de detrás en las esquinas redondeadas
+	   — el "descuadre" que se notaba. Un cross-fade plano es más limpio y fiable. */
+	.demo-screen {
+		opacity: 0;
+	}
+	@keyframes demo-screen-in-cycle {
+		0%,
+		16.477% {
+			opacity: 0;
+		}
+		21.591% {
+			opacity: 1;
+		}
+		62.5% {
+			opacity: 1;
+		}
+		67.614% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+	.demo-screen.is-current {
+		animation: demo-screen-in-cycle 8800ms linear;
+	}
+	.demo-screen-success {
+		opacity: 0;
+	}
+	@keyframes demo-success-cycle {
+		0%,
+		62.5% {
+			opacity: 0;
+		}
+		64.773% {
+			opacity: 1;
+		}
+		84.091% {
+			opacity: 1;
+		}
+		86.364% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+	.demo-screen-success {
+		animation: demo-success-cycle 8800ms linear infinite;
+	}
+
+	.demo-card {
+		opacity: 1;
+		transform: translate(calc(-50% - 60%), calc(-50% + 6%)) rotate(-5deg) scale(1);
+	}
+	@keyframes demo-card-cycle {
+		0% {
+			opacity: 0;
+			transform: translate(calc(-50% - 175%), calc(-50% + 14%)) rotate(-9deg) scale(0.85);
+		}
+		14.773% {
+			opacity: 1;
+			transform: translate(calc(-50% - 60%), calc(-50% + 6%)) rotate(-5deg) scale(1);
+		}
+		16.477% {
+			opacity: 1;
+			transform: translate(calc(-50% - 60%), calc(-50% + 6%)) rotate(-5deg) scale(1);
+		}
+		26.704% {
+			opacity: 0;
+			transform: translate(-50%, -50%) rotate(0deg) scale(0.4);
+		}
+		84.091% {
+			opacity: 0;
+			transform: translate(-50%, -50%) rotate(0deg) scale(0.4);
+		}
+		98.864% {
+			opacity: 0;
+			transform: translate(calc(-50% - 175%), calc(-50% + 14%)) rotate(-9deg) scale(0.85);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(calc(-50% - 175%), calc(-50% + 14%)) rotate(-9deg) scale(0.85);
+		}
+	}
+	.demo-card {
+		animation: demo-card-cycle 8800ms cubic-bezier(0.16, 1, 0.3, 1) infinite;
+	}
+	.demo-card-sheen {
+		background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.12) 50%, transparent 65%);
+	}
+
+	.demo-flash {
+		transform: translate(-50%, -50%) scale(0.4);
+		background: radial-gradient(circle, rgba(129, 140, 248, 0.9), transparent 70%);
+		opacity: 0;
+	}
+	@keyframes demo-flash-cycle {
+		0%,
+		16.477% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(0.4);
+		}
+		16.487% {
+			opacity: 0.9;
+			transform: translate(-50%, -50%) scale(0.4);
+		}
+		22.159% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(2.6);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(2.6);
+		}
+	}
+	.demo-flash {
+		animation: demo-flash-cycle 8800ms cubic-bezier(0.16, 1, 0.3, 1) infinite;
+	}
+
+	/* el toque se marca sobre la propia plantilla, donde de verdad está su botón de
+	   guardar contacto (cerca del final de la página) — sin fabricar ningún botón
+	   nuevo encima, solo señalando dónde tocar */
+	.demo-tap-ping {
+		top: var(--tap-y, 84%);
+		left: var(--tap-x, 50%);
+		width: 34px;
+		height: 34px;
+		transform: translate(-50%, -50%) scale(0.7);
+		background: rgba(99, 102, 241, 0.55);
+		opacity: 0;
+	}
+	@keyframes demo-tap-ping-cycle {
+		0%,
+		32.955% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(0.7);
+		}
+		32.965% {
+			opacity: 0.8;
+			transform: translate(-50%, -50%) scale(0.7);
+		}
+		43.182% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(2.2);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(2.2);
+		}
+	}
+	.demo-screen.is-current .demo-tap-ping {
+		animation: demo-tap-ping-cycle 8800ms ease-out;
+	}
+	.demo-tap-finger {
+		top: var(--tap-y, 84%);
+		left: var(--tap-x, 50%);
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.95);
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+		transform: translate(-50%, -220%) scale(0.75);
+		opacity: 0;
+		z-index: 5;
+	}
+	@keyframes demo-finger-tap-cycle {
+		0%,
+		32.955% {
+			opacity: 0;
+			transform: translate(-50%, -220%) scale(0.75);
+		}
+		35.819% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+		}
+		37.864% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(0.8);
+		}
+		39.909% {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+		}
+		43.182% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(0.75);
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-50%, -50%) scale(0.75);
+		}
+	}
+	.demo-screen.is-current .demo-tap-finger {
+		animation: demo-finger-tap-cycle 8800ms ease-out;
+	}
+
+	/* barra de descarga del navegador: aparece tras el toque en "Guardar contacto"
+	   y llena su barra de progreso durante toda la fase — el check verde sustituye
+	   a la flecha justo cuando pasa a "success", como la notificación real de Chrome */
+	.demo-download-bar {
+		bottom: 8px;
+		opacity: 0;
+		transform: translateY(14px);
+		z-index: 6;
+	}
+	@keyframes demo-download-bar-cycle {
+		0%,
+		47.727% {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		51.136% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+		84.091% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+		84.101% {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+	}
+	.demo-screen.is-current .demo-download-bar {
+		animation: demo-download-bar-cycle 8800ms linear;
+	}
+	.demo-download-arrow {
+		opacity: 1;
+	}
+	.demo-download-check {
+		opacity: 0;
+	}
+	@keyframes demo-download-arrow-cycle {
+		0%,
+		62.5% {
+			opacity: 1;
+		}
+		64.773% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+	@keyframes demo-download-check-cycle {
+		0%,
+		62.5% {
+			opacity: 0;
+		}
+		64.773% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+	.demo-screen.is-current .demo-download-arrow {
+		animation: demo-download-arrow-cycle 8800ms linear;
+	}
+	.demo-screen.is-current .demo-download-check {
+		animation: demo-download-check-cycle 8800ms linear;
+	}
+	.demo-download-fill {
+		width: 0%;
+	}
+	@keyframes demo-download-fill-cycle {
+		0%,
+		47.727% {
+			width: 0%;
+		}
+		60.795% {
+			width: 100%;
+		}
+		84.091% {
+			width: 100%;
+		}
+		84.101% {
+			width: 0%;
+		}
+		100% {
+			width: 0%;
+		}
+	}
+	.demo-screen.is-current .demo-download-fill {
+		animation: demo-download-fill-cycle 8800ms linear;
+	}
+
+	/* barra de direcciones arriba, como en Chrome de verdad — nunca abajo — deja
+	   claro que la plantilla es una web real abierta en el móvil, no un montaje */
+	.demo-address-bar {
+		z-index: 6;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.demo-card,
+		.demo-screen,
+		.demo-screen-idle,
+		.demo-screen-success,
+		.demo-flash,
+		.demo-tap-ping,
+		.demo-tap-finger,
+		.demo-download-bar,
+		.demo-download-arrow,
+		.demo-download-check,
+		.demo-download-fill {
+			animation: none !important;
+		}
+		.demo-screen-idle {
+			opacity: 1;
+		}
+	}
+</style>

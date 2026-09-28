@@ -28,6 +28,27 @@ function agruparPorSector(items: typeof sectorItems) {
 }
 const grupos = ordenarPorSector([...agruparPorSector(sectorItems).entries()]);
 const gruposOtrosProximamente = ordenarPorSector([...agruparPorSector(otrosProximamenteItems).entries()]);
+
+// un único selector de sector en vez de dos listados largos por separado: cada sector
+// junta lo real ya entregado y lo que aún está en camino, y solo se ve un panel a la vez.
+type Item = (typeof sectorItems)[number];
+const porSector = new Map<string, { real: Item[]; proximamente: Item[] }>();
+for (const [sector, items] of grupos) porSector.set(sector, { real: items, proximamente: [] });
+for (const [sector, items] of gruposOtrosProximamente) {
+	const entry = porSector.get(sector) ?? { real: [], proximamente: [] };
+	entry.proximamente = items;
+	porSector.set(sector, entry);
+}
+const sectoresOrdenados = ordenarPorSector([...porSector.entries()]);
+
+function slugSector(sector: string) {
+	return sector
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/[̀-ͯ]/g, '')
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/(^-|-$)/g, '');
+}
 ---
 
 <Layout title="Portafolio">
@@ -102,65 +123,65 @@ const gruposOtrosProximamente = ordenarPorSector([...agruparPorSector(otrosProxi
 		}
 
 		{
-			grupos.length > 0 && (
+			sectoresOrdenados.length > 0 && (
 				<section class="mt-10">
 					<div class="flex items-center gap-2.5">
 						<span class="h-2 w-2 shrink-0 rounded-full bg-white" />
-						<h2 class="text-sm font-bold tracking-widest text-zinc-300 uppercase">Ejemplos ya entregados</h2>
+						<h2 class="text-sm font-bold tracking-widest text-zinc-300 uppercase">Por sector</h2>
 					</div>
-					<p class="mt-1.5 text-sm text-zinc-500">Diseños reales, agrupados por el sector para el que los hicimos.</p>
+					<p class="mt-1.5 text-sm text-zinc-500">Todos los sectores, uno detrás de otro — salta a uno si ya sabes cuál buscas.</p>
 
-					<div class="mt-6 divide-y divide-zinc-900">
-						{grupos.map(([sector, items]) => (
-							<div class="py-8 first:pt-6">
-								<h3 class="text-lg font-semibold text-white">{sector}</h3>
-								<div class="mt-4 grid gap-4 sm:grid-cols-3">
-									{items.map((p) => (
-										<PlantillaCard
-											nombre={p.data.nombre}
-											descripcion={p.data.descripcion}
-											sector={sector}
-											colorHex={p.data.colorHex}
-											imagen={p.data.imagen}
-											ruta={p.data.ruta}
-										/>
-									))}
-								</div>
-							</div>
+					<div class="sector-picker mt-6 flex flex-wrap gap-2">
+						{sectoresOrdenados.map(([sector, entry]) => (
+							<a
+								href={`#sector-${slugSector(sector)}`}
+								class="sector-chip rounded-full border border-zinc-800 bg-white/[0.03] px-3.5 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:border-zinc-600 hover:text-white"
+							>
+								{sector}
+								{entry.real.length === 0 && <span class="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-zinc-500 align-middle" title="Próximamente" />}
+							</a>
 						))}
 					</div>
-				</section>
-			)
-		}
 
-		{
-			gruposOtrosProximamente.length > 0 && (
-				<section class="mt-14 rounded-3xl border border-zinc-800 bg-zinc-900/20 p-6 sm:p-8">
-					<div class="flex items-center gap-2.5">
-						<span class="h-2 w-2 shrink-0 animate-pulse rounded-full bg-zinc-500" />
-						<h2 class="text-sm font-bold tracking-widest text-zinc-400 uppercase">También en camino</h2>
-					</div>
-					<p class="mt-1.5 max-w-xl text-sm text-zinc-500">
-						Estilos que estamos terminando de pulir — todavía no están disponibles para pedir.
-					</p>
-					<div class="mt-6 space-y-8">
-						{gruposOtrosProximamente.map(([sector, items]) => (
-							<div>
-								<p class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">{sector}</p>
-								<div class="mt-3 grid gap-4 sm:grid-cols-3">
-									{items.map((p) => (
-										<div class="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 opacity-60">
-											{p.data.imagen && <img src={p.data.imagen} alt={p.data.nombre} class="aspect-[4/5] w-full object-cover grayscale" loading="lazy" />}
-											<div class="p-5">
-												<span class="inline-block rounded-full border border-zinc-700 bg-zinc-900 px-2 py-0.5 text-[10px] font-bold tracking-wide text-zinc-500 uppercase">
-													Próximamente
-												</span>
-												<h3 class="mt-2 text-base font-medium text-zinc-300">{p.data.nombre}</h3>
-												<p class="mt-1 text-sm text-zinc-500">{p.data.descripcion}</p>
-											</div>
+					<div class="mt-4 divide-y divide-zinc-900">
+						{sectoresOrdenados.map(([sector, entry]) => (
+							<div id={`sector-${slugSector(sector)}`} class="scroll-mt-24 py-8 first:pt-6">
+								<h3 class="text-lg font-semibold text-white">{sector}</h3>
+								{entry.real.length > 0 && (
+									<div class="mt-4 grid gap-4 sm:grid-cols-3">
+										{entry.real.map((p) => (
+											<PlantillaCard
+												nombre={p.data.nombre}
+												descripcion={p.data.descripcion}
+												sector={sector}
+												colorHex={p.data.colorHex}
+												imagen={p.data.imagen}
+												ruta={p.data.ruta}
+											/>
+										))}
+									</div>
+								)}
+								{entry.proximamente.length > 0 && (
+									<div class={entry.real.length > 0 ? 'mt-6' : 'mt-4'}>
+										{entry.real.length > 0 && (
+											<p class="text-xs font-semibold tracking-wide text-zinc-500 uppercase">También en camino en este sector</p>
+										)}
+										<div class="mt-3 grid gap-4 sm:grid-cols-3">
+											{entry.proximamente.map((p) => (
+												<div class="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 opacity-60">
+													{p.data.imagen && <img src={p.data.imagen} alt={p.data.nombre} class="aspect-[4/5] w-full object-cover grayscale" loading="lazy" />}
+													<div class="p-5">
+														<span class="inline-block rounded-full border border-zinc-700 bg-zinc-900 px-2 py-0.5 text-[10px] font-bold tracking-wide text-zinc-500 uppercase">
+															Próximamente
+														</span>
+														<h3 class="mt-2 text-base font-medium text-zinc-300">{p.data.nombre}</h3>
+														<p class="mt-1 text-sm text-zinc-500">{p.data.descripcion}</p>
+													</div>
+												</div>
+											))}
 										</div>
-									))}
-								</div>
+									</div>
+								)}
 							</div>
 						))}
 					</div>

@@ -1,0 +1,1183 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============ SEO ============ -->
+  <title>InmoFlow | CRM Inmobiliario con WhatsApp y Automatización de Leads</title>
+  <meta name="description" content="CRM inmobiliario todo en uno: captación de leads, seguimiento automático por WhatsApp e informes en tiempo real. Más ventas, menos trabajo." />
+  <meta name="keywords" content="crm inmobiliario, software inmobiliario, captación de leads, whatsapp business inmobiliaria, automatización inmobiliaria" />
+  <meta name="author" content="InmoFlow" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://inmoflow.es/" />
+  <meta name="theme-color" content="#526a5d" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="InmoFlow" />
+  <meta property="og:title" content="InmoFlow | CRM Inmobiliario con WhatsApp y Automatización de Leads" />
+  <meta property="og:description" content="Captación, gestión y seguimiento automático de tus leads en un solo sistema. Más visitas, más ventas, menos trabajo." />
+  <meta property="og:url" content="https://inmoflow.es/" />
+  <meta property="og:image" content="https://inmoflow.es/og-cover.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="es_ES" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="InmoFlow | CRM Inmobiliario con WhatsApp y Automatización de Leads" />
+  <meta name="twitter:description" content="Captación, gestión y seguimiento automático de tus leads en un solo sistema." />
+  <meta name="twitter:image" content="https://inmoflow.es/og-cover.jpg" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23526a5d'/%3E%3Cpath d='M16 8l8 7h-2.5v8h-4v-5h-3v5h-4v-8H8z' fill='%23fff'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============ Base ============ */
+    :root{
+      --bg:#fbfbf8;
+      --surface:#ffffff;
+      --surface-soft:#f1f4ee;
+      --text:#22313a;
+      --muted:#66727a;
+      --line:#dfe5df;
+      --accent:#6d8677;
+      --accent-dark:#526a5d;
+      --accent-soft:#dfe8e1;
+      --ok:#2f9e63;
+      --star:#e0a63c;
+      --footer-bg:#1c2721;
+      --shadow:0 18px 50px rgba(36,52,45,.08);
+      --radius:20px;
+      --max:1180px;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:clip;
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    ::selection{background:var(--accent);color:#fff}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+    ::-webkit-scrollbar{width:10px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:#c3cfc5;border-radius:8px;border:2px solid var(--bg)}
+    ::-webkit-scrollbar-thumb:hover{background:#a9b9ad}
+    h2{text-wrap:balance}
+    .container{width:min(var(--max),calc(100% - 40px));margin:auto}
+    section[id]{scroll-margin-top:92px}
+
+    .ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+    .skip-link{position:fixed;top:-60px;left:16px;z-index:200;background:var(--accent-dark);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;transition:top .25s}
+    .skip-link:focus{top:12px}
+
+    .progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:120;background:linear-gradient(90deg,var(--accent),var(--accent-dark))}
+
+    /* ============ Navegación ============ */
+    .nav{
+      position:sticky;top:0;z-index:50;
+      background:rgba(251,251,248,.88);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(223,229,223,.72);
+      transition:box-shadow .3s;
+    }
+    .nav.scrolled{box-shadow:0 10px 30px rgba(36,52,45,.07)}
+    .nav-inner{height:76px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em}
+    .brand-mark{width:28px;height:28px;border:2px solid var(--accent);border-radius:8px 8px 10px 10px;position:relative}
+    .brand-mark:before{content:"";position:absolute;width:9px;height:9px;border-left:2px solid var(--accent);border-top:2px solid var(--accent);transform:rotate(45deg);left:7px;top:-5px;background:var(--bg)}
+    .brand-mark:after{content:"";position:absolute;width:5px;height:8px;border:2px solid var(--accent);border-bottom:0;border-radius:4px 4px 0 0;left:9px;bottom:0}
+    .nav-links{display:flex;gap:34px;font-size:14px;color:#6c757c}
+    .nav-links a{position:relative;transition:color .2s;padding:4px 0}
+    .nav-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--accent);border-radius:2px;transition:width .25s var(--ease)}
+    .nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .nav-links a.active::after,.nav-links a:hover::after{width:100%}
+    .nav-cta{display:inline-flex;align-items:center;gap:8px}
+    .only-mobile{display:none}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      min-height:46px;padding:0 22px;border-radius:999px;border:1px solid transparent;
+      font-size:14px;font-weight:700;cursor:pointer;transition:.25s ease;
+    }
+    .btn-primary{position:relative;overflow:hidden;background:linear-gradient(115deg,var(--accent),var(--ok));color:#fff;box-shadow:0 8px 20px rgba(47,158,99,.28)}
+    .btn-primary::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 48%,transparent 66%);transform:translateX(-120%)}
+    .btn-primary:hover::before{transform:translateX(120%);transition:transform .8s var(--ease)}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(47,158,99,.38)}
+    .btn-primary:active{transform:scale(.98)}
+    .btn-secondary{border-color:#b9c6bd;background:transparent;color:var(--text)}
+    .btn-secondary:hover{background:#fff;transform:translateY(-1px)}
+    .btn-block{width:100%}
+    .btn .arrow{display:inline-block;transition:transform .25s ease}
+    .btn:hover .arrow{transform:translateX(4px)}
+    .mobile-toggle{display:none;background:none;border:0;font-size:24px;cursor:pointer;color:var(--text)}
+
+    /* ============ Hero ============ */
+    .hero{padding:88px 0 84px;position:relative}
+    .hero::before{
+      content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+      background:
+        radial-gradient(620px 420px at 88% 6%, rgba(47,158,99,.22), transparent 65%),
+        radial-gradient(560px 380px at 4% 92%, rgba(109,134,119,.16), transparent 60%);
+    }
+    .hero::after{
+      content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.6;
+      background-image:
+        linear-gradient(rgba(34,49,58,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,49,58,.035) 1px, transparent 1px);
+      background-size:34px 34px;
+      -webkit-mask-image:radial-gradient(ellipse 75% 65% at 75% 15%, #000 40%, transparent 90%);
+      mask-image:radial-gradient(ellipse 75% 65% at 75% 15%, #000 40%, transparent 90%);
+    }
+    .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.08fr;gap:72px;align-items:center}
+    .hero-copy-col > *{animation:fadeUp .8s var(--ease) both}
+    .hero-copy-col > *:nth-child(2){animation-delay:.1s}
+    .hero-copy-col > *:nth-child(3){animation-delay:.2s}
+    .hero-copy-col > *:nth-child(4){animation-delay:.3s}
+    .hero-copy-col > *:nth-child(5){animation-delay:.4s}
+    .eyebrow{display:inline-flex;padding:8px 13px;border-radius:999px;background:#e4e9e4;color:var(--accent-dark);font-size:12px;font-weight:700}
+    h1{font-size:clamp(42px,5.2vw,68px);line-height:1.04;letter-spacing:-.06em;margin:18px 0 22px}
+    h1 span{background:linear-gradient(100deg,var(--accent) 10%,var(--ok) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero-copy{font-size:18px;color:var(--muted);max-width:580px}
+    .hero-actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+    .hero-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:38px}
+    .benefit{display:flex;gap:10px;align-items:flex-start}
+    .benefit-dot{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#edf2ed;color:var(--accent-dark);flex-shrink:0}
+    .benefit-dot .ic{width:15px;height:15px}
+    .benefit strong{display:block;font-size:12px}
+    .benefit small{color:var(--muted);font-size:11px}
+
+    /* ---- Visual del hero: panel arriba-izquierda + móvil abajo-derecha ---- */
+    .hero-visual{position:relative;min-height:580px}
+    .dashboard{
+      position:absolute;left:0;right:88px;top:0;background:var(--surface);
+      border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:18px;
+      animation:fadeUp .9s .35s var(--ease) both;
+    }
+    .dash-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+    .dash-title{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px}
+    .dash-tabs{display:flex;gap:8px;font-size:10px;flex-wrap:wrap}
+    .pill{padding:6px 9px;border-radius:999px;background:#eef2ed;color:#526a5d;font-weight:700}
+    .pill.live{display:inline-flex;align-items:center;gap:5px}
+    .pill.live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--ok);animation:pulse 2.2s infinite}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex-shrink:0;animation:pulse 2.2s infinite}
+    .dash-table{display:grid;gap:10px;max-height:264px;overflow:hidden}
+    .lead-row{
+      display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;
+      padding:10px;border:1px solid #edf0ed;border-radius:14px;background:#fff;
+      transition:opacity .5s ease,transform .5s var(--ease);
+    }
+    .lead-row > div:nth-child(2){min-width:0}
+    .lead-name{font-size:12px;font-weight:700}
+    .lead-meta{font-size:10px;color:var(--muted)}
+    .lead-name,.lead-meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:800;color:#fff;background:var(--av,#93a89a);flex-shrink:0}
+    .status{font-size:10px;font-weight:700;padding:5px 8px;border-radius:999px;background:#e7efe8;color:#5b7464}
+    .status.yellow{background:#f4ede0;color:#9b7745}.status.blue{background:#e8eef3;color:#637c90}
+    .lead-row.new{opacity:0;transform:translateY(-14px) scale(.97)}
+    .lead-row.new.show{opacity:1;transform:none}
+
+    .phone{
+      position:absolute;right:0;bottom:0;width:210px;background:#111;
+      border:6px solid #111;border-radius:30px;padding:9px;z-index:2;
+      box-shadow:0 24px 60px rgba(0,0,0,.2);
+      animation:fadeUp .9s .55s var(--ease) both, float 6.5s 1.6s ease-in-out infinite;
+    }
+    .phone-screen{background:#f7f8f6;border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+    .phone-head{display:flex;align-items:center;gap:8px;padding:14px;border-bottom:1px solid #e7ebe6;background:#fff;font-size:10px;font-weight:800}
+    .chat{padding:12px;height:288px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+    .bubble{max-width:88%;padding:9px 10px;border-radius:13px;font-size:10px;margin-bottom:10px;animation:bubbleIn .35s var(--ease)}
+    .bubble.in{background:#fff;border:1px solid #e5e9e5}
+    .bubble.out{margin-left:auto;background:#dce9df}
+    .bubble.typing{display:flex;gap:4px;padding:12px}
+    .bubble.typing span{width:6px;height:6px;border-radius:50%;background:#9db1a3;animation:blink 1.2s infinite}
+    .bubble.typing span:nth-child(2){animation-delay:.2s}
+    .bubble.typing span:nth-child(3){animation-delay:.4s}
+    .chat-input{padding:10px;border-top:1px solid #e7ebe6;background:#fff;font-size:9px;color:#9aa19d}
+
+    /* ============ Franja de integraciones (marquesina) ============ */
+    .logos{background:#fff;border-bottom:1px solid var(--line);padding:26px 0}
+    .logos-caption{text-align:center;font-size:11px;color:var(--muted);margin:0 0 16px;letter-spacing:.05em;text-transform:uppercase;font-weight:700}
+    .logos-viewport{
+      overflow:hidden;
+      -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+      mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    }
+    .logos-track{display:flex;width:max-content}
+    .js .logos-track{animation:marquee 32s linear infinite}
+    .logos-track:hover{animation-play-state:paused}
+    .logos-set{display:flex;align-items:center;gap:64px;padding-right:64px}
+    .logo-item{color:#8d9a91;font-weight:800;font-size:15px;letter-spacing:-.02em;white-space:nowrap;opacity:.8;transition:opacity .2s}
+    .logo-item:hover{opacity:1}
+
+    /* ============ Secciones ============ */
+    .section{padding:94px 0}
+    .section-soft{background:var(--surface-soft)}
+    .section-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--accent)}
+    h2{font-size:clamp(34px,4vw,48px);line-height:1.08;letter-spacing:-.05em;margin:12px 0 18px}
+    .section-lead{font-size:16px;color:var(--muted);max-width:690px}
+
+    /* ============ Características ============ */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:42px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;transition:transform .35s var(--ease),box-shadow .35s,border-color .35s}
+    .card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:#c8d5ca}
+    .icon{
+      width:40px;height:40px;border-radius:12px;background:#edf2ed;display:grid;place-items:center;
+      color:var(--accent-dark);margin-bottom:18px;
+      transition:background .35s,color .35s,transform .35s var(--ease);
+    }
+    .icon .ic{width:18px;height:18px}
+    .card:hover .icon{background:var(--accent);color:#fff;transform:translateY(-2px) rotate(-4deg)}
+    .card h3{font-size:16px;margin:0 0 8px}
+    .card p{font-size:13px;color:var(--muted);margin:0}
+
+    /* ============ Proceso ============ */
+    .process{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;align-items:center}
+    .steps{margin-top:34px;display:grid;gap:18px}
+    /* Bola más grande (40px), número de 16px con line-height:1 (centrado perfecto,
+       sin recortes) y anillo del color del fondo que la separa de la línea */
+    .step{display:grid;grid-template-columns:40px 1fr;gap:16px;align-items:start;position:relative}
+    .step-num{
+      width:40px;height:40px;border-radius:50%;
+      background:var(--accent-dark);color:#fff;
+      display:grid;place-items:center;
+      font-size:16px;font-weight:800;line-height:1;
+      position:relative;z-index:2;
+      box-shadow:0 0 0 6px var(--surface-soft);
+      transition:transform .3s var(--ease);
+    }
+    .step:hover .step-num{transform:scale(1.1)}
+    /* La línea va por TRAMOS entre bola y bola (nunca pasa por debajo del número)
+       y se dibuja en cascada al entrar en pantalla */
+    .step:not(:last-child)::after{
+      content:"";position:absolute;left:19px;top:46px;bottom:-12px;width:2px;border-radius:2px;
+      background:var(--accent-soft);
+      transform:scaleY(0);transform-origin:top;
+      transition:transform .5s var(--ease);
+    }
+    .steps.in .step:not(:last-child)::after{transform:scaleY(1)}
+    .steps.in .step:nth-child(1)::after{transition-delay:.35s}
+    .steps.in .step:nth-child(2)::after{transition-delay:.55s}
+    .steps.in .step:nth-child(3)::after{transition-delay:.75s}
+    .step strong{display:block;font-size:14px}
+    .step span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+    .showcase{position:relative}
+    .showcase img{width:100%;aspect-ratio:1.35;border-radius:22px;object-fit:cover;background:#e6e9e4}
+    .showcase-card{
+      position:absolute;right:22px;bottom:28px;background:#fff;border:1px solid var(--line);
+      border-radius:18px;padding:20px;width:min(320px,70%);box-shadow:var(--shadow);
+    }
+    .showcase-card strong{display:block;font-size:15px}
+    .showcase-card ul{padding:0;margin:12px 0 0;list-style:none;display:grid;gap:8px;font-size:11px;color:var(--muted)}
+    .showcase-card li:before{content:"✓";color:var(--accent);font-weight:800;margin-right:7px}
+
+    /* ============ Estadísticas ============ */
+    .stats{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--accent-dark),#1c2721);color:#fff;padding:64px 0}
+    .stats::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:
+        radial-gradient(480px 320px at 12% 0%, rgba(52,211,153,.22), transparent 65%),
+        radial-gradient(420px 300px at 92% 100%, rgba(52,211,153,.14), transparent 60%);
+    }
+    .stats-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+    .stat{padding:4px 28px;border-left:1px solid rgba(255,255,255,.16)}
+    .stat:first-child{border-left:0;padding-left:0}
+    .stat strong{display:block;font-size:clamp(34px,4.2vw,48px);font-weight:800;letter-spacing:-.04em;margin-bottom:6px;background:linear-gradient(100deg,#fff,#a7f3d0);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .stat span{font-size:13px;color:#c9d6cc;line-height:1.5;display:block}
+
+    /* ============ Testimonios ============ */
+    /*.stars{color:var(--star);letter-spacing:3px;font-size:13px;margin-bottom:12px}
+    .quote{font-size:13px;line-height:1.65;color:#5d696f}
+    .person{display:flex;align-items:center;gap:10px;margin-top:20px}
+    .person .avatar{width:34px;height:34px;font-size:9px}
+    .person strong{font-size:11px}
+    .person span{font-size:10px;color:var(--muted);display:block} */
+
+    /* ============ Presupuesto ============ */
+    .budget{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:42px;align-items:stretch}
+    .budget-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px;display:flex;flex-direction:column;gap:14px;transition:transform .35s var(--ease),box-shadow .35s}
+    .budget-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+    .budget-range{border-color:#aab9af;box-shadow:var(--shadow)}
+    .budget-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--accent)}
+    .budget-range .price{font-size:clamp(30px,3.4vw,42px);font-weight:800;letter-spacing:-.05em}
+    .budget-explain{font-size:13px;color:var(--muted);margin:0}
+    .budget-note{font-size:11.5px;color:var(--muted);margin:0;text-align:center}
+    .budget-card h3{margin:0;font-size:17px}
+    .budget-list{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:16px}
+    .budget-list li{display:grid;gap:2px}
+    .budget-list span{color:var(--muted);font-size:12px}
+
+    /* ============ FAQ ============ */
+    .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:42px}
+    .faq{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .25s}
+    .faq:hover{border-color:#c8d5ca}
+    .faq button{
+      width:100%;background:none;border:0;padding:17px 18px;text-align:left;
+      display:flex;justify-content:space-between;align-items:center;gap:14px;
+      font:inherit;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;
+    }
+    .faq button:hover{color:var(--accent-dark)}
+    .faq-icon{transition:transform .3s var(--ease);color:var(--accent);font-size:16px;flex-shrink:0}
+    .faq.open .faq-icon{transform:rotate(45deg)}
+    .faq .answer{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease)}
+    .faq .answer > div{overflow:hidden;min-height:0}
+    .faq .answer p{margin:0;padding:0 18px 18px;font-size:12.5px;color:var(--muted);line-height:1.65}
+    .faq.open .answer{grid-template-rows:1fr}
+    .faq-note{margin-top:26px;font-size:13px;color:var(--muted)}
+    .faq-note a{color:var(--accent-dark);font-weight:700}
+    .faq-note a:hover{text-decoration:underline}
+
+    /* ============ Contacto ============ */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .perks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px;font-size:13.5px;color:#4d5a61}
+    .perks li:before{content:"✓";color:var(--accent);font-weight:800;margin-right:9px}
+    .contact-alt{margin-top:22px;font-size:12.5px;color:var(--muted)}
+    .contact-alt a{color:var(--accent-dark);font-weight:700;text-decoration:underline}
+    .contact-form{
+      background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;
+      box-shadow:var(--shadow);display:grid;gap:16px;
+    }
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .contact-form label{display:grid;gap:7px;font-size:12px;font-weight:700;color:var(--text)}
+    .contact-form input,.contact-form textarea{
+      font:inherit;font-size:13px;font-weight:400;padding:12px 14px;border:1px solid var(--line);
+      border-radius:12px;background:var(--bg);resize:vertical;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(109,134,119,.15)}
+    .contact-form input::placeholder,.contact-form textarea::placeholder{color:#a9b2ab}
+    .form-note{font-size:11px;color:var(--muted)}
+    .form-note a{color:var(--accent-dark);font-weight:600;text-decoration:underline}
+
+    /* ============ Footer ============ */
+    footer{background:var(--footer-bg);color:#aebcb2;padding:64px 0 0}
+    footer .brand{color:#fff}
+    footer .brand-mark:before{background:var(--footer-bg)}
+    .footer-grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1.4fr;gap:44px;padding-bottom:52px}
+    .footer-brand p{font-size:13px;line-height:1.7;margin:16px 0 14px;max-width:300px}
+    .footer-mail{color:#dfe8e1;font-weight:700;font-size:13px;transition:color .2s}
+    .footer-mail:hover{color:#fff}
+    footer h4{color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:4px 0 16px}
+    .footer-grid nav a{display:block;color:#aebcb2;font-size:13px;padding:5px 0;transition:color .2s}
+    .footer-grid nav a:hover{color:#fff}
+    .footer-note{font-size:12.5px;margin:0 0 10px}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.09);padding:20px 0;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;font-size:11.5px;color:#8fa096}
+    .footer-legal a{color:#8fa096;transition:color .2s}
+    .footer-legal a:hover{color:#fff}
+
+    /* ============ CTA fijo en móvil ============ */
+    .mobile-cta{display:none}
+    @media (max-width:700px){
+      .mobile-cta{
+        display:block;position:fixed;left:0;right:0;bottom:0;z-index:70;
+        padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));
+        background:rgba(251,251,248,.94);backdrop-filter:blur(10px);
+        border-top:1px solid var(--line);box-shadow:0 -10px 26px rgba(36,52,45,.08);
+      }
+      body{padding-bottom:76px}
+      .to-top{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+    }
+
+    /* ============ Botón subir + toast ============ */
+    .to-top{
+      position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;z-index:60;
+      background:var(--accent);color:#fff;border:0;cursor:pointer;display:grid;place-items:center;
+      box-shadow:0 10px 26px rgba(36,52,45,.25);
+      opacity:0;transform:translateY(12px);pointer-events:none;transition:.3s;
+    }
+    .to-top.show{opacity:1;transform:none;pointer-events:auto}
+    .to-top:hover{background:var(--accent-dark)}
+    .toast{
+      position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:80;
+      background:#22313a;color:#fff;padding:13px 22px;border-radius:12px;font-size:13px;
+      box-shadow:0 16px 40px rgba(0,0,0,.25);max-width:min(92vw,480px);text-align:center;
+      opacity:0;pointer-events:none;transition:.35s var(--ease);
+    }
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+
+    /* ============ Animaciones al hacer scroll ============ */
+    .js [data-reveal]{
+      opacity:0;transform:translateY(28px);
+      transition:opacity .8s ease var(--d,0s),transform .8s var(--ease) var(--d,0s);
+    }
+    .js [data-reveal].in{opacity:1;transform:none}
+    .js .stagger:not(.in) > *{opacity:0;transform:translateY(26px)}
+    .stagger.in > *{animation:fadeUp .7s var(--ease) backwards}
+    .stagger.in > *:nth-child(1){animation-delay:.05s}
+    .stagger.in > *:nth-child(2){animation-delay:.13s}
+    .stagger.in > *:nth-child(3){animation-delay:.21s}
+    .stagger.in > *:nth-child(4){animation-delay:.29s}
+    .stagger.in > *:nth-child(5){animation-delay:.37s}
+    .stagger.in > *:nth-child(6){animation-delay:.45s}
+
+    /* ============ Keyframes ============ */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+    @keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-2px)}}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,158,99,.45)}70%{box-shadow:0 0 0 7px rgba(47,158,99,0)}100%{box-shadow:0 0 0 0 rgba(47,158,99,0)}}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+    @keyframes menuIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+    /* ============ Responsive ============ */
+    @media (max-width: 980px){
+      .hero-grid,.process,.contact-grid{grid-template-columns:1fr}
+      .hero{padding-top:66px}
+      .hero-grid{gap:52px}
+      .hero-visual{min-height:580px;max-width:620px;width:100%;margin:0 auto}
+      .features{grid-template-columns:repeat(2,1fr)}
+      .faq-grid{grid-template-columns:1fr}
+      .stats-grid{grid-template-columns:repeat(2,1fr);gap:36px 20px}
+      .stat{border-left:0;padding:0}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:36px}
+      .showcase-card{right:12px}
+      /* Proceso en una columna: bloque centrado, imagen acotada en anchura
+         y altura (antes, a ~950px de ancho, la imagen llegaba a 660px de alto) */
+      .process{gap:48px}
+      .showcase{width:100%;max-width:560px;margin:0 auto}
+      .showcase img{aspect-ratio:16/10}
+    }
+    @media (max-width: 700px){
+      .container{width:min(var(--max),calc(100% - 28px))}
+      .nav-inner{height:68px}
+      .nav-links,.nav-cta{display:none}
+      .mobile-toggle{display:block}
+      .nav.mobile-open .nav-links{
+        display:flex;position:absolute;left:14px;right:14px;top:70px;flex-direction:column;gap:4px;
+        background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;
+        box-shadow:var(--shadow);animation:menuIn .25s ease;
+      }
+      .nav.mobile-open .nav-links a{padding:10px 4px}
+      .nav.mobile-open .only-mobile{display:block;font-weight:700;color:var(--accent-dark);border-top:1px solid var(--line);margin-top:10px;padding-top:16px}
+
+      .hero{padding:48px 0 64px}
+      h1{font-size:clamp(34px,9vw,42px)}
+      .hero-copy{font-size:16px}
+      .hero-actions{flex-direction:column;align-items:stretch}
+      .hero-actions .btn{width:100%}
+      .hero-benefits{grid-template-columns:1fr;gap:16px}
+
+      .hero-visual{min-height:0;display:flex;justify-content:center;padding:26px 0 8px}
+      .dashboard{display:none}
+      .phone{position:relative;right:auto;bottom:auto;width:238px}
+      .phone-head{font-size:11px}
+      .chat{height:340px}
+      .bubble{font-size:11px}
+      .chat-input{font-size:10px}
+
+      .features{grid-template-columns:1fr}
+      .section{padding:72px 0}
+      .stats{padding:52px 0}
+      .step strong{font-size:15px}
+
+      /* Imagen compacta y la tarjeta pasa a DEBAJO (solapada 34px),
+         en vez de cubrir la mitad de la imagen */
+      .showcase img{aspect-ratio:3/2}
+      .showcase-card{
+        position:relative;right:auto;bottom:auto;z-index:2;
+        width:calc(100% - 24px);margin:-34px auto 0;padding:16px 18px;
+      }
+      .showcase-card strong{font-size:14px}
+      .showcase-card ul{margin-top:10px;gap:6px;font-size:12px}
+
+      .form-row{grid-template-columns:1fr}
+    }
+    @media (max-width: 560px){
+      .footer-grid{grid-template-columns:1fr}
+    }
+
+    /* ============ Accesibilidad: reduce movimiento ============ */
+    @media (prefers-reduced-motion: reduce){
+      *,*::before,*::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+      }
+      html{scroll-behavior:auto}
+      .js [data-reveal],.js .stagger:not(.in) > *{opacity:1 !important;transform:none !important}
+    }
+  </style>
+
+  <script is:inline>document.documentElement.classList.add('js');</script>
+
+  <!-- ============ Datos estructurados (JSON-LD) ============ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "InmoFlow",
+        "url": "https://inmoflow.es/",
+        "logo": "https://inmoflow.es/icon.svg",
+        "email": "hola@inmoflow.es",
+        "contactPoint": {"@type": "ContactPoint", "contactType": "Ventas", "email": "hola@inmoflow.es", "availableLanguage": ["es"]}
+      },
+      {
+        "@type": "WebSite",
+        "name": "InmoFlow",
+        "url": "https://inmoflow.es/",
+        "inLanguage": "es"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "InmoFlow",
+        "url": "https://inmoflow.es/",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Navegador web",
+        "inLanguage": "es",
+        "description": "CRM inmobiliario todo en uno con captación de leads, seguimiento automático por WhatsApp, calendario de visitas e informes.",
+        "featureList": ["Captación de leads multicanal","CRM inmobiliario","Automatizaciones de seguimiento","WhatsApp Business","Calendario de visitas","Informes y métricas"],
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "minPrice": "100",
+            "maxPrice": "1500",
+            "priceCurrency": "EUR"
+          },
+          "description": "Presupuesto a medida según el alcance del proyecto (web/landing, CRM, automatizaciones e integraciones)."
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {"@type": "Question", "name": "¿Necesito tener conocimientos técnicos?", "acceptedAnswer": {"@type": "Answer", "text": "No. Nosotros nos encargamos de toda la configuración inicial y te formamos con sesiones prácticas. En menos de una hora, tu equipo domina el día a día del sistema."}},
+          {"@type": "Question", "name": "¿Hay permanencia mínima?", "acceptedAnswer": {"@type": "Answer", "text": "No hay permanencia ni cuotas obligatorias: no vendemos planes cerrados, te hacemos un presupuesto único para tu proyecto. Si más adelante quieres ampliarlo o necesitas mantenimiento, lo hablamos aparte, sin compromisos."}},
+          {"@type": "Question", "name": "¿Puedo usar mi número de WhatsApp actual?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Conectamos tu número mediante la API oficial de WhatsApp Business, de modo que conservas tus conversaciones y tu perfil verificado."}},
+          {"@type": "Question", "name": "¿Cuánto tarda la implementación?", "acceptedAnswer": {"@type": "Answer", "text": "Menos de 7 días. En la primera semana tienes el sistema configurado, tu equipo formado y tus primeras automatizaciones activas."}},
+          {"@type": "Question", "name": "¿Qué pasa si no estoy satisfecho?", "acceptedAnswer": {"@type": "Answer", "text": "Antes de pagar nada verás una demo personalizada con tus propios casos de uso, así sabes exactamente qué vas a recibir. Al ser un proyecto cerrado y no una suscripción, no hay cuotas de las que darte de baja."}},
+          {"@type": "Question", "name": "¿Ofrecéis soporte?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Todo proyecto incluye soporte por email durante el primer mes tras la entrega. Si necesitas soporte prioritario y continuo por WhatsApp o teléfono, lo incluimos en el presupuesto a medida."}}
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#inicio">Saltar al contenido</a>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#inicio" aria-label="InmoFlow — inicio">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>InmoFlow</span>
+      </a>
+      <nav class="nav-links" aria-label="Navegación principal">
+        <a href="#caracteristicas">Características</a>
+        <a href="#proceso">Cómo funciona</a>
+        <a href="#precios">Presupuesto</a>
+        <a href="#faq">FAQ</a>
+        <a class="only-mobile" href="#contacto">Solicita una demo →</a>
+      </nav>
+      <a class="btn btn-primary nav-cta" href="#contacto">Solicita una demo <span class="arrow" aria-hidden="true">→</span></a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ Hero ============ -->
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div class="hero-copy-col">
+          <span class="eyebrow">CRM + Automatización + WhatsApp</span>
+          <h1>Más leads.<br>Menos trabajo.<br><span>Todo en un solo sistema.</span></h1>
+          <p class="hero-copy">InmoFlow es el sistema todo en uno para inmobiliarias: captación de leads, CRM y seguimiento automático por WhatsApp, para que cierres más ventas sin esfuerzo.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contacto">Solicita una demo gratuita <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn-secondary" href="#caracteristicas">Ver cómo funciona</a>
+          </div>
+          <div class="hero-benefits">
+            <div class="benefit">
+              <span class="benefit-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+              <div><strong>Respuesta inmediata</strong><small>a cada nuevo lead</small></div>
+            </div>
+            <div class="benefit">
+              <span class="benefit-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+              <div><strong>Seguimiento automático</strong><small>24 horas, 7 días</small></div>
+            </div>
+            <div class="benefit">
+              <span class="benefit-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
+              <div><strong>Más visitas, más ventas</strong><small>con menos gestión</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual" role="img" aria-label="Demo del producto: panel de oportunidades y respuesta automática por WhatsApp">
+          <div class="dashboard" aria-hidden="true">
+            <div class="dash-top">
+              <div class="dash-title"><span class="live-dot"></span>Oportunidades</div>
+              <div class="dash-tabs">
+                <span class="pill live" id="leadPill">Lead nuevo · 18</span>
+                <span class="pill">Contactando · 12</span>
+                <span class="pill">Interesado · 9</span>
+              </div>
+            </div>
+            <div class="dash-table" id="leadTable">
+              <div class="lead-row"><div class="avatar" style="--av:#7d9c88">LM</div><div><div class="lead-name">Laura Martínez</div><div class="lead-meta">Valencia · 180.000 €</div></div><div class="status">Interesado</div></div>
+              <div class="lead-row"><div class="avatar" style="--av:#a08f74">CR</div><div><div class="lead-name">Carlos Ruiz</div><div class="lead-meta">Paterna · 250.000 €</div></div><div class="status yellow">Contactando</div></div>
+              <div class="lead-row"><div class="avatar" style="--av:#74889b">AL</div><div><div class="lead-name">Ana López</div><div class="lead-meta">Torrent · 320.000 €</div></div><div class="status">Interesado</div></div>
+              <div class="lead-row"><div class="avatar" style="--av:#9b7f8b">JG</div><div><div class="lead-name">Javier García</div><div class="lead-meta">Valencia · 310.000 €</div></div><div class="status blue">Lead nuevo</div></div>
+            </div>
+          </div>
+
+          <div class="phone" aria-hidden="true">
+            <div class="phone-screen">
+              <div class="phone-head"><span class="live-dot"></span>InmoFlow · WhatsApp</div>
+              <div class="chat" id="chat">
+                <div class="bubble in">Hola, soy el equipo de InmoFlow. Hemos recibido tu solicitud sobre viviendas en Valencia. ¿Buscas comprar o alquilar?</div>
+                <div class="bubble out">Comprar</div>
+                <div class="bubble in">Perfecto. ¿Cuál es tu presupuesto aproximado?</div>
+                <div class="bubble out">Hasta 250.000 €</div>
+              </div>
+              <div class="chat-input">Escribe un mensaje…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Integraciones ============ -->
+    <div class="logos" aria-label="Integraciones con canales y herramientas">
+      <div class="container" data-reveal>
+        <p class="logos-caption">Integrado con los canales y herramientas que ya utilizas</p>
+        <div class="logos-viewport">
+          <div class="logos-track">
+            <div class="logos-set">
+              <span class="logo-item">WhatsApp</span>
+              <span class="logo-item">Facebook</span>
+              <span class="logo-item">Instagram</span>
+              <span class="logo-item">Google</span>
+              <span class="logo-item">Stripe</span>
+              <span class="logo-item">Meta</span>
+              <span class="logo-item">Zapier</span>
+            </div>
+            <div class="logos-set" aria-hidden="true">
+              <span class="logo-item">WhatsApp</span>
+              <span class="logo-item">Facebook</span>
+              <span class="logo-item">Instagram</span>
+              <span class="logo-item">Google</span>
+              <span class="logo-item">Stripe</span>
+              <span class="logo-item">Meta</span>
+              <span class="logo-item">Zapier</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Características ============ -->
+    <section class="section" id="caracteristicas">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">Características</div>
+          <h2>Un sistema diseñado<br>para tu día a día</h2>
+          <p class="section-lead">Desde que un cliente potencial te contacta hasta que se convierte en una venta, InmoFlow automatiza el proceso y te da el control en todo momento.</p>
+        </div>
+        <div class="features stagger">
+          <article class="card">
+            <div class="icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
+            <h3>Captación de leads</h3>
+            <p>Recoge contactos desde web, WhatsApp, portales y redes sociales en un solo embudo.</p>
+          </article>
+          <article class="card">
+            <div class="icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <h3>CRM personalizado</h3>
+            <p>Gestiona tus contactos y el proceso de venta en un solo lugar, con tu propia marca.</p>
+          </article>
+          <article class="card">
+            <div class="icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+            <h3>Automatizaciones</h3>
+            <p>Haz que el sistema trabaje por ti con seguimientos automáticos y mensajes personalizados.</p>
+          </article>
+          <article class="card">
+            <div class="icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+            <h3>WhatsApp Business</h3>
+            <p>Comunícate con tus leads desde la plataforma con plantillas y mensajes automatizados.</p>
+          </article>
+          <article class="card">
+            <div class="icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <h3>Calendario de visitas</h3>
+            <p>Agenda y gestiona visitas con tus clientes fácilmente, con recordatorios automáticos.</p>
+          </article>
+          <article class="card">
+            <div class="icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
+            <h3>Informes y métricas</h3>
+            <p>Mide lo que importa y toma decisiones con datos reales, en tiempo real.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Proceso ============ -->
+    <section class="section section-soft" id="proceso">
+      <div class="container process">
+        <div>
+          <div class="section-head" data-reveal>
+            <div class="section-kicker">En 4 pasos</div>
+            <h2>Así es como empezamos</h2>
+            <p class="section-lead">En menos de 7 días puedes tener tu sistema funcionando y captando leads.</p>
+          </div>
+          <div class="steps stagger">
+            <div class="step"><span class="step-num">1</span><div><strong>Solicita tu demo</strong><span>Cuéntanos sobre tu inmobiliaria y tus necesidades.</span></div></div>
+            <div class="step"><span class="step-num">2</span><div><strong>Configuramos tu cuenta</strong><span>Personalizamos el sistema con tu marca y tus procesos.</span></div></div>
+            <div class="step"><span class="step-num">3</span><div><strong>Te formamos</strong><span>Te enseñamos a usarlo de forma sencilla, con casos reales.</span></div></div>
+            <div class="step"><span class="step-num">4</span><div><strong>Empiezas a captar y vender</strong><span>Nosotros te acompañamos durante todo el proceso.</span></div></div>
+          </div>
+        </div>
+        <div class="showcase">
+          <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=80"
+               alt="Interior moderno y luminoso de una vivienda gestionada por una inmobiliaria"
+               width="1400" height="1037" loading="lazy" decoding="async" data-reveal>
+          <div class="showcase-card" data-reveal style="--d:.2s">
+            <strong>Tu inmobiliaria, en piloto automático</strong>
+            <ul>
+              <li>Más contactos cualificados</li>
+              <li>Seguimiento sin esfuerzo</li>
+              <li>Equipo más productivo</li>
+              <li>Más ventas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Estadísticas ============ -->
+    <section class="stats" aria-label="Resultados de nuestros clientes">
+      <div class="container stats-grid stagger">
+        <div class="stat"><strong data-count="40" data-prefix="+">+40</strong><span>% más leads cualificados con seguimiento automático</span></div>
+        <div class="stat"><strong data-count="5" data-prefix="&lt;" data-suffix=" min">&lt;5 min</strong><span>tiempo de respuesta objetivo</span></div>
+        <div class="stat"><strong data-count="7" data-suffix=" días">7 días</strong><span>para tener tu sistema operativo</span></div>
+        <div class="stat"><strong>24/7</strong><span>seguimiento automático de tus leads</span></div>
+      </div>
+    </section>
+
+    <!-- ============ Testimonios ============ -->
+    <!-- Reactivar solo cuando haya testimonios reales de clientes.
+    <section class="section" id="opiniones">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">Lo que dicen nuestros clientes</div>
+          <h2>Inmobiliarias que ya confían en InmoFlow</h2>
+        </div>
+        <div class="testimonials stagger">
+          <article class="card">
+            <div class="stars" aria-label="Valoración: 5 de 5 estrellas">★★★★★</div>
+            <div class="quote">“Desde que usamos InmoFlow hemos conseguido un 40% más de leads cualificados y reducimos el tiempo de respuesta a menos de 5 minutos.”</div>
+            <div class="person"><div class="avatar" style="--av:#7d9c88">LG</div><div><strong>Laura Gómez</strong><span>Directora · Inmobiliaria Mediterránea</span></div></div>
+          </article>
+          <article class="card">
+            <div class="stars" aria-label="Valoración: 5 de 5 estrellas">★★★★★</div>
+            <div class="quote">“La automatización del seguimiento nos ha permitido atender mejor a nuestros clientes y cerrar más ventas. Es un cambio total.”</div>
+            <div class="person"><div class="avatar" style="--av:#a08f74">CR</div><div><strong>Carlos Ruiz</strong><span>Gerente · Hogar &amp; Más Inmobiliaria</span></div></div>
+          </article>
+          <article class="card">
+            <div class="stars" aria-label="Valoración: 5 de 5 estrellas">★★★★★</div>
+            <div class="quote">“Fácil de usar, muy completo y con un soporte excelente. Lo recomiendo 100% a cualquier inmobiliaria que quiera crecer.”</div>
+            <div class="person"><div class="avatar" style="--av:#74889b">AT</div><div><strong>Ana Torres</strong><span>CEO · Soluciones Inmobiliarias</span></div></div>
+          </article>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- ============ Presupuesto ============ -->
+    <section class="section section-soft" id="precios">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">Presupuesto</div>
+        <h2>Sin planes fijos.<br>Pagas solo lo que necesitas.</h2>
+        <p class="section-lead">Cada proyecto es distinto: desde una web sencilla hasta un sistema completo con CRM y automatizaciones. Cuéntanos tu caso y te enviamos un presupuesto a medida, sin compromiso.</p>
+      </div>
+
+      <div class="budget stagger">
+        <article class="budget-card budget-range">
+          <span class="budget-label">Rango orientativo</span>
+          <div class="price">100€ — 1.500€</div>
+          <p class="budget-explain">El precio final depende de lo que necesite tu proyecto. No vendemos packs: hablamos contigo y te damos un presupuesto cerrado.</p>
+          <a class="btn btn-primary btn-block" href="#contacto">Cuéntanos y te damos presupuesto <span class="arrow" aria-hidden="true">→</span></a>
+          <p class="budget-note">Sin compromiso · Respuesta en menos de 24 h</p>
+        </article>
+
+        <article class="budget-card">
+          <h3>¿Qué influye en el precio?</h3>
+          <ul class="budget-list">
+            <li><strong>Web o landing de captación</strong><span>Una página sencilla parte desde 100 €.</span></li>
+            <li><strong>CRM y pipeline de ventas</strong><span>Adaptado a tu proceso comercial.</span></li>
+            <li><strong>Automatizaciones</strong><span>Seguimiento por WhatsApp, email, recordatorios…</span></li>
+            <li><strong>Integraciones</strong><span>Formularios, calendario, WhatsApp Business, etc.</span></li>
+          </ul>
+        </article>
+      </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">Preguntas frecuentes</div>
+          <h2>Resolvemos tus dudas</h2>
+        </div>
+        <div class="faq-grid stagger">
+          <div class="faq">
+            <button type="button" id="faq-q1" aria-expanded="false" aria-controls="faq-a1">¿Necesito tener conocimientos técnicos? <span class="faq-icon" aria-hidden="true">+</span></button>
+            <div class="answer" id="faq-a1" role="region" aria-labelledby="faq-q1"><div><p>No. Nosotros nos encargamos de toda la configuración inicial y te formamos con sesiones prácticas. En menos de una hora, tu equipo domina el día a día del sistema.</p></div></div>
+          </div>
+          <div class="faq">
+            <button type="button" id="faq-q2" aria-expanded="false" aria-controls="faq-a2">¿Hay permanencia mínima? <span class="faq-icon" aria-hidden="true">+</span></button>
+            <div class="answer" id="faq-a2" role="region" aria-labelledby="faq-q2"><div><p>No hay permanencia ni cuotas obligatorias: no vendemos planes cerrados, te hacemos un presupuesto único para tu proyecto. Si más adelante quieres ampliarlo o necesitas mantenimiento, lo hablamos aparte, sin compromisos.</p></div></div>
+          </div>
+          <div class="faq">
+            <button type="button" id="faq-q3" aria-expanded="false" aria-controls="faq-a3">¿Puedo usar mi número de WhatsApp actual? <span class="faq-icon" aria-hidden="true">+</span></button>
+            <div class="answer" id="faq-a3" role="region" aria-labelledby="faq-q3"><div><p>Sí. Conectamos tu número mediante la API oficial de WhatsApp Business, de modo que conservas tus conversaciones y tu perfil verificado.</p></div></div>
+          </div>
+          <div class="faq">
+            <button type="button" id="faq-q4" aria-expanded="false" aria-controls="faq-a4">¿Cuánto tarda la implementación? <span class="faq-icon" aria-hidden="true">+</span></button>
+            <div class="answer" id="faq-a4" role="region" aria-labelledby="faq-q4"><div><p>Menos de 7 días. En la primera semana tienes el sistema configurado, tu equipo formado y tus primeras automatizaciones activas.</p></div></div>
+          </div>
+          <div class="faq">
+            <button type="button" id="faq-q5" aria-expanded="false" aria-controls="faq-a5">¿Qué pasa si no estoy satisfecho? <span class="faq-icon" aria-hidden="true">+</span></button>
+            <div class="answer" id="faq-a5" role="region" aria-labelledby="faq-q5"><div><p>Antes de pagar nada verás una demo personalizada con tus propios casos de uso, así sabes exactamente qué vas a recibir. Al ser un proyecto cerrado y no una suscripción, no hay cuotas de las que darte de baja.</p></div></div>
+          </div>
+          <div class="faq">
+            <button type="button" id="faq-q6" aria-expanded="false" aria-controls="faq-a6">¿Ofrecéis soporte? <span class="faq-icon" aria-hidden="true">+</span></button>
+            <div class="answer" id="faq-a6" role="region" aria-labelledby="faq-q6"><div><p>Sí. Todo proyecto incluye soporte por email durante el primer mes tras la entrega. Si necesitas soporte prioritario y continuo por WhatsApp o teléfono, lo incluimos en el presupuesto a medida.</p></div></div>
+          </div>
+        </div>
+        <p class="faq-note" data-reveal>¿Tienes otra duda? Escríbenos a <a href="https://mail.google.com/mail/?view=cm&fs=1&to=contacto@096matics.com" target="_blank"
+            rel="noopener noreferrer">contacto@096matics.com</a> y te respondemos en menos de 24 h laborables.</p>
+      </div>
+    </section>
+
+    <!-- ============ Contacto ============ -->
+    <section class="section section-soft" id="contacto">
+      <div class="container contact-grid">
+        <div data-reveal>
+          <div class="section-kicker">Empieza hoy</div>
+          <h2>Solicita tu demo gratuita</h2>
+          <p class="section-lead">Cuéntanos cómo trabajáis hoy y te enseñaremos, con vuestros propios casos, cómo InmoFlow puede ahorraros horas cada semana.</p>
+          <ul class="perks">
+            <li>Demo personalizada de 30 minutos</li>
+            <li>Sin compromiso y sin tarjeta de crédito</li>
+            <li>Propuesta a medida en menos de 48 horas</li>
+          </ul>
+          <p class="contact-alt">¿Prefieres escribirnos directamente? <a href="https://mail.google.com/mail/?view=cm&fs=1&to=contacto@096matics.com" target="_blank"
+            rel="noopener noreferrer">contacto@096matics.com</a></p>
+        </div>
+        <!-- IMPORTANTE: antes de publicar, verifica hola@inmoflow.es en FormSubmit
+             (te llegará un email de confirmación la primera vez que se envíe el formulario) -->
+        <form class="contact-form" id="demoForm"
+          action="https://formsubmit.co/contacto@096matics.com"
+          method="POST"
+          data-reveal style="--d:.15s">
+
+          <div class="form-row">
+            <label>Nombre y apellidos*
+              <input type="text" name="nombre" placeholder="María García" autocomplete="name" required>
+            </label>
+            <label>Email profesional*
+              <input type="email" name="email" placeholder="maria@inmobiliaria.es" autocomplete="email" required>
+            </label>
+          </div>
+
+          <label>Teléfono
+            <input type="tel" name="telefono" placeholder="+34 600 000 000" autocomplete="tel">
+          </label>
+
+          <label>Tu inmobiliaria
+            <textarea name="mensaje" rows="4" placeholder="Nº de agentes, portales donde publicáis, leads que recibís al mes…"></textarea>
+          </label>
+
+          <!-- Config de FormSubmit -->
+          <input type="hidden" name="_subject" value="🔥 Nueva solicitud de demo — InmoFlow">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="/tarjeta/inmoflow/gracias.html">
+          <!-- Honeypot anti-spam: los bots lo rellenan, los humanos no lo ven -->
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+          <button class="btn btn-primary btn-block" type="submit">Solicitar demo <span class="arrow" aria-hidden="true">→</span></button>
+          <small class="form-note">Al enviar aceptas nuestra <a href="privacidad.html">política de privacidad</a>. Nada de spam.</small>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#inicio"><span class="brand-mark" aria-hidden="true"></span><span>InmoFlow</span></a>
+          <p>El sistema todo en uno para inmobiliarias: captación de leads, CRM y seguimiento automático por WhatsApp.</p>
+          <a class="footer-mail" href="https://mail.google.com/mail/?view=cm&fs=1&to=contacto@096matics.com" target="_blank"
+            rel="noopener noreferrer">contacto@096matics.com</a>
+        </div>
+        <nav aria-label="Producto">
+          <h4>Producto</h4>
+          <a href="#caracteristicas">Características</a>
+          <a href="#proceso">Cómo funciona</a>
+          <a href="#precios">Presupuesto</a>
+          <a href="#faq">Preguntas frecuentes</a>
+        </nav>
+        <nav aria-label="Empresa">
+          <h4>Empresa</h4>
+          <a href="#opiniones">Opiniones</a>
+          <a href="#contacto">Solicita una demo</a>
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=contacto@096matics.com" target="_blank"
+            rel="noopener noreferrer">Contacto</a>
+        </nav>
+        <div>
+          <h4>Atención al cliente</h4>
+          <p class="footer-note">Respondemos en menos de 24 h laborables.</p>
+          <p class="footer-note">Lunes a viernes · 9:00–18:00 (CET)</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year">2025</span> InmoFlow. Todos los derechos reservados.</span>
+        <span class="footer-legal"><a href="aviso-legal.html">Aviso legal</a> · <a href="privacidad.html">Privacidad</a> · <a href="cookies.html">Cookies</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mobile-cta">
+    <a class="btn btn-primary btn-block" href="#contacto">Solicita una demo gratuita <span class="arrow" aria-hidden="true">→</span></a>
+  </div>
+
+  <button class="to-top" id="toTop" type="button" aria-label="Volver arriba">
+    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script is:inline>
+  (function () {
+    'use strict';
+
+    const $  = (s, c) => (c || document).querySelector(s);
+    const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- Año dinámico ---------- */
+    const yearEl = $('#year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    /* ---------- Toast ---------- */
+    const toast = $('#toast');
+    let toastTimer;
+    function showToast(msg) {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+    }
+
+    /* ---------- Cabecera, barra de progreso y botón "subir" ---------- */
+    const nav = $('#nav');
+    const progress = $('#progress');
+    const toTop = $('#toTop');
+
+    function onScroll() {
+      const y = window.scrollY;
+      if (nav) nav.classList.toggle('scrolled', y > 8);
+      if (toTop) toTop.classList.toggle('show', y > 640);
+      if (progress) {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    toTop && toTop.addEventListener('click', () =>
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })
+    );
+
+    /* ---------- Menú móvil ---------- */
+    const toggle = $('#mobileToggle');
+    toggle && toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('mobile-open');
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    });
+    $$('.nav-links a').forEach((a) => a.addEventListener('click', () => {
+      nav.classList.remove('mobile-open');
+      toggle && toggle.setAttribute('aria-expanded', 'false');
+    }));
+
+    /* ---------- Enlace activo del menú según la sección visible ---------- */
+    const navAnchors = $$('.nav-links a[href^="#"]');
+    if ('IntersectionObserver' in window) {
+      const spy = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const id = '#' + e.target.id;
+          navAnchors.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === id));
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      $$('main section[id]').forEach((s) => spy.observe(s));
+    }
+
+    /* ---------- Acordeón FAQ ---------- */
+    $$('.faq button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const open = btn.closest('.faq').classList.toggle('open');
+        btn.setAttribute('aria-expanded', String(open));
+      });
+    });
+
+    /* ---------- Animaciones al hacer scroll ---------- */
+    const revealTargets = $$('[data-reveal], .stagger');
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      revealTargets.forEach((el) => el.classList.add('in'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      revealTargets.forEach((el) => io.observe(el));
+    }
+
+    /* ---------- Contadores animados ---------- */
+    const counters = $$('[data-count]');
+    const renderCount = (el, v) =>
+      el.textContent = (el.dataset.prefix || '') + v + (el.dataset.suffix || '');
+    function animateCount(el) {
+      const target = parseInt(el.dataset.count, 10) || 0;
+      const dur = 1600, t0 = performance.now();
+      const ease = (t) => 1 - Math.pow(1 - t, 4);
+      (function tick(now) {
+        const p = Math.min((now - t0) / dur, 1);
+        renderCount(el, Math.round(ease(p) * target));
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+    }
+    if (reduceMotion) {
+      counters.forEach((el) => renderCount(el, el.dataset.count));
+    } else {
+      counters.forEach((el) => renderCount(el, 0));
+      const co = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { animateCount(e.target); co.unobserve(e.target); }
+        });
+      }, { threshold: 0.6 });
+      counters.forEach((el) => co.observe(el));
+    }
+
+    /* ---------- Marquesina: duplicamos el set para un bucle perfecto ---------- */
+    const logosSet = $('.logos-set');
+    if (logosSet && !reduceMotion) {
+      const clone = logosSet.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      logosSet.parentNode.appendChild(clone);
+    }
+
+    /* ---------- Chat simulado de WhatsApp (bucle) ---------- */
+    const chat = $('#chat');
+    if (chat && !reduceMotion) {
+      const conversation = [
+        { dir: 'in',  text: 'Hola, soy el equipo de InmoFlow. Hemos recibido tu solicitud sobre viviendas en Valencia. ¿Buscas comprar o alquilar?' },
+        { dir: 'out', text: 'Comprar' },
+        { dir: 'in',  text: 'Perfecto. ¿Cuál es tu presupuesto aproximado?' },
+        { dir: 'out', text: 'Hasta 250.000 €' },
+        { dir: 'in',  text: 'Genial. Tengo 12 viviendas que encajan contigo. ¿Te muestro las 3 mejores de esta semana?' },
+        { dir: 'out', text: 'Sí, perfecto 🙌' }
+      ];
+      (async function runChat() {
+        for (;;) {
+          chat.innerHTML = '';
+          for (const m of conversation) {
+            if (m.dir === 'in') {
+              const typing = document.createElement('div');
+              typing.className = 'bubble in typing';
+              typing.setAttribute('aria-hidden', 'true');
+              typing.innerHTML = '<span></span><span></span><span></span>';
+              chat.appendChild(typing);
+              await sleep(1100 + Math.random() * 500);
+              typing.remove();
+            } else {
+              await sleep(650);
+            }
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble ' + m.dir;
+            bubble.textContent = m.text;
+            chat.appendChild(bubble);
+            await sleep(1000);
+          }
+          await sleep(4500);
+        }
+      })();
+    }
+
+    /* ---------- Leads entrando "en directo" en el panel (FLIP) ---------- */
+    const table = $('#leadTable');
+    const pill = $('#leadPill');
+    const dashboardVisible = window.matchMedia('(min-width: 701px)').matches;
+    if (table && pill && !reduceMotion && dashboardVisible) {
+      const feed = [
+        { ini: 'MF', name: 'Marta Ferrer',  meta: 'Gandía · 195.000 €',   cls: 'blue',   label: 'Lead nuevo' },
+        { ini: 'DS', name: 'Diego Sanchís', meta: 'Valencia · 420.000 €', cls: 'yellow', label: 'Contactando' },
+        { ini: 'EP', name: 'Elena Prats',   meta: 'Cullera · 150.000 €',  cls: '',       label: 'Interesado' },
+        { ini: 'RB', name: 'Raúl Blasco',   meta: 'Alzira · 230.000 €',   cls: 'blue',   label: 'Lead nuevo' },
+        { ini: 'CG', name: 'Clara Gumbau',  meta: 'Valencia · 275.000 €', cls: 'yellow', label: 'Contactando' }
+      ];
+      let total = 18, i = 0;
+
+      setInterval(() => {
+        const existing = $$('.lead-row', table);
+        if (!existing.length) return;
+        const topsBefore = existing.map((r) => r.getBoundingClientRect().top);
+
+        const d = feed[i++ % feed.length];
+        const row = document.createElement('div');
+        row.className = 'lead-row new';
+        row.innerHTML =
+          '<div class="avatar" style="--av:#74889b">' + d.ini + '</div>' +
+          '<div><div class="lead-name">' + d.name + '</div><div class="lead-meta">' + d.meta + '</div></div>' +
+          '<div class="status ' + d.cls + '">' + d.label + '</div>';
+        table.prepend(row);
+
+        existing.forEach((r, idx) => {
+          const delta = r.getBoundingClientRect().top - topsBefore[idx];
+          if (!delta) return;
+          r.style.transition = 'none';
+          r.style.transform = 'translateY(' + (-delta) + 'px)';
+        });
+        void table.offsetWidth;
+        existing.forEach((r) => { r.style.transition = ''; r.style.transform = ''; });
+
+        void row.offsetHeight;
+        row.classList.add('show');
+        pill.textContent = 'Lead nuevo · ' + (++total);
+
+        setTimeout(() => {
+          const all = $$('.lead-row', table);
+          while (all.length > 4) all.pop().remove();
+        }, 650);
+      }, 4800);
+    }
+  })();
+  </script>
+</body>
+</html>

@@ -1,324 +1,950 @@
 ---
 ---
 
-<!doctype html>
-<html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Carlos Cantos Blasco · 096matics</title>
-		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-		<style>
-			:root {
-				--bg: #050505;
-				--ink: #f1f1ee;
-				--ink-dim: rgba(241, 241, 238, 0.55);
-				--ink-faint: rgba(241, 241, 238, 0.3);
-				--accent: #e8483a;
-				--line: rgba(255, 255, 255, 0.22);
-			}
-			* {
-				box-sizing: border-box;
-			}
-			html,
-			body {
-				margin: 0;
-				padding: 0;
-				height: 100%;
-				overflow: hidden;
-				overscroll-behavior: none;
-				background: var(--bg);
-			}
-			body {
-				height: 100dvh;
-				font-family: 'IBM Plex Mono', monospace;
-				color: var(--ink);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				padding: 26px 16px;
-				position: relative;
-				background:
-					linear-gradient(rgba(5, 5, 5, 0.82), rgba(5, 5, 5, 0.92)),
-					url('/tarjeta/personal-carlos/fondo.jpg') no-repeat center center / cover;
-			}
-			.frame {
-				position: relative;
-				width: 100%;
-				max-width: 380px;
-				border: 1px solid var(--line);
-				padding: 18px;
-				background: rgba(8, 8, 8, 0.55);
-				backdrop-filter: blur(6px);
-				-webkit-backdrop-filter: blur(6px);
-				animation: bootIn 1.6s steps(10, end) forwards;
-			}
-			@keyframes bootIn {
-				0% {
-					opacity: 0;
-					filter: brightness(2.4) contrast(1.6);
-				}
-				60% {
-					opacity: 0.7;
-					filter: brightness(1.4) contrast(1.2);
-				}
-				to {
-					opacity: 1;
-					filter: brightness(1) contrast(1);
-				}
-			}
-			.corner {
-				position: absolute;
-				width: 14px;
-				height: 14px;
-			}
-			.corner.tl {
-				top: -1px;
-				left: -1px;
-				border-top: 2px solid var(--ink);
-				border-left: 2px solid var(--ink);
-			}
-			.corner.tr {
-				top: -1px;
-				right: -1px;
-				border-top: 2px solid var(--ink);
-				border-right: 2px solid var(--ink);
-			}
-			.corner.bl {
-				bottom: -1px;
-				left: -1px;
-				border-bottom: 2px solid var(--ink);
-				border-left: 2px solid var(--ink);
-			}
-			.corner.br {
-				bottom: -1px;
-				right: -1px;
-				border-bottom: 2px solid var(--ink);
-				border-right: 2px solid var(--ink);
-			}
-			.readout {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				font-size: 10px;
-				letter-spacing: 0.12em;
-				text-transform: uppercase;
-				color: var(--ink-faint);
-				margin-bottom: 14px;
-			}
-			.status {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-			}
-			.dot {
-				width: 6px;
-				height: 6px;
-				border-radius: 50%;
-				background: var(--accent);
-				animation: pulseDot 2s ease-in-out infinite;
-			}
-			@keyframes pulseDot {
-				0%,
-				100% {
-					opacity: 1;
-					box-shadow: 0 0 0 0 rgba(232, 72, 58, 0.5);
-				}
-				50% {
-					opacity: 0.5;
-					box-shadow: 0 0 0 4px rgba(232, 72, 58, 0);
-				}
-			}
-			.portrait-box {
-				border: 1px solid var(--line);
-				padding: 5px;
-				margin-bottom: 14px;
-			}
-			.portrait {
-				aspect-ratio: 3 / 4;
-				width: 100%;
-				background: url('/tarjeta/personal-carlos/foto.jpg') no-repeat center top / cover;
-				filter: grayscale(0.15) contrast(1.05);
-				display: block;
-			}
-			.caption {
-				display: flex;
-				justify-content: space-between;
-				font-size: 9px;
-				letter-spacing: 0.08em;
-				text-transform: uppercase;
-				color: var(--ink-faint);
-				margin-top: 6px;
-				padding: 0 1px;
-			}
-			.id-block {
-				margin-bottom: 14px;
-			}
-			.id-row {
-				display: flex;
-				font-size: 12.5px;
-				line-height: 1.9;
-			}
-			.id-label {
-				width: 64px;
-				flex-shrink: 0;
-				color: var(--ink-faint);
-				letter-spacing: 0.05em;
-			}
-			.id-value {
-				font-weight: 600;
-				letter-spacing: 0.01em;
-			}
-			.id-value.accent {
-				color: var(--accent);
-			}
-			.divider {
-				border: none;
-				border-top: 1px dashed var(--line);
-				margin: 14px 0;
-			}
-			.contact-label {
-				font-size: 9.5px;
-				letter-spacing: 0.14em;
-				text-transform: uppercase;
-				color: var(--ink-faint);
-				margin: 0 0 10px;
-			}
-			.contact-row {
-				display: flex;
-				gap: 8px;
-			}
-			.contact-btn {
-				flex: 1;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				gap: 6px;
-				padding: 12px 6px 9px;
-				border: 1px solid var(--line);
-				text-decoration: none;
-				color: var(--ink);
-				transition:
-					border-color 0.15s ease,
-					background 0.15s ease;
-			}
-			.contact-btn:hover {
-				border-color: var(--accent);
-				background: rgba(232, 72, 58, 0.06);
-			}
-			.contact-btn svg {
-				width: 16px;
-				height: 16px;
-			}
-			.contact-btn span {
-				font-size: 8.5px;
-				letter-spacing: 0.1em;
-				text-transform: uppercase;
-				color: var(--ink-faint);
-			}
-			.footer-tag {
-				display: flex;
-				justify-content: space-between;
-				margin-top: 16px;
-				font-size: 8.5px;
-				letter-spacing: 0.1em;
-				text-transform: uppercase;
-				color: var(--ink-faint);
-			}
-			@media (max-height: 700px) {
-				body {
-					padding: 16px 16px;
-				}
-				.frame {
-					padding: 14px;
-				}
-				.readout {
-					margin-bottom: 8px;
-				}
-				.portrait-box {
-					padding: 4px;
-					margin-bottom: 8px;
-				}
-				.caption {
-					margin-top: 4px;
-				}
-				.id-block {
-					margin-bottom: 8px;
-				}
-				.id-row {
-					line-height: 1.6;
-				}
-				.divider {
-					margin: 8px 0;
-				}
-				.contact-label {
-					margin-bottom: 6px;
-				}
-				.contact-btn {
-					padding: 10px 6px 7px;
-				}
-				.footer-tag {
-					margin-top: 10px;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<div class="frame">
-			<div class="corner tl"></div>
-			<div class="corner tr"></div>
-			<div class="corner bl"></div>
-			<div class="corner br"></div>
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
 
-			<div class="readout">
-				<span>Perfil // 01</span>
-				<span class="status"><span class="dot"></span>Disponible</span>
-			</div>
+    <!-- Aplica tema e idioma guardados ANTES de pintar (evita parpadeo) -->
+    <script is:inline>
+    (function () {
+        var d = document.documentElement, t = null, l = null;
+        try { t = localStorage.getItem('theme'); l = localStorage.getItem('lang'); } catch (e) {}
+        if (t === 'light') d.classList.add('light');
+        if (l !== 'es' && l !== 'en') {
+            l = ((navigator.language || 'es').toLowerCase().indexOf('es') === 0) ? 'es' : 'en';
+        }
+        d.lang = l;
+    })();
+    </script>
+    <title>Carlos Cantos | Desarrollador de Automatización e IA en Valencia</title>
+    <meta name="description" content="Desarrollador de automatización e IA en Valencia. Diseño flujos con n8n, integro LLMs (OpenAI, Claude) y despliego infraestructura en producción. Disponible para proyectos freelance y para incorporarme a un equipo.">
+    <meta name="robots" content="index, follow">
 
-			<div class="portrait-box">
-				<div class="portrait"></div>
-				<div class="caption">
-					<span>Fmt: Retrato</span>
-					<span>Modo: Programador</span>
-				</div>
-			</div>
+    <link rel="canonical" href="https://096matics.com/tarjeta/personal-carlos">
 
-			<div class="id-block">
-				<div class="id-row"><span class="id-label">Nombre</span><span class="id-value">Carlos Cantos Blasco</span></div>
-				<div class="id-row"><span class="id-label">Rol</span><span class="id-value accent">Programador</span></div>
-			</div>
+    <!-- Open Graph (vista previa al compartir en LinkedIn / WhatsApp) -->
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="Carlos Cantos | Automation & AI Developer">
+    <meta property="og:description" content="Sistemas de automatización e IA en producción: +1.800 clientes gestionados, integraciones n8n + LLMs, infraestructura self-hosted.">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:url" content="https://096matics.com/tarjeta/personal-carlos">
 
-			<hr class="divider" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Carlos Cantos | Automation & AI Developer">
+    <meta name="twitter:description" content="Diseño sistemas que automatizan procesos e integran IA en producción.">
 
-			<p class="contact-label">Contacto</p>
-			<div class="contact-row">
-				<a class="contact-btn" href="https://wa.link/0rnaff" target="_blank">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-						><path
-							d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
-						></path></svg
-					>
-					<span>WhatsApp</span>
-				</a>
-				<a class="contact-btn" href="https://www.instagram.com/carls096/" target="_blank">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-						><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"
-						></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg
-					>
-					<span>Instagram</span>
-				</a>
-				<a class="contact-btn" href="mailto:carlos@096matics.com">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-						><path d="M22 6l-10 7L2 6"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg
-					>
-					<span>Email</span>
-				</a>
-			</div>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Ctext x='50' y='70' font-size='58' font-family='Arial,sans-serif' font-weight='700' fill='%23fff' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E">
 
-			<div class="footer-tag">
-				<span>Build // Personal</span>
-				<span>V.I · MMXXVI</span>
-			</div>
-		</div>
-	</body>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Carlos Cantos",
+      "jobTitle": "Automation & AI Developer",
+      "description": "Desarrollador de automatización e IA especializado en n8n, integración de LLMs e infraestructura self-hosted.",
+      "url": "https://096matics.com/tarjeta/personal-carlos",
+      "address": { "@type": "PostalAddress", "addressLocality": "Valencia", "addressRegion": "Comunidad Valenciana", "addressCountry": "ES" },
+      "knowsAbout": ["n8n", "Automatización de procesos", "Inteligencia Artificial", "LLMs", "Docker", "PostgreSQL", "Prompt Engineering"]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script is:inline src="https://cdn.tailwindcss.com"></script>
+    <script is:inline>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    // Colores ligados a variables CSS → cambian con el tema.
+                    // "white" y "black" se redefinen como texto/fondo del tema,
+                    // así todas las clases text-white, bg-black, bg-white/5... se invierten solas.
+                    colors: {
+                        background: 'rgb(var(--c-bg) / <alpha-value>)',
+                        surface: 'rgb(var(--c-surface) / <alpha-value>)',
+                        card: 'rgb(var(--c-card) / <alpha-value>)',
+                        border: 'rgb(var(--c-border) / <alpha-value>)',
+                        accent: 'rgb(var(--c-fg) / <alpha-value>)',
+                        muted: 'rgb(var(--c-muted) / <alpha-value>)',
+                        white: 'rgb(var(--c-fg) / <alpha-value>)',
+                        black: 'rgb(var(--c-bg) / <alpha-value>)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ============================================
+           TEMA (oscuro por defecto / claro con html.light)
+           ============================================ */
+        :root {
+            color-scheme: dark;
+            --c-bg: 0 0 0;
+            --c-surface: 10 10 10;
+            --c-card: 17 17 17;
+            --c-border: 39 39 42;
+            --c-fg: 255 255 255;
+            --c-muted: 161 161 170;
+            --dot-bg: #18181b;
+            --dot-border: #3f3f46;
+        }
+        html.light {
+            color-scheme: light;
+            --c-bg: 255 255 255;
+            --c-surface: 244 244 245;
+            --c-card: 250 250 250;
+            --c-border: 212 212 216;
+            --c-fg: 9 9 11;
+            --c-muted: 82 82 91;
+            --dot-bg: #e4e4e7;
+            --dot-border: #a1a1aa;
+        }
+
+        body { 
+            background-color: rgb(var(--c-bg)); 
+            color: rgb(var(--c-fg));
+            position: relative;
+        }
+
+        /* Colores de acento: más oscuros en modo claro para mantener el contraste */
+        html.light .text-green-400 { color: #15803d; }
+        html.light .text-blue-400 { color: #1d4ed8; }
+        html.light .text-purple-400 { color: #7e22ce; }
+        html.light .text-red-400 { color: #b91c1c; }
+        /* La terminal se queda oscura en ambos temas */
+        html.light .terminal-win .text-green-400 { color: #4ade80; }
+
+        /* Botones de tema / idioma */
+        .icon-sun { display: none; }
+        html:not(.light) .icon-sun { display: block; }
+        html.light .icon-moon { display: block; }
+        html:not(.light) .icon-moon { display: none; }
+
+        /* FIX definitivo del scroll horizontal en móvil.
+           clip no crea scroll-container y no permite pan lateral. */
+        html, body { overflow-x: clip; }
+        @supports not (overflow: clip) {
+            html, body { overflow-x: hidden; }
+        }
+
+        /* ============================================
+           SCROLL BLOQUEADO (móvil Y escritorio)
+           Cada sección encaja en una pantalla
+           ============================================ */
+        html { scroll-snap-type: y mandatory; }
+        .snap-section { scroll-snap-align: start; scroll-snap-stop: always; }
+        #page-footer { scroll-snap-align: end; }
+
+        /* En escritorio, además, cada item de experiencia encaja centrado */
+        @media (min-width: 768px) {
+            .timeline-item { scroll-snap-align: center; scroll-snap-stop: always; }
+        }
+
+        /* Altura de pantalla completa con fallback */
+        .fullpage { min-height: 100vh; min-height: 100svh; }
+
+        /* Animaciones suaves */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), 
+                        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Cursor terminal */
+        .cursor::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+            margin-left: 4px;
+            font-size: 0.8em;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Glow — FIXED: los elementos fixed nunca generan overflow del documento
+           (el absolute de 800px era el causante del hueco lateral en móvil) */
+        .glow-bg {
+            position: fixed;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgb(var(--c-fg) / 0.03) 0%, rgb(var(--c-bg) / 0) 60%);
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Marquee */
+        .marquee-wrapper { width: 100%; overflow: hidden; }
+        .marquee-track { display: flex; width: max-content; }
+        .marquee-track.left { animation: scroll-left 40s linear infinite; }
+        .marquee-track.right { animation: scroll-right 40s linear infinite; }
+        @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes scroll-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+        /* Timeline progresivo */
+        .timeline-item .timeline-dot { transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1); background-color: var(--dot-bg); border-color: var(--dot-border); }
+        .timeline-item .timeline-content { transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.8s ease; opacity: 0.2; transform: translateY(15px); }
+        .timeline-item.active .timeline-dot { background-color: rgb(var(--c-fg)); border-color: rgb(var(--c-fg)); box-shadow: 0 0 15px rgb(var(--c-fg) / 0.6); }
+        .timeline-item.active .timeline-content { opacity: 1; transform: translateY(0); border-color: rgb(var(--c-fg) / 0.2); }
+
+        #timeline-progress {
+            background: linear-gradient(to bottom, rgb(var(--c-fg) / 0.1), rgb(var(--c-fg)));
+            box-shadow: 0 0 12px rgb(var(--c-fg) / 0.35);
+            transition: height 0.25s ease-out;
+        }
+
+        /* Modal: animación por clases (sin conflicto hidden/flex) */
+        #techModal {
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+        }
+        #techModal.open {
+            opacity: 1; visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+        #modalContent {
+            transform: scale(0.95) translateY(12px);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #techModal.open #modalContent { transform: scale(1) translateY(0); }
+
+        .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-snap-type: none !important; scroll-behavior: auto; }
+            .fade-in-up { opacity: 1; transform: none; transition: none; }
+            .marquee-track { animation: none; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+    <div class="glow-bg"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-40 bg-background/80 backdrop-blur-md border-b border-border">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#inicio" class="font-bold text-sm tracking-widest text-accent">CARLOS.</a>
+            <div class="flex items-center gap-2 md:gap-3">
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-muted md:mr-3">
+                <a href="#servicios" class="hover:text-white transition-colors" data-i18n="nav.services">Servicios</a>
+                <a href="#proyectos" class="hover:text-white transition-colors" data-i18n="nav.projects">Proyectos</a>
+                <a href="#experiencia" class="hover:text-white transition-colors" data-i18n="experience">Experiencia</a>
+                <a href="#contacto" class="bg-white text-black px-4 py-2 rounded-lg hover:bg-white/80 transition-colors" data-i18n="nav.contact">Contacto</a>
+            </div>
+            <!-- Controles: idioma + tema -->
+            <button id="langToggle" type="button" class="h-9 px-2.5 inline-flex items-center gap-1.5 rounded-lg border border-border text-muted hover:text-white hover:border-gray-500 transition-colors text-xs font-semibold">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+                <span id="langLabel">EN</span>
+            </button>
+            <button id="themeToggle" type="button" class="w-9 h-9 inline-flex items-center justify-center rounded-lg border border-border text-muted hover:text-white hover:border-gray-500 transition-colors">
+                <svg class="icon-sun w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                <svg class="icon-moon w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+            </button>
+            <a href="#contacto" class="md:hidden bg-white text-black text-xs font-medium px-3 py-2 rounded-lg" data-i18n="nav.contact">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 1. HERO -->
+    <section id="inicio" class="fullpage snap-section relative px-6 pt-24 pb-16 md:pt-20 md:pb-0 flex items-center">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-center w-full">
+            <div class="space-y-6 md:space-y-8 fade-in-up">
+                <div>
+                    <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-3 md:mb-4">Carlos Cantos</h1>
+                    <h2 class="text-lg md:text-2xl text-muted font-medium">Automation & AI Developer</h2>
+                </div>
+                <p class="text-base md:text-xl text-muted leading-relaxed max-w-lg" data-i18n="hero.p">
+                    Diseño sistemas que automatizan procesos, integran inteligencia artificial y eliminan trabajo manual. Actualmente en producción gestionando <span class="text-white font-semibold">+1.800 clientes</span> para una empresa de distribución.
+                </p>
+                <div class="flex flex-wrap items-center gap-3 md:gap-4">
+                    <a href="#contacto" class="inline-block bg-white text-black px-6 py-3 rounded-md font-medium hover:bg-white/80 transition-colors" data-i18n="hero.cta1">
+                        Contactar
+                    </a>
+                    <a href="#experiencia" class="inline-block border border-border text-white px-6 py-3 rounded-md font-medium hover:border-gray-500 transition-colors" data-i18n="hero.cta2">
+                        Ver trayectoria
+                    </a>
+                </div>
+                <p class="text-xs md:text-sm text-muted" data-i18n="hero.open">Abierto a proyectos freelance y a incorporarme a un equipo.</p>
+            </div>
+
+            <!-- Terminal -->
+            <div class="w-full max-w-lg mx-auto fade-in-up" style="transition-delay: 200ms;">
+                <div class="terminal-win bg-[#0c0c0c] rounded-xl border border-border shadow-2xl overflow-hidden">
+                    <div class="flex items-center px-4 py-3 bg-[#111] border-b border-border">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+                        </div>
+                    </div>
+                    <div class="p-4 md:p-6 font-mono text-xs md:text-sm space-y-3 text-gray-300 min-h-[130px] md:min-h-[160px]" id="terminal-body"></div>
+                </div>
+            </div>
+        </div>
+
+        <a href="#servicios" class="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-muted hover:text-white transition-colors" aria-label="Bajar" data-i18n-aria="aria.down">
+            <span class="text-[10px] tracking-[0.3em] uppercase">Scroll</span>
+            <svg class="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+        </a>
+    </section>
+
+    <!-- 2. LO QUE HAGO -->
+    <section id="servicios" class="fullpage snap-section py-16 md:py-24 bg-surface border-y border-border px-6 flex items-center">
+        <div class="max-w-6xl mx-auto w-full">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 md:mb-12 fade-in-up" data-i18n="svc.title">Lo que hago</h2>
+
+            <div class="md:hidden flex items-center gap-2 text-xs text-muted mb-4 fade-in-up">
+                <span data-i18n="swipe">Desliza para ver más</span>
+                <svg class="w-4 h-4 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7-7 7M21 12H3" />
+                </svg>
+            </div>
+
+            <div id="cards-carousel"
+                 class="no-scrollbar fade-in-up flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6
+                        md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0">
+
+                <div class="bg-card border border-border p-6 md:p-8 rounded-2xl hover:border-gray-500 transition-all flex flex-col justify-between h-full shrink-0 snap-center w-[80vw] max-w-[340px] md:w-auto md:max-w-none">
+                    <div>
+                        <div class="w-10 h-10 mb-6 flex items-center justify-center rounded-lg bg-white/5 text-white">⚙️</div>
+                        <h3 class="text-lg md:text-xl font-bold mb-3" data-i18n="svc.auto">Automatización</h3>
+                        <p class="text-muted leading-relaxed text-sm mb-6" data-i18n="svc.auto.d">Diseño workflows empresariales capaces de ejecutar procesos complejos sin intervención humana.</p>
+                    </div>
+                    <button onclick="openModal('auto')" class="text-sm font-medium text-white border border-border px-4 py-2 rounded-lg hover:bg-white hover:text-black transition-colors w-max" data-i18n="svc.tech">
+                        Ver técnico →
+                    </button>
+                </div>
+
+                <div class="bg-card border border-border p-6 md:p-8 rounded-2xl hover:border-gray-500 transition-all flex flex-col justify-between h-full shrink-0 snap-center w-[80vw] max-w-[340px] md:w-auto md:max-w-none">
+                    <div>
+                        <div class="w-10 h-10 mb-6 flex items-center justify-center rounded-lg bg-white/5 text-white">🧠</div>
+                        <h3 class="text-lg md:text-xl font-bold mb-3" data-i18n="svc.ia">Inteligencia Artificial</h3>
+                        <p class="text-muted leading-relaxed text-sm mb-6" data-i18n="svc.ia.d">Integración de LLMs, agentes IA y sistemas de decisión en flujos de trabajo tradicionales.</p>
+                    </div>
+                    <button onclick="openModal('ia')" class="text-sm font-medium text-white border border-border px-4 py-2 rounded-lg hover:bg-white hover:text-black transition-colors w-max" data-i18n="svc.tech">
+                        Ver técnico →
+                    </button>
+                </div>
+
+                <div class="bg-card border border-border p-6 md:p-8 rounded-2xl hover:border-gray-500 transition-all flex flex-col justify-between h-full shrink-0 snap-center w-[80vw] max-w-[340px] md:w-auto md:max-w-none">
+                    <div>
+                        <div class="w-10 h-10 mb-6 flex items-center justify-center rounded-lg bg-white/5 text-white">⚡</div>
+                        <h3 class="text-lg md:text-xl font-bold mb-3" data-i18n="svc.infra">Infraestructura</h3>
+                        <p class="text-muted leading-relaxed text-sm mb-6" data-i18n="svc.infra.d">Docker, VPS, bases de datos y despliegues robustos preparados para producción continua.</p>
+                    </div>
+                    <button onclick="openModal('infra')" class="text-sm font-medium text-white border border-border px-4 py-2 rounded-lg hover:bg-white hover:text-black transition-colors w-max" data-i18n="svc.tech">
+                        Ver técnico →
+                    </button>
+                </div>
+            </div>
+
+            <div id="cards-dots" class="md:hidden flex justify-center gap-2 mt-3"></div>
+        </div>
+    </section>
+
+    <!-- 3. CASO DE ÉXITO -->
+    <section id="success-section" class="fullpage snap-section py-16 md:py-24 relative overflow-hidden px-6 flex items-center">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-black to-black -z-10"></div>
+        <div class="max-w-5xl mx-auto w-full text-center">
+            <h2 class="text-2xl md:text-3xl font-bold mb-3 md:mb-4 fade-in-up" data-i18n="case.title">Caso de Éxito</h2>
+            <p class="text-sm md:text-base text-muted mb-8 md:mb-12 fade-in-up" data-i18n="case.sub">Sistema de pedidos automatizado para empresa de distribución.</p>
+            
+            <div class="bg-card/80 backdrop-blur-xl border border-border rounded-3xl p-5 md:p-12 shadow-2xl fade-in-up">
+                <!-- Métricas: slider en móvil -->
+                <div id="metrics-carousel"
+                     class="no-scrollbar flex gap-8 overflow-x-auto snap-x snap-mandatory pb-5 -mx-5 px-5 border-b border-border mb-6
+                            md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-12 md:mb-12">
+                    <div class="shrink-0 snap-center w-[55vw] max-w-[240px] md:w-auto md:max-w-none">
+                        <div class="text-4xl md:text-5xl font-bold text-white mb-2 counter" data-target="1800">0</div>
+                        <div class="text-muted text-xs md:text-sm uppercase tracking-wider font-medium" data-i18n="case.clients">Clientes</div>
+                    </div>
+                    <div class="shrink-0 snap-center w-[55vw] max-w-[240px] md:w-auto md:max-w-none">
+                        <div class="text-4xl md:text-5xl font-bold text-white mb-2 counter" data-target="600">0</div>
+                        <div class="text-muted text-xs md:text-sm uppercase tracking-wider font-medium" data-i18n="case.orders">Pedidos / mes</div>
+                    </div>
+                    <div class="shrink-0 snap-center w-[55vw] max-w-[240px] md:w-auto md:max-w-none">
+                        <div class="text-4xl md:text-5xl font-bold text-white mb-2">24/7</div>
+                        <div class="text-muted text-xs md:text-sm uppercase tracking-wider font-medium" data-i18n="svc.auto">Automatización</div>
+                    </div>
+                </div>
+                <div id="metrics-dots" class="md:hidden flex justify-center gap-2 -mt-2 mb-5"></div>
+
+                <!-- Flujo compacto: cabe en móvil -->
+                <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3 text-[11px] md:text-sm font-semibold">
+                    <div class="bg-black border border-border px-3 md:px-5 py-2 md:py-3 rounded-lg text-white">WhatsApp</div>
+                    <span class="text-muted">→</span>
+                    <div class="bg-black border border-border px-3 md:px-5 py-2 md:py-3 rounded-lg text-green-400">n8n</div>
+                    <span class="text-muted">→</span>
+                    <div class="bg-black border border-border px-3 md:px-5 py-2 md:py-3 rounded-lg text-blue-400" data-i18n="case.agent">Agente IA Recepcionista</div>
+                    <span class="text-muted">→</span>
+                    <div class="bg-black border border-border px-3 md:px-5 py-2 md:py-3 rounded-lg text-purple-400" data-i18n="case.db">Base de datos/SQL</div>
+                    <span class="text-muted">→</span>
+                    <div class="bg-black border border-border px-3 md:px-5 py-2 md:py-3 rounded-lg text-red-400" data-i18n="case.done">Pedido Completado</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3B. OTROS PROYECTOS -->
+    <section id="proyectos" class="fullpage snap-section py-16 md:py-24 px-6 border-b border-border flex items-center">
+        <div class="max-w-6xl mx-auto w-full">
+            <h2 class="text-2xl md:text-3xl font-bold mb-3 fade-in-up" data-i18n="prj.title">Otros proyectos</h2>
+            <p class="text-sm md:text-base text-muted mb-6 md:mb-12 fade-in-up max-w-2xl" data-i18n="prj.sub">Prototipos funcionales más allá de la orquestación con n8n.</p>
+
+            <div class="md:hidden flex items-center gap-2 text-xs text-muted mb-4 fade-in-up">
+                <span data-i18n="swipe">Desliza para ver más</span>
+                <svg class="w-4 h-4 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7-7 7M21 12H3" />
+                </svg>
+            </div>
+
+            <div id="projects-carousel"
+                 class="no-scrollbar fade-in-up flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6
+                        md:mx-0 md:px-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:pb-0">
+
+                <a href="https://dashboard-propflow.vercel.app" target="_blank" rel="noopener"
+                   class="group bg-card border border-border p-6 md:p-8 rounded-2xl hover:border-gray-500 transition-all flex flex-col justify-between h-full shrink-0 snap-center w-[80vw] max-w-[340px] md:w-auto md:max-w-none">
+                    <div>
+                        <div class="w-10 h-10 mb-6 flex items-center justify-center rounded-lg bg-white/5 text-white">🏠</div>
+                        <h3 class="text-lg md:text-xl font-bold mb-1" data-i18n="prj1.t">Dashboard de scoring inmobiliario</h3>
+                        <p class="text-xs text-muted mb-3">MVP — n8n + Supabase + WhatsApp</p>
+                        <p class="text-muted leading-relaxed text-sm" data-i18n="prj1.d">CRM con matching automático entre clientes y propiedades por zona, presupuesto y tipología. Maqueta de producto para venderlo como servicio a inmobiliarias.</p>
+                    </div>
+                    <span class="text-sm font-medium text-white mt-6 inline-flex items-center gap-1 group-hover:gap-2 transition-all"><span data-i18n="prj.view">Ver proyecto</span> <span aria-hidden="true">→</span></span>
+                </a>
+
+                <a href="https://ios-template.vercel.app" target="_blank" rel="noopener"
+                   class="group bg-card border border-border p-6 md:p-8 rounded-2xl hover:border-gray-500 transition-all flex flex-col justify-between h-full shrink-0 snap-center w-[80vw] max-w-[340px] md:w-auto md:max-w-none">
+                    <div>
+                        <div class="w-10 h-10 mb-6 flex items-center justify-center rounded-lg bg-white/5 text-white">📱</div>
+                        <h3 class="text-lg md:text-xl font-bold mb-1" data-i18n="prj2.t">Landing "link in bio" estilo iOS</h3>
+                        <p class="text-xs text-muted mb-3" data-i18n="prj2.k">Plantilla — frontend</p>
+                        <p class="text-muted leading-relaxed text-sm" data-i18n="prj2.d">Página de enlaces para redes sociales dentro de una réplica de interfaz iOS: Dynamic Island, hojas modales y glassmorphism.</p>
+                    </div>
+                    <span class="text-sm font-medium text-white mt-6 inline-flex items-center gap-1 group-hover:gap-2 transition-all"><span data-i18n="prj.view">Ver proyecto</span> <span aria-hidden="true">→</span></span>
+                </a>
+            </div>
+            <div id="projects-dots" class="md:hidden flex justify-center gap-2 mt-3"></div>
+        </div>
+    </section>
+
+    <!-- 4. STACK -->
+    <section class="fullpage snap-section py-16 md:py-24 bg-surface border-y border-border overflow-hidden flex items-center">
+        <div class="w-full text-center fade-in-up">
+            <h2 class="text-2xl md:text-3xl font-bold mb-10 md:mb-16" data-i18n="stack.title">Stack Tecnológico</h2>
+
+            <div class="marquee-wrapper mb-6">
+                <div class="marquee-track left" id="marquee-left"></div>
+            </div>
+            <div class="marquee-wrapper">
+                <div class="marquee-track right" id="marquee-right"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4B. FORMACIÓN -->
+    <section id="formacion" class="fullpage snap-section py-16 md:py-24 px-6 bg-surface border-b border-border flex items-center">
+        <div class="max-w-3xl mx-auto w-full">
+            <h2 class="text-2xl md:text-3xl font-bold mb-8 md:mb-10 text-center fade-in-up" data-i18n="edu.title">Formación</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 fade-in-up">
+                <div class="bg-card border border-border p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-2 gap-2">
+                        <h3 class="font-bold text-white">DAM</h3>
+                        <span class="text-[10px] md:text-xs px-2 py-1 bg-white/5 rounded-md text-muted" data-i18n="edu.degree">Título</span>
+                    </div>
+                    <p class="text-muted text-sm" data-i18n="edu.dam">Técnico Superior en Desarrollo de Aplicaciones Multiplataforma</p>
+                </div>
+                <div class="bg-card border border-border p-6 rounded-2xl">
+                    <div class="flex items-center justify-between mb-2 gap-2">
+                        <h3 class="font-bold text-white">Microsoft AI</h3>
+                        <span class="text-[10px] md:text-xs px-2 py-1 bg-white/5 rounded-md text-muted" data-i18n="edu.ongoing">En curso</span>
+                    </div>
+                    <p class="text-muted text-sm" data-i18n="edu.ms">Certificaciones AI-900 y AI-102</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. EXPERIENCIA (compacta en móvil para caber en pantalla) -->
+    <section id="experiencia" class="fullpage snap-section py-16 md:py-32 relative px-6">
+        <div class="max-w-3xl mx-auto w-full">
+            <h2 class="text-2xl md:text-3xl font-bold mb-8 md:mb-16 text-center fade-in-up" data-i18n="experience">Experiencia</h2>
+            
+            <div id="timeline-track" class="space-y-6 md:space-y-24 relative before:absolute before:inset-0 before:ml-5 md:before:mx-auto before:h-full before:w-0.5 before:bg-border">
+                
+                <div id="timeline-progress" class="absolute left-5 md:left-1/2 md:-translate-x-1/2 top-0 w-0.5" style="height: 0%;"></div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse timeline-item">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 bg-black shrink-0 md:order-1 md:mx-auto z-10 timeline-dot"></div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 md:p-6 rounded-2xl border border-border bg-card timeline-content">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-3 gap-1 md:gap-2">
+                            <h3 class="font-bold text-base md:text-lg text-white">Freelancer AI & Auto</h3>
+                            <span class="text-[10px] md:text-xs px-2 py-1 bg-white/5 rounded-md text-muted w-max" data-i18n="exp1.date">Febrero 2026 – Junio 2026</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-muted leading-relaxed" data-i18n="exp1.d">Diseño y desarrollo de sistemas autónomos de gestión empresarial. Automatización integral de pedidos, integrando bases de datos de 1.800 clientes mediante Docker y VPS.</p>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse timeline-item">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 bg-black shrink-0 md:order-1 md:mx-auto z-10 timeline-dot"></div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 md:p-6 rounded-2xl border border-border bg-card timeline-content">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-3 gap-1 md:gap-2">
+                            <h3 class="font-bold text-base md:text-lg text-white">Mercadona</h3>
+                            <span class="text-[10px] md:text-xs px-2 py-1 bg-white/5 rounded-md text-muted w-max" data-i18n="exp2.date">Junio 2024 – Marzo 2026</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-muted leading-relaxed" data-i18n="exp2.d">Supervisión y resolución de incidencias en sistemas logísticos automatizados. Diagnóstico de fallos operativos y prevención de riesgos en líneas de producción.</p>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse timeline-item">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 bg-black shrink-0 md:order-1 md:mx-auto z-10 timeline-dot"></div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 md:p-6 rounded-2xl border border-border bg-card timeline-content">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-3 gap-1 md:gap-2">
+                            <h3 class="font-bold text-base md:text-lg text-white">ITBACKING</h3>
+                            <span class="text-[10px] md:text-xs px-2 py-1 bg-white/5 rounded-md text-muted w-max" data-i18n="exp3.date">Sep 2023 – Dic 2023</span>
+                        </div>
+                        <p class="text-xs md:text-sm text-muted leading-relaxed" data-i18n="exp3.d">Desarrollo Frontend en Angular y Backend mediante ASP.NET Core. Diseño y despliegue de bases de datos relacionales en SQL Server.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. CTA FINAL -->
+    <section id="contacto" class="fullpage snap-section py-16 md:py-32 bg-surface border-t border-border text-center px-6 flex items-center justify-center">
+        <div class="max-w-2xl mx-auto fade-in-up">
+            <h2 class="text-3xl md:text-5xl font-bold mb-5 md:mb-6" data-i18n="cta.title">¿Automatizamos?</h2>
+            <p class="text-base md:text-xl text-muted mb-8 md:mb-10" data-i18n="cta.p">Transformemos horas de trabajo manual en sistemas eficientes e inteligentes.</p>
+            <a href="https://wa.me/34644226771" class="inline-block bg-white text-black font-semibold text-base md:text-lg px-8 py-4 rounded-xl hover:bg-white/80 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)]" data-i18n="cta.btn">
+                Iniciar conversación
+            </a>
+        </div>
+    </section>
+
+    <footer id="page-footer" class="py-8 border-t border-border text-center text-sm text-muted bg-black">
+        <div class="flex items-center justify-center gap-5 mb-3 text-xs">
+            <a href="https://wa.me/34644226771" class="hover:text-white transition-colors">WhatsApp</a>
+            <a href="mailto:carlos@096matics.com" class="hover:text-white transition-colors">Email</a>
+        </div>
+        <p>© 2026 Carlos Cantos. Automation & AI Developer.</p>
+    </footer>
+
+    <!-- MODAL (reescrito: siempre display:flex, animado con clases, 100% adaptable) -->
+    <div id="techModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div id="modalContent" class="bg-card border border-border p-5 md:p-8 rounded-2xl w-full max-w-lg relative shadow-2xl max-h-[85vh] overflow-y-auto overscroll-contain">
+            <button onclick="closeModal()" class="absolute top-3 right-4 text-muted hover:text-white text-3xl leading-none" aria-label="Cerrar" data-i18n-aria="aria.close">&times;</button>
+            <h3 id="modalTitle" class="text-xl md:text-2xl font-bold mb-4 text-white pr-8"></h3>
+            <div id="modalBody" class="text-muted space-y-4 text-sm leading-relaxed [overflow-wrap:anywhere]"></div>
+        </div>
+    </div>
+
+    <script is:inline>
+        // ===== FIX: evitar que el navegador restaure una posición anterior al recargar
+        // (era la causa del "salto forzado hacia abajo" en escritorio al cargar)
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.addEventListener('pageshow', (e) => { if (e.persisted) window.scrollTo(0, 0); });
+
+        // ============ TERMINAL ============
+        const terminalBody = document.getElementById('terminal-body');
+        async function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+        
+        async function typeText(text, element, speed = 50) {
+            for(let i = 0; i < text.length; i++) {
+                element.innerHTML += text.charAt(i);
+                await sleep(speed);
+            }
+        }
+
+        async function initTerminal() {
+            const line1 = document.createElement('div');
+            line1.innerHTML = `<span class="text-green-400 mr-2">guest@portfolio:~$</span><span class="typing"></span><span class="cursor"></span>`;
+            terminalBody.appendChild(line1);
+            await typeText('whoami', line1.querySelector('.typing'), 100);
+            line1.querySelector('.cursor').remove();
+            
+            const out1 = document.createElement('div');
+            out1.className = "text-[#ffffff] mt-1 mb-3";
+            out1.textContent = "Carlos Cantos";
+            terminalBody.appendChild(out1);
+            await sleep(400);
+
+            const line2 = document.createElement('div');
+            line2.innerHTML = `<span class="text-green-400 mr-2">guest@portfolio:~$</span><span class="typing"></span><span class="cursor"></span>`;
+            terminalBody.appendChild(line2);
+            await typeText('./get_role.sh', line2.querySelector('.typing'), 80);
+            startRoleLoop(line2.querySelector('.typing'));
+        }
+
+        function startRoleLoop(textElement) {
+            const roles = ["Automation Engineer", "AI Developer", "n8n Specialist"];
+            let roleIndex = 0; let charIndex = 0; let isDeleting = false;
+            function typeEffect() {
+                const currentRole = roles[roleIndex];
+                textElement.textContent = "./get_role.sh --" + currentRole.substring(0, charIndex + (isDeleting ? -1 : 1));
+                charIndex += isDeleting ? -1 : 1;
+                let speed = isDeleting ? 30 : 80;
+                if (!isDeleting && charIndex === currentRole.length) { speed = 2000; isDeleting = true; } 
+                else if (isDeleting && charIndex === 0) { isDeleting = false; roleIndex = (roleIndex + 1) % roles.length; speed = 500; }
+                setTimeout(typeEffect, speed);
+            }
+            setTimeout(typeEffect, 500);
+        }
+        setTimeout(initTerminal, 800);
+
+        // ============ MARQUEE GENERADO POR JS ============
+        const stackRows = [
+            { id: 'marquee-left',  items: [
+                { t: 'JavaScript' }, { t: 'TypeScript' }, { t: 'n8n', hot: true },
+                { t: 'Docker' }, { t: 'PostgreSQL' }, { t: 'Supabase' }
+            ]},
+            { id: 'marquee-right', items: [
+                { t: 'OpenAI API' }, { t: 'Claude API' }, { t: 'Prompt Engineering' },
+                { t: 'Linux VPS' }, { t: 'EasyPanel' }, { t: 'Git / GitHub' }
+            ]}
+        ];
+
+        function skillSpan({ t, hot }) {
+            const cls = hot
+                ? 'bg-card border-green-500/30 text-green-400 font-bold'
+                : 'bg-card border-border font-medium';
+            return `<span class="shrink-0 whitespace-nowrap px-4 md:px-6 py-2 md:py-3 rounded-xl text-base md:text-lg border ${cls}">${t}</span>`;
+        }
+
+        function buildMarquee(row) {
+            const track = document.getElementById(row.id);
+            track.innerHTML = '';
+            const group = document.createElement('div');
+            group.className = 'flex shrink-0 items-center gap-4 md:gap-6 px-3';
+            group.innerHTML = row.items.map(skillSpan).join('');
+            track.appendChild(group);
+            const gw = group.offsetWidth || 1000;
+            const perHalf = Math.max(2, Math.ceil(window.innerWidth / gw));
+            const frag = document.createDocumentFragment();
+            for (let i = 1; i < perHalf * 2; i++) {
+                const g = group.cloneNode(true);
+                if (i >= perHalf) g.setAttribute('aria-hidden', 'true');
+                frag.appendChild(g);
+            }
+            track.appendChild(frag);
+        }
+
+        function buildAllMarquees() { stackRows.forEach(buildMarquee); }
+        buildAllMarquees();
+        // Reconstruir cuando las fuentes carguen (evita medidas erróneas y saltos de layout)
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildAllMarquees);
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(buildAllMarquees, 250);
+        });
+
+        // ============ CARRUSELES MÓVILES + PUNTOS ============
+        function initCarouselDots(trackId, dotsId) {
+            const track = document.getElementById(trackId);
+            const dots = document.getElementById(dotsId);
+            if (!track || !dots) return;
+            const cards = Array.from(track.children);
+            if (!cards.length) return;
+            const step = () => cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].offsetWidth;
+
+            cards.forEach((_, i) => {
+                const d = document.createElement('button');
+                d.className = 'w-2 h-2 rounded-full bg-white/20 transition-all duration-300';
+                d.setAttribute('aria-label', 'Ir al elemento ' + (i + 1));
+                d.addEventListener('click', () => track.scrollTo({ left: i * step(), behavior: 'smooth' }));
+                dots.appendChild(d);
+            });
+
+            const update = () => {
+                const idx = Math.min(cards.length - 1, Math.max(0, Math.round(track.scrollLeft / step())));
+                [...dots.children].forEach((d, i) => {
+                    d.classList.toggle('bg-white', i === idx);
+                    d.classList.toggle('bg-white/20', i !== idx);
+                    d.classList.toggle('w-5', i === idx);
+                });
+            };
+            let ticking = false;
+            track.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => { update(); ticking = false; });
+                    ticking = true;
+                }
+            }, { passive: true });
+            update();
+        }
+        initCarouselDots('cards-carousel', 'cards-dots');
+        initCarouselDots('metrics-carousel', 'metrics-dots');
+        initCarouselDots('projects-carousel', 'projects-dots');
+
+        // ============ MODAL ============
+        const modalDataEs = {
+            auto: { title: "⚙️ Automatización", body: "<p><strong>Core Stack:</strong> n8n, Webhooks, REST APIs.</p><p>Creación de flujos condicionales complejos en n8n para conectar herramientas aisladas. Uso de nodos HTTP, transformaciones de JSON complejas y manejo de errores (Error Trigger) para garantizar robustez en producción.</p>" },
+            ia: { title: "🧠 Inteligencia Artificial", body: "<p><strong>Core Stack:</strong> OpenAI, Claude, LangChain concepts.</p><p>Integración de modelos LLM mediante API para análisis de sentimiento, extracción de datos estructurados desde texto libre, y agentes conversacionales. Diseño de Prompts estructurados y optimizados para el mejor resultado.</p>" },
+            infra: { title: "⚡ Infraestructura", body: "<p><strong>Core Stack:</strong> Docker, Linux VPS, PostgreSQL.</p><p>Despliegue self-hosted de n8n y bases de datos usando Docker Compose. Gestión de variables de entorno, volúmenes persistentes y redes aisladas. Uso de PostgreSQL/Supabase como capa de datos central.</p>" }
+        };
+
+        const modalDataEn = {
+            auto: { title: "⚙️ Automation", body: "<p><strong>Core Stack:</strong> n8n, Webhooks, REST APIs.</p><p>Building complex conditional flows in n8n to connect isolated tools. Use of HTTP nodes, advanced JSON transformations and error handling (Error Trigger) to guarantee robustness in production.</p>" },
+            ia: { title: "🧠 Artificial Intelligence", body: "<p><strong>Core Stack:</strong> OpenAI, Claude, LangChain concepts.</p><p>Integration of LLM models via API for sentiment analysis, structured data extraction from free text, and conversational agents. Design of structured, optimized prompts to get the best results.</p>" },
+            infra: { title: "⚡ Infrastructure", body: "<p><strong>Core Stack:</strong> Docker, Linux VPS, PostgreSQL.</p><p>Self-hosted deployment of n8n and databases using Docker Compose. Management of environment variables, persistent volumes and isolated networks. PostgreSQL/Supabase as the central data layer.</p>" }
+        };
+
+        const modal = document.getElementById('techModal');
+        let currentModal = null;
+
+        function renderModal() {
+            const data = (document.documentElement.lang === 'en' ? modalDataEn : modalDataEs)[currentModal];
+            document.getElementById('modalTitle').innerHTML = data.title;
+            document.getElementById('modalBody').innerHTML = data.body;
+        }
+
+        function openModal(type) {
+            currentModal = type;
+            renderModal();
+            modal.classList.add('open');
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            setTimeout(() => {
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        // Cerrar con clic fuera y con Escape
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+        });
+
+        // ============ OBSERVERS ============
+        const generalObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-in-up').forEach(el => generalObserver.observe(el));
+
+        // ============ CONTADORES (por elemento → funcionan seguro también en móvil) ============
+        function animateCounter(el) {
+            const target = +el.getAttribute('data-target');
+            const duration = 2000;
+            let start = null;
+            function step(ts) {
+                if (!start) start = ts;
+                const p = Math.min((ts - start) / duration, 1);
+                el.innerText = Math.floor(p * target) + "+";
+                if (p < 1) window.requestAnimationFrame(step);
+            }
+            window.requestAnimationFrame(step);
+        }
+
+        const counterObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.counter[data-target]').forEach(c => counterObserver.observe(c));
+
+        // ============ TIMELINE PROGRESIVO ============
+        const timelineTrack = document.getElementById('timeline-track');
+        const timelineProgress = document.getElementById('timeline-progress');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        let timelineTicking = false;
+
+        function updateTimeline() {
+            if (!timelineTrack) return;
+            const rect = timelineTrack.getBoundingClientRect();
+            const trigger = window.innerHeight * 0.55;
+            const progress = Math.min(Math.max((trigger - rect.top) / rect.height, 0), 1);
+            timelineProgress.style.height = (progress * 100).toFixed(2) + '%';
+
+            timelineItems.forEach(item => {
+                const r = item.getBoundingClientRect();
+                const center = r.top + r.height / 2;
+
+                // Histéresis para evitar parpadeo en el borde:
+                // - Se ENCIENDE al pasar por encima de trigger + 100px
+                // - Se APAGA al bajar de trigger + 40px (al subir el scroll)
+                if (center <= trigger + 100) {
+                    item.classList.add('active');
+                } else if (center > trigger + 40) {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!timelineTicking) {
+                window.requestAnimationFrame(() => { updateTimeline(); timelineTicking = false; });
+                timelineTicking = true;
+            }
+        }, { passive: true });
+        window.addEventListener('resize', updateTimeline);
+        updateTimeline();
+
+        // ============ TEMA + IDIOMA ============
+        const i18nEn = {
+            'nav.services': 'Services', 'nav.projects': 'Projects', 'experience': 'Experience', 'nav.contact': 'Contact',
+            'hero.p': 'I design systems that automate processes, integrate artificial intelligence and eliminate manual work. Currently in production managing <span class="text-white font-semibold">1,800+ clients</span> for a distribution company.',
+            'hero.cta1': 'Get in touch', 'hero.cta2': 'View experience',
+            'hero.open': 'Open to freelance projects and to joining a team.',
+            'svc.title': 'What I do', 'swipe': 'Swipe to see more',
+            'svc.auto': 'Automation',
+            'svc.auto.d': 'I design business workflows that run complex processes without human intervention.',
+            'svc.ia': 'Artificial Intelligence',
+            'svc.ia.d': 'Integration of LLMs, AI agents and decision systems into traditional workflows.',
+            'svc.infra': 'Infrastructure',
+            'svc.infra.d': 'Docker, VPS, databases and robust deployments ready for continuous production.',
+            'svc.tech': 'See technical details →',
+            'case.title': 'Success Story',
+            'case.sub': 'Automated order system for a distribution company.',
+            'case.clients': 'Clients', 'case.orders': 'Orders / month',
+            'case.agent': 'AI Receptionist Agent', 'case.db': 'Database/SQL', 'case.done': 'Order Completed',
+            'prj.title': 'Other projects',
+            'prj.sub': 'Working prototypes beyond n8n orchestration.',
+            'prj.view': 'View project',
+            'prj1.t': 'Real-estate scoring dashboard',
+            'prj1.d': 'CRM with automatic matching between clients and properties by area, budget and property type. A product mockup to sell as a service to real-estate agencies.',
+            'prj2.t': 'iOS-style "link in bio" landing', 'prj2.k': 'Template — frontend',
+            'prj2.d': 'Social media links page inside an iOS interface replica: Dynamic Island, modal sheets and glassmorphism.',
+            'stack.title': 'Tech Stack',
+            'edu.title': 'Education', 'edu.degree': 'Degree',
+            'edu.dam': 'Higher Technical Degree in Cross-Platform Application Development',
+            'edu.ongoing': 'In progress', 'edu.ms': 'AI-900 and AI-102 certifications',
+            'exp1.date': 'February 2026 – June 2026',
+            'exp1.d': 'Design and development of autonomous business management systems. End-to-end order automation, integrating databases of 1,800 clients through Docker and VPS.',
+            'exp2.date': 'June 2024 – March 2026',
+            'exp2.d': 'Supervision and resolution of incidents in automated logistics systems. Diagnosis of operational failures and risk prevention on production lines.',
+            'exp3.date': 'Sep 2023 – Dec 2023',
+            'exp3.d': 'Frontend development in Angular and backend with ASP.NET Core. Design and deployment of relational databases in SQL Server.',
+            'cta.title': 'Shall we automate?',
+            'cta.p': 'Let\u2019s turn hours of manual work into efficient, intelligent systems.',
+            'cta.btn': 'Start a conversation',
+            'aria.down': 'Scroll down', 'aria.close': 'Close'
+        };
+
+        const uiText = {
+            es: {
+                title: document.title,
+                toDark: 'Cambiar a modo oscuro', toLight: 'Cambiar a modo claro',
+                lang: 'Cambiar a inglés', dot: 'Ir al elemento ', locale: 'es_ES'
+            },
+            en: {
+                title: 'Carlos Cantos | Automation & AI Developer in Valencia',
+                toDark: 'Switch to dark mode', toLight: 'Switch to light mode',
+                lang: 'Switch to Spanish', dot: 'Go to item ', locale: 'en_US'
+            }
+        };
+
+        const metaEn = {
+            'meta[name="description"]': 'Automation and AI developer in Valencia. I design n8n workflows, integrate LLMs (OpenAI, Claude) and deploy production infrastructure. Available for freelance projects and to join a team.',
+            'meta[property="og:description"]': 'Automation and AI systems in production: 1,800+ clients managed, n8n + LLM integrations, self-hosted infrastructure.',
+            'meta[name="twitter:description"]': 'I design systems that automate processes and integrate AI in production.'
+        };
+
+        // Guardar el texto original en español (ya está en el HTML)
+        const i18nEs = {}, ariaEs = {}, metaEs = {};
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            if (!(el.dataset.i18n in i18nEs)) i18nEs[el.dataset.i18n] = el.innerHTML;
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+            ariaEs[el.dataset.i18nAria] = el.getAttribute('aria-label');
+        });
+        Object.keys(metaEn).forEach(sel => {
+            const m = document.querySelector(sel);
+            if (m) metaEs[sel] = m.getAttribute('content');
+        });
+
+        function safeStore(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+        function updateControls() {
+            const l = document.documentElement.lang === 'en' ? 'en' : 'es';
+            const light = document.documentElement.classList.contains('light');
+            const t = uiText[l];
+            const themeBtn = document.getElementById('themeToggle');
+            const langBtn = document.getElementById('langToggle');
+            const themeLabel = light ? t.toDark : t.toLight;
+            themeBtn.setAttribute('aria-label', themeLabel);
+            themeBtn.title = themeLabel;
+            langBtn.setAttribute('aria-label', t.lang);
+            langBtn.title = t.lang;
+            document.getElementById('langLabel').textContent = l === 'es' ? 'EN' : 'ES';
+        }
+
+        function applyTheme(theme) {
+            const light = theme === 'light';
+            document.documentElement.classList.toggle('light', light);
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', light ? '#ffffff' : '#000000');
+            updateControls();
+        }
+
+        function applyLang(l) {
+            l = l === 'en' ? 'en' : 'es';
+            document.documentElement.lang = l;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const k = el.dataset.i18n;
+                el.innerHTML = (l === 'en' && k in i18nEn) ? i18nEn[k] : i18nEs[k];
+            });
+            document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+                const k = el.dataset.i18nAria;
+                el.setAttribute('aria-label', (l === 'en' && k in i18nEn) ? i18nEn[k] : ariaEs[k]);
+            });
+            document.querySelectorAll('[id$="-dots"] button').forEach(b => {
+                const i = Array.prototype.indexOf.call(b.parentNode.children, b) + 1;
+                b.setAttribute('aria-label', uiText[l].dot + i);
+            });
+            document.title = uiText[l].title;
+            Object.keys(metaEn).forEach(sel => {
+                const m = document.querySelector(sel);
+                if (m) m.setAttribute('content', l === 'en' ? metaEn[sel] : metaEs[sel]);
+            });
+            const loc = document.querySelector('meta[property="og:locale"]');
+            if (loc) loc.setAttribute('content', uiText[l].locale);
+            if (currentModal) renderModal();
+            updateControls();
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+            applyTheme(next);
+            safeStore('theme', next);
+        });
+        document.getElementById('langToggle').addEventListener('click', () => {
+            const next = document.documentElement.lang === 'en' ? 'es' : 'en';
+            applyLang(next);
+            safeStore('lang', next);
+        });
+
+        // Estado inicial (el <head> ya dejó la clase y el lang correctos)
+        applyTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark');
+        applyLang(document.documentElement.lang);
+    </script>
+</body>
 </html>

@@ -20,9 +20,9 @@ function agruparPorSector(items: typeof sectorItems) {
 	}
 	return grupos;
 }
-const galeria = ordenarPorSector([...agruparPorSector(sectorItems).entries()])
-	.flatMap(([, items]) => items)
-	.slice(0, 9);
+// todas las plantillas reales, agrupadas por sector, cada grupo como su propia pila
+// — se ven todas (antes se recortaba), y ahora se navega entre pilas deslizando.
+const gruposLanding = ordenarPorSector([...agruparPorSector(sectorItems).entries()]);
 
 const ICONOS: Record<string, string> = {
 	hosteleria:
@@ -49,37 +49,47 @@ const ICONOS: Record<string, string> = {
 			</p>
 		</div>
 
-		<div data-reveal class="piece piece-bottom piece-d1 mt-14">
-			<p class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Un ejemplo por sector</p>
-			<p class="mt-1 text-sm text-zinc-500">Como si repartiéramos las cartas — pasa el ratón por encima.</p>
-			<div class="fan-deck mt-6 flex items-end justify-start overflow-x-auto px-2 pt-4 pb-6 lg:justify-center">
+		<div data-reveal class="piece piece-bottom piece-d1 mt-16">
+			<p class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Lo que dicen de nosotros</p>
+			<p class="mt-1 text-sm text-zinc-500">Un mazo de reseñas reales — toca para abrirlo en abanico y elige una tarjeta para leerla entera.</p>
+			<div class="sector-deck relative mx-auto mt-10 h-[190px] w-full max-w-[560px] sm:h-[220px]" data-deck>
 				{
 					sectores.map((s, idx) => {
-						const centro = (sectores.length - 1) / 2;
-						const rot = (idx - centro) * 7;
-						const arco = Math.abs(idx - centro) * 13;
-						const delay = idx * 0.1;
+						const n = sectores.length;
+						const rot = (idx % 2 === 0 ? -1 : 1) * (3 + (idx % 3) * 1.5);
+						const fan = idx - (n - 1) / 2;
+						const depth = n - 1 - idx;
 						return (
-							<div
-								class="fan-card relative shrink-0"
-								style={`--rot:${rot}deg; --arco:${arco}px; --delay:${delay}s; z-index:${idx}`}
+							<button
+								type="button"
+								data-preview-trigger
+								data-preview-group="resenas"
+								data-preview-sector={s.data.titulo}
+								data-preview-title={s.data.negocioEjemplo}
+								data-preview-desc={`"${s.data.testimonioTexto}" — ${s.data.testimonioAutor}, ${s.data.testimonioNegocio}`}
+								data-preview-href={`/portafolio/${s.id}`}
+								data-preview-cta="Ver el ejemplo completo →"
+								class="sector-card group absolute top-1/2 left-1/2 w-[152px] rounded-2xl bg-zinc-900/70 p-4 text-left shadow-2xl shadow-black/50 ring-1 ring-white/[0.06] backdrop-blur-sm sm:w-[178px]"
+								style={`--rot:${rot}deg; --fan:${fan}; --depth:${depth}; --n:${n}; border-top: 2px solid ${s.data.colorHex}`}
 							>
-								<a href={`/portafolio/${s.id}`} class="fan-card-inner group block w-[172px] rounded-2xl border border-zinc-800 bg-zinc-900 p-4 shadow-xl shadow-black/40" style={`border-top: 2px solid ${s.data.colorHex}`}>
-									<span
-										class="grid h-9 w-9 place-items-center rounded-xl"
-										style={`background:color-mix(in srgb, ${s.data.colorHex} 16%, transparent); color:${s.data.colorHex}`}
-									>
-										<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={ICONOS[s.id] ?? ''} />
-									</span>
-									<p class="mt-2.5 text-[10px] font-bold tracking-wide text-zinc-500 uppercase">{s.data.titulo}</p>
-									<h3 class="mt-1 flex flex-wrap items-center gap-1.5 text-sm font-semibold text-white">
-										{s.data.negocioEjemplo}
-									</h3>
-									<span class="mt-2 inline-block rounded-full border border-zinc-800 bg-white/[0.06] px-2 py-0.5 text-[8.5px] font-bold tracking-wide text-zinc-500 uppercase">
-										Ejemplo
-									</span>
-								</a>
-							</div>
+								<span
+									class="grid h-9 w-9 place-items-center rounded-xl"
+									style={`background:color-mix(in srgb, ${s.data.colorHex} 16%, transparent); color:${s.data.colorHex}`}
+								>
+									<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={ICONOS[s.id] ?? ''} />
+								</span>
+								<p class="mt-2.5 text-[10px] font-bold tracking-wide text-zinc-500 uppercase">{s.data.titulo}</p>
+								<h3 class="mt-1 flex flex-wrap items-center gap-1.5 text-sm font-semibold text-white">
+									{s.data.negocioEjemplo}
+								</h3>
+								<div class="mt-2 flex items-center gap-1 text-[11px] font-semibold text-amber-400">
+									<svg class="sector-score-star" width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6.1L10 14.9l-5.4 3 1.3-6.1L1.3 7.7l6.1-.6L10 1.5z" /></svg>
+									<span class="sector-score" data-score={s.data.valoracion}>0.0</span> <span class="font-normal text-zinc-500">· toca para leer</span>
+								</div>
+								<span class="sector-card-tip pointer-events-none absolute bottom-full left-1/2 mb-2.5 w-[190px] -translate-x-1/2 translate-y-1 rounded-xl border border-white/10 bg-zinc-950 p-3 text-[11.5px] leading-snug text-zinc-300 opacity-0 shadow-xl transition-all duration-200">
+									{s.data.resumen}
+								</span>
+							</button>
 						);
 					})
 				}
@@ -87,32 +97,56 @@ const ICONOS: Record<string, string> = {
 		</div>
 
 		<div data-reveal class="piece piece-bottom piece-d2 mt-14">
-			<p class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Capturas reales, ya entregadas</p>
-			<p class="mt-1 text-sm text-zinc-500">Cada una a su propia profundidad — se mueven contigo al bajar.</p>
-			<div class="mosaico mt-6 columns-1 gap-4 sm:columns-2 lg:columns-3">
+			<p class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Landings y cartas de presentación</p>
+			<p class="mt-1 text-sm text-zinc-500">Cada categoría tiene su propio escaparate — pasa las plantillas con las flechas y toca la que te guste para verla en grande.</p>
+
+			<div class="landing-grid mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3" data-carousel>
 				{
-					galeria.map((img, idx) => (
-						<div class="parallax-wrap" data-depth={[-26, 20, -16][idx % 3]}>
-							<div
-								role="button"
-								tabindex="0"
-								data-preview-trigger
-								data-preview-group="mosaico"
-								data-preview-img={img.data.imagen}
-								data-preview-sector={img.data.sector ?? 'Tarjeta personal'}
-								data-preview-title={img.data.nombre}
-								data-preview-desc={img.data.descripcion}
-								data-preview-href={img.data.ruta ?? '/portafolio'}
-								data-preview-cta="Ver página →"
-								class={`gallery-item group relative block cursor-pointer overflow-hidden rounded-2xl border border-zinc-800 ${idx % 2 === 0 ? 'tilt-a' : 'tilt-b'}`}
-							>
-								<img src={img.data.imagen} alt={img.data.nombre} class="block w-full" loading="lazy" />
-								<span class="absolute top-3 left-3 h-2 w-2 rounded-full shadow" style={`background:${img.data.colorHex ?? '#a1a1aa'}`} />
-								<div class="gallery-caption absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-3 pt-8 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-									<p class="text-xs font-semibold text-white">{img.data.nombre}</p>
-									<p class="text-[10px] text-zinc-400">{img.data.sector ?? 'Tarjeta personal'}</p>
+					gruposLanding.map(([sector, items], gi) => (
+						<div class="landing-panel flex flex-col items-center" data-panel-index={gi} style={`--accent:${items[0]?.data.colorHex ?? '#a1a1aa'}`}>
+							<p class="pointer-events-none text-center text-sm font-semibold text-white">{sector}</p>
+							<div class="relative mt-3 w-full max-w-[240px]">
+								<div class="landing-slide-track relative aspect-[640/1362] w-full overflow-hidden rounded-3xl bg-zinc-900 shadow-2xl shadow-black/50" data-track>
+									{
+										items.map((img, i) => (
+											<button
+												type="button"
+												data-preview-trigger
+												data-preview-group={`pila-${sector}`}
+												data-preview-img={img.data.imagen}
+												data-preview-sector={img.data.sector ?? 'Tarjeta personal'}
+												data-preview-title={img.data.nombre}
+												data-preview-desc={img.data.descripcion}
+												data-preview-href={img.data.ruta ?? '/portafolio'}
+												data-preview-cta="Ver página →"
+												data-preview-notes={(img.data.notas ?? []).join('|')}
+												class="landing-slide absolute inset-0 flex cursor-pointer items-center justify-center overflow-hidden"
+											>
+												<img src={img.data.imagen} alt={img.data.nombre} class="h-full w-full object-cover" loading="lazy" />
+											</button>
+										))
+									}
 								</div>
+								{
+									items.length > 1 && (
+										<>
+											<button type="button" class="landing-nav landing-nav-prev" data-nav-prev aria-label="Plantilla anterior">
+												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6" /></svg>
+											</button>
+											<button type="button" class="landing-nav landing-nav-next" data-nav-next aria-label="Siguiente plantilla">
+												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6" /></svg>
+											</button>
+										</>
+									)
+								}
 							</div>
+							{
+								items.length > 1 && (
+									<div class="landing-dots mt-4 flex items-center justify-center gap-1.5" data-dots>
+										{items.map((_, i) => <button type="button" class="landing-dot" data-dot-index={i} aria-label={`Ir a la plantilla ${i + 1}`} />)}
+									</div>
+								)
+							}
 						</div>
 					))
 				}
@@ -122,138 +156,313 @@ const ICONOS: Record<string, string> = {
 		<a
 			href="/portafolio"
 			data-reveal
-			class="piece piece-bottom piece-d3 group mt-4 inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20"
+			class="cta-shimmer piece piece-bottom piece-d3 group relative mt-4 inline-flex items-center gap-2 overflow-hidden rounded-full border border-indigo-400/40 bg-indigo-500/10 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-indigo-400/70 hover:bg-indigo-500/20"
 		>
 			Ver todo el portafolio
-			<span class="transition-transform group-hover:translate-x-0.5">→</span>
+			<span class="relative transition-transform group-hover:translate-x-0.5">→</span>
 		</a>
 	</div>
 </section>
 
 <style>
-	/* ============ Mazo de sectores: reparte las cartas al revelarse, luego cada una se
-	   endereza y levanta al pasar el ratón — dos elementos por carta (fan-card exterior con
-	   el ángulo de reparto, fan-card-inner interior con el hover) para que ambas animaciones
-	   no compitan por la misma propiedad ============ */
-	.fan-card {
-		width: 172px;
-		margin-left: -40px;
-		transform-origin: bottom center;
+	/* ============ Mazo de reseñas: las cartas están todas apiladas prácticamente
+	   una encima de otra (un mazo de verdad, no un abanico ya entreabierto). Tocar
+	   el mazo lo abre en abanico con un salto claro — cada carta vuela a su sitio
+	   con un rebote — y ahí sí se distinguen todas. Pasar el ratón por encima da
+	   una pista (se levanta un poco) y enseña un resumen corto; tocar una en
+	   concreto abre su reseña completa en el lightbox. Todo con `transform` sobre
+	   cartas con `position:absolute`, así el contenedor nunca cambia de tamaño ni
+	   se recoloca — antes, al abrir con márgenes negativos, el mazo entero se
+	   desplazaba de sitio y cerrar se sentía como un reinicio brusco. ============ */
+	.sector-card {
+		transform: translate(-50%, -50%) translate(calc(var(--depth) * 5px), calc(var(--depth) * 7px)) rotate(var(--rot, 0deg));
+		z-index: calc(20 - var(--depth));
 		opacity: 0;
+		transition:
+			transform 0.6s cubic-bezier(0.22, 1.4, 0.36, 1),
+			box-shadow 0.3s ease;
 	}
-	.fan-card:first-child {
-		margin-left: 0;
+	/* la animación de entrada solo toca `opacity`/`scale`/`translate` (propiedades
+	   independientes de `transform`) — si tocara `transform` directamente, su
+	   `forwards` la dejaría fija para siempre y ganaría a la regla de abrir/cerrar
+	   el abanico pase lo que pase (una animación con `forwards` siempre gana a una
+	   regla estática, sin importar la especificidad). Así `transform` queda libre
+	   siempre para el apilado y el abanico. */
+	.is-revealing .sector-card {
+		animation: sector-deal calc(0.5s * var(--reveal-speed, 1)) ease-out forwards;
+		animation-delay: calc(var(--depth) * 0.06s * var(--reveal-speed, 1));
 	}
-	.is-revealing .fan-card {
-		animation: fan-deal calc(1s * var(--reveal-speed, 1)) cubic-bezier(0.16, 1, 0.3, 1) forwards;
-		animation-delay: calc(var(--delay, 0s) * var(--reveal-speed, 1));
-	}
-	@keyframes fan-deal {
+	@keyframes sector-deal {
 		0% {
 			opacity: 0;
-			filter: blur(7px);
-			transform: rotate(0deg) translateY(50px) scale(0.8);
-		}
-		60% {
-			filter: blur(0);
+			scale: 0.85;
+			translate: 0 40px;
 		}
 		100% {
 			opacity: 1;
-			filter: blur(0);
-			transform: rotate(var(--rot)) translateY(var(--arco)) scale(1);
+			scale: 1;
+			translate: 0 0;
 		}
 	}
-	.fan-card-inner {
-		transition:
-			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-			box-shadow 0.4s ease,
-			border-color 0.3s ease;
+	/* abanico abierto: cada carta salta a su hueco horizontal con un rebote claro */
+	.sector-deck[data-deck-state='open'] .sector-card {
+		transform: translate(-50%, -50%) translate(calc(var(--fan) * 122px), calc(var(--fan) * var(--fan) * 7px)) rotate(calc(var(--fan) * 9deg));
+		z-index: calc(20 + var(--fan) * 10);
+		box-shadow: 0 22px 40px -16px rgba(0, 0, 0, 0.65);
 	}
-	.fan-card:hover {
-		z-index: 50 !important;
+	.sector-card:hover {
+		box-shadow: 0 26px 44px -14px rgba(0, 0, 0, 0.7);
 	}
-	.fan-card:hover .fan-card-inner {
-		transform: translateY(-20px) rotate(calc(var(--rot) * -1));
-		border-color: rgba(255, 255, 255, 0.22);
-		box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+	.sector-deck[data-deck-state='open'] .sector-card:hover {
+		transform: translate(-50%, -50%) translate(calc(var(--fan) * 122px), calc(var(--fan) * var(--fan) * 7px - 12px)) rotate(calc(var(--fan) * 9deg)) scale(1.06);
+		z-index: 40;
+	}
+	/* pista al pasar el ratón: un resumen corto, tanto apiladas como abiertas */
+	.sector-card-tip {
+		opacity: 0;
+		transform: translateX(-50%) translateY(4px);
+	}
+	.sector-card:hover .sector-card-tip {
+		opacity: 1;
+		transform: translateX(-50%) translateY(0);
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.fan-card {
+		.sector-card {
 			opacity: 1;
 			animation: none !important;
-			transform: none !important;
-		}
-		.fan-card:hover .fan-card-inner {
-			transform: translateY(-6px);
 		}
 	}
 
-	/* ============ Galería real: cada tarjeta se inclina un poco al pasar el ratón, y el
-	   wrapper exterior (sin tocar) recibe un desplazamiento de profundidad distinto por
-	   tarjeta, calculado en el script de abajo según el scroll ============ */
-	.parallax-wrap {
-		margin-bottom: 1rem;
-		break-inside: avoid;
-		will-change: transform;
-	}
-	.gallery-item {
+	/* la valoración se "construye" en vez de aparecer ya hecha: la estrella se
+	   dibuja con el trazo y se rellena, a la vez que el número cuenta hacia
+	   arriba (por JS) hasta la puntuación real */
+	.sector-score-star {
+		stroke-dasharray: 46;
+		stroke-dashoffset: 46;
+		fill: none;
 		transition:
-			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-			border-color 0.3s ease;
+			stroke-dashoffset 0.7s ease,
+			fill 0.25s ease 0.55s;
 	}
-	.tilt-a:hover {
-		transform: translateY(-4px) rotate(-0.6deg);
-	}
-	.tilt-b:hover {
-		transform: translateY(-4px) rotate(0.6deg);
-	}
-	.gallery-item img {
-		transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-	}
-	.gallery-item:hover img {
-		transform: scale(1.04);
+	.sector-deck.is-built .sector-score-star {
+		stroke-dashoffset: 0;
+		fill: currentColor;
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.tilt-a:hover,
-		.tilt-b:hover {
-			transform: none;
+		.sector-score-star {
+			transition: none;
+			stroke-dashoffset: 0;
+			fill: currentColor;
 		}
-		.parallax-wrap {
-			transform: none !important;
+	}
+
+	/* ============ Landings: cada categoría tiene su propio escaparate, todas
+	   visibles a la vez en una rejilla — nada de pestañas que hay que pulsar para
+	   ver el resto. Antes las categorías competían por el mismo panel (pestañas)
+	   o se apilaban unas sobre otras (mazo); con cada una en su propia columna,
+	   con su propio hueco, nunca se solapan ni compiten entre sí, ni siquiera al
+	   interactuar con una de ellas. Dentro de cada una, flechas/puntos dejan
+	   clarísimo cómo moverse, y con más de una plantilla avanza sola cada pocos
+	   segundos (se para en cuanto tocas algo) para que se note viva. El marco
+	   ahora usa la proporción real de las capturas (más alto que ancho) en vez
+	   de un 4:5 que las dejaba mal encajadas con márgenes de sobra. ============ */
+	.landing-grid {
+		align-items: start;
+	}
+	.landing-slide-track {
+		border-top: 3px solid var(--accent);
+	}
+	.landing-slide {
+		transition:
+			transform 0.6s cubic-bezier(0.65, 0, 0.35, 1),
+			opacity 0.5s ease;
+		transform: translateX(100%) scale(0.94);
+		opacity: 0;
+	}
+	.landing-slide.is-current {
+		transform: translateX(0%) scale(1);
+		opacity: 1;
+		z-index: 2;
+	}
+	.landing-slide.is-before {
+		transform: translateX(-100%) scale(0.94);
+	}
+	.landing-nav {
+		position: absolute;
+		top: 50%;
+		z-index: 5;
+		display: grid;
+		height: 34px;
+		width: 34px;
+		translate: 0 -50%;
+		place-items: center;
+		border-radius: 999px;
+		background: rgba(9, 9, 11, 0.75);
+		border: 1px solid rgba(255, 255, 255, 0.15);
+		color: #e4e4e7;
+		backdrop-filter: blur(4px);
+		transition: background-color 0.2s ease;
+	}
+	.landing-nav:hover {
+		background: rgba(30, 30, 34, 0.9);
+	}
+	.landing-nav-prev {
+		left: 10px;
+	}
+	.landing-nav-next {
+		right: 10px;
+	}
+	.landing-dot {
+		height: 6px;
+		width: 6px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.25);
+		transition:
+			background-color 0.2s ease,
+			width 0.2s ease;
+	}
+	.landing-dot.is-active {
+		width: 16px;
+		background: var(--accent, #fff);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.landing-slide {
+			transition: opacity 0.3s ease;
+		}
+	}
+	.cta-shimmer::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.25) 48%, transparent 66%);
+		transform: translateX(-120%);
+		transition: none;
+	}
+	.cta-shimmer:hover::before {
+		transform: translateX(120%);
+		transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.cta-shimmer:hover::before {
+			transition: none;
+			transform: translateX(-120%);
 		}
 	}
 </style>
 
 <script>
-	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const items = document.querySelectorAll<HTMLElement>('.parallax-wrap');
-
-	if (items.length && !prefersReducedMotion) {
-		let ticking = false;
-
-		function updateParallax() {
-			const vh = window.innerHeight;
-			items.forEach((el) => {
-				const rect = el.getBoundingClientRect();
-				if (rect.bottom < -200 || rect.top > vh + 200) return;
-				const center = rect.top + rect.height / 2;
-				const progress = (center - vh / 2) / vh;
-				const depth = parseFloat(el.dataset.depth ?? '0');
-				el.style.transform = `translateY(${(progress * depth).toFixed(1)}px)`;
-			});
-			ticking = false;
-		}
-
-		window.addEventListener(
-			'scroll',
-			() => {
-				if (!ticking) {
-					requestAnimationFrame(updateParallax);
-					ticking = true;
+	// valoraciones del mazo de reseñas: cuentan hacia arriba desde 0.0 hasta la
+	// puntuación real la primera vez que el mazo entra en pantalla, a la vez que
+	// la estrella se dibuja (por CSS, vía la clase .is-built) — efecto de "esto se
+	// está calculando/construyendo" en vez de aparecer ya terminado.
+	document.querySelectorAll<HTMLElement>('.sector-deck').forEach((deck) => {
+		const scoreEls = Array.from(deck.querySelectorAll<HTMLElement>('.sector-score'));
+		if (!scoreEls.length) return;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (!entry.isIntersecting) continue;
+					deck.classList.add('is-built');
+					const duration = 900;
+					const start = performance.now();
+					function tick(now: number) {
+						const p = Math.min(1, (now - start) / duration);
+						const eased = 1 - Math.pow(1 - p, 3);
+						scoreEls.forEach((el) => {
+							const target = parseFloat(el.dataset.score ?? '0');
+							el.textContent = (target * eased).toFixed(1);
+						});
+						if (p < 1) requestAnimationFrame(tick);
+					}
+					requestAnimationFrame(tick);
+					observer.unobserve(deck);
 				}
 			},
-			{ passive: true }
+			{ threshold: 0.3 }
 		);
-		updateParallax();
+		observer.observe(deck);
+	});
+
+	// mazo de reseñas: el primer toque solo abre el mazo en abanico (se ven todas
+	// las tarjetas); con el mazo ya abierto, tocar una en concreto abre su reseña
+	// completa en el lightbox (PreviewOverlay), en vez de desplegar el texto ahí
+	// mismo. Se intercepta en captura para adelantarse al listener de PreviewOverlay.
+	document.querySelectorAll<HTMLElement>('.sector-deck').forEach((deck) => {
+		deck.addEventListener(
+			'click',
+			(e) => {
+				if (deck.dataset.deckState !== 'open') {
+					e.preventDefault();
+					e.stopPropagation();
+					deck.dataset.deckState = 'open';
+				}
+			},
+			true
+		);
+	});
+	document.addEventListener('click', (e) => {
+		const target = e.target as HTMLElement;
+		document.querySelectorAll<HTMLElement>('.sector-deck[data-deck-state="open"]').forEach((deck) => {
+			if (!deck.contains(target)) delete deck.dataset.deckState;
+		});
+	});
+
+	// landings: todas las categorías están siempre a la vista (sin pestañas que
+	// pulsar), cada una con su propio carrusel independiente — flechas, puntos y
+	// avance automático (se para en cuanto el usuario toca algo) para que cada
+	// escaparate se sienta vivo antes de que nadie interactúe.
+	const landingGrid = document.querySelector<HTMLElement>('[data-carousel]');
+	if (landingGrid) {
+		const panels = Array.from(landingGrid.querySelectorAll<HTMLElement>('.landing-panel'));
+
+		panels.forEach((panel) => {
+			const slides = Array.from(panel.querySelectorAll<HTMLElement>('.landing-slide'));
+			const dots = Array.from(panel.querySelectorAll<HTMLElement>('.landing-dot'));
+			let current = 0;
+			let autoplayId: ReturnType<typeof setInterval> | undefined;
+
+			function render() {
+				slides.forEach((s, i) => {
+					s.classList.toggle('is-current', i === current);
+					s.classList.toggle('is-before', i < current);
+				});
+				dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+			}
+			function goTo(i: number) {
+				current = (i + slides.length) % slides.length;
+				render();
+			}
+			function startAutoplay() {
+				// siempre limpia el intervalo anterior antes de crear uno nuevo — si no,
+				// un "mouseleave" sin su "mouseenter" (el ratón ya estaba encima al cargar
+				// la página) dejaba dos intervalos corriendo a la vez, y el carrusel
+				// avanzaba dos plantillas de golpe en vez de una.
+				clearInterval(autoplayId);
+				if (slides.length < 2) return;
+				autoplayId = setInterval(() => goTo(current + 1), 4000);
+			}
+			function restartAutoplay() {
+				startAutoplay();
+			}
+			panel.querySelector('[data-nav-prev]')?.addEventListener('click', () => {
+				goTo(current - 1);
+				restartAutoplay();
+			});
+			panel.querySelector('[data-nav-next]')?.addEventListener('click', () => {
+				goTo(current + 1);
+				restartAutoplay();
+			});
+			dots.forEach((dot, i) =>
+				dot.addEventListener('click', () => {
+					goTo(i);
+					restartAutoplay();
+				})
+			);
+			panel.addEventListener('mouseenter', () => clearInterval(autoplayId));
+			panel.addEventListener('mouseleave', () => startAutoplay());
+
+			render();
+			startAutoplay();
+		});
 	}
 </script>

@@ -23,6 +23,7 @@
 			</div>
 			<h3 id="previewTitle" class="preview-title"></h3>
 			<p id="previewDesc" class="preview-desc"></p>
+			<ul id="previewNotes" class="preview-notes"></ul>
 			<a id="previewCta" class="preview-cta" href="#" target="_blank" rel="noopener noreferrer">Ver página →</a>
 		</div>
 	</div>
@@ -163,6 +164,9 @@
 		object-fit: cover;
 		object-position: top;
 	}
+	.preview-media.is-empty {
+		display: none;
+	}
 	.preview-info {
 		padding: 28px 28px 30px;
 		overflow-y: auto;
@@ -196,7 +200,35 @@
 		font-size: 14px;
 		line-height: 1.6;
 		color: #a1a1aa;
+		margin: 0 0 16px;
+	}
+	.preview-notes {
+		display: none;
+		flex-direction: column;
+		gap: 8px;
 		margin: 0 0 22px;
+		padding: 0;
+		list-style: none;
+	}
+	.preview-notes.has-notes {
+		display: flex;
+	}
+	.preview-notes li {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		font-size: 12.5px;
+		line-height: 1.5;
+		color: #d4d4d8;
+	}
+	.preview-notes li::before {
+		content: '';
+		flex-shrink: 0;
+		width: 5px;
+		height: 5px;
+		margin-top: 6px;
+		border-radius: 50%;
+		background: #818cf8;
 	}
 	.preview-cta {
 		display: inline-flex;
@@ -218,6 +250,7 @@
 	const sectorEl = document.getElementById('previewSector');
 	const titleEl = document.getElementById('previewTitle');
 	const descEl = document.getElementById('previewDesc');
+	const notesEl = document.getElementById('previewNotes');
 	const ctaEl = document.getElementById('previewCta') as HTMLAnchorElement | null;
 	const counterEl = document.getElementById('previewCounter');
 	const prevBtn = document.getElementById('previewPrev');
@@ -234,18 +267,28 @@
 
 	function show(trigger: HTMLElement) {
 		if (!overlay) return;
-		const { previewImg, previewSector, previewTitle, previewDesc, previewHref, previewCta } = trigger.dataset;
+		const { previewImg, previewSector, previewTitle, previewDesc, previewHref, previewCta, previewNotes } = trigger.dataset;
 		if (img) {
 			if (previewImg) {
 				img.src = previewImg;
-				img.style.display = '';
+				img.closest('.preview-media')?.classList.remove('is-empty');
 			} else {
-				img.style.display = 'none';
+				img.closest('.preview-media')?.classList.add('is-empty');
 			}
 		}
 		if (sectorEl) sectorEl.textContent = previewSector ?? '';
 		if (titleEl) titleEl.textContent = previewTitle ?? '';
 		if (descEl) descEl.textContent = previewDesc ?? '';
+		if (notesEl) {
+			const notes = (previewNotes ?? '').split('|').filter(Boolean);
+			notesEl.innerHTML = '';
+			notes.forEach((note) => {
+				const li = document.createElement('li');
+				li.textContent = note;
+				notesEl.appendChild(li);
+			});
+			notesEl.classList.toggle('has-notes', notes.length > 0);
+		}
 		if (ctaEl && previewHref) {
 			ctaEl.href = previewHref;
 			ctaEl.textContent = previewCta ?? 'Ver página →';

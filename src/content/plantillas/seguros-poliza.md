@@ -7,4 +7,5 @@ estado: "publico"
 colorHex: "#7a1f18"
 ruta: "/tarjeta/seguros-poliza"
 imagen: "/plantillas/seguros-poliza.png"
+notas: ["La página se desenrolla como una póliza de verdad", "Sello de lacre que se estampa al cargar"]
 ---

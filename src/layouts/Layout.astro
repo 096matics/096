@@ -24,6 +24,10 @@ const {
 		<title>{title} · 096matics</title>
 	</head>
 	<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+		<div class="ambient-glow" aria-hidden="true"></div>
+		<div class="bg-grid" aria-hidden="true"></div>
+		<div class="grain-overlay" aria-hidden="true"></div>
+
 		<slot />
 		<PreviewOverlay />
 	</body>
@@ -52,9 +56,37 @@ const {
 		}
 		lastY = y;
 		lastT = now;
+		// fondo reactivo al scroll: un desplazamiento sutil de la retícula, proporcional
+		// a la velocidad (tope para que nunca sea brusco), reutilizando esta misma medición.
+		const parallax = Math.min(10, velocity * 14);
+		root.style.setProperty('--scroll-parallax', `${parallax.toFixed(2)}px`);
 		requestAnimationFrame(trackVelocity);
 	}
 	requestAnimationFrame(trackVelocity);
+
+	// fondo reactivo al cursor: el resplandor sigue al puntero con un pequeño retraso
+	// (la transición vive en el CSS), desplazándose sólo unos px desde el centro del blob.
+	let pointerTicking = false;
+	let pendingPointer: { x: number; y: number } | null = null;
+	function applyPointer() {
+		pointerTicking = false;
+		if (!pendingPointer) return;
+		const { x, y } = pendingPointer;
+		const offsetX = (x / window.innerWidth - 0.5) * 70;
+		const offsetY = (y / window.innerHeight - 0.5) * 70;
+		root.style.setProperty('--pointer-x', `${offsetX.toFixed(1)}px`);
+		root.style.setProperty('--pointer-y', `${offsetY.toFixed(1)}px`);
+	}
+	window.addEventListener(
+		'pointermove',
+		(e) => {
+			pendingPointer = { x: e.clientX, y: e.clientY };
+			if (pointerTicking) return;
+			pointerTicking = true;
+			requestAnimationFrame(applyPointer);
+		},
+		{ passive: true }
+	);
 
 	function speedMultiplier() {
 		// en reposo o scroll deliberado: ritmo base (1) o incluso algo más lento (hasta 1.15).
@@ -75,7 +107,11 @@ const {
 					}
 				}
 			},
-			{ threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+			// threshold 0 (en vez de una fracción del alto del elemento): con secciones muy
+			// altas —como el portafolio, con el mazo de sectores y el mosaico— exigir un % fijo
+			// del área total nunca llega a cumplirse en viewports más bajos que esa altura.
+			// Basta con que un solo píxel entre en la zona recortada por rootMargin.
+			{ threshold: 0, rootMargin: '0px 0px -8% 0px' }
 		);
 		targets.forEach((el) => observer.observe(el));
 	}

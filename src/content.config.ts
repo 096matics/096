@@ -27,6 +27,9 @@ const plantillas = defineCollection({
     origenArchivo: z.string().optional(),
     imagen: z.string().optional(),
     ruta: z.string().optional(),
+    // apuntes cortos y reales sobre la página (animaciones, elementos clicables...),
+    // que se muestran al abrir la plantilla en el portafolio.
+    notas: z.array(z.string()).optional(),
   }),
 });
 

@@ -1,6 +1,9 @@
 ---
 import Logo from '../Logo.astro';
 
+// el orden aquí debe coincidir con el orden real de las secciones en la página
+// (ver src/pages/index.astro) — si no, el riel resalta los puntos fuera de orden
+// al bajar, dando la sensación de que "salta" en vez de seguir el scroll.
 const links = [
 	{ href: '#productos', label: 'El mecanismo' },
 	{ href: '#portafolio', label: 'Portafolio' },
@@ -24,11 +27,13 @@ const rail = [
 
 		<nav aria-label="Secciones" class="section-rail absolute left-1/2 hidden -translate-x-1/2 lg:flex">
 			<div class="rail-track relative flex items-center gap-8">
-				<span class="rail-indicator absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full" id="railIndicator" aria-hidden="true"></span>
+				<span class="rail-line-bg absolute top-1/2 h-px -translate-y-1/2 bg-zinc-700/60" id="railLineBg" aria-hidden="true"></span>
+				<span class="rail-line-fill absolute top-1/2 h-px -translate-y-1/2" id="railLineFill" aria-hidden="true"></span>
+				<span class="rail-tip absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full" id="railTip" aria-hidden="true"></span>
 				{
 					rail.map((item) => (
 						<a href={`#${item.id}`} data-dot={item.id} class="rail-item group relative flex flex-col items-center py-1" aria-label={item.label}>
-							<span class="rail-dot h-1.5 w-1.5 rounded-full bg-zinc-600 transition-all duration-300" />
+							<span class="rail-dot relative z-[1] block h-1.5 w-1.5 rounded-full bg-zinc-600 transition-all duration-300" />
 							<span class="rail-label pointer-events-none absolute top-4 rounded-md bg-zinc-900/90 px-2 py-1 text-[10px] font-medium whitespace-nowrap text-zinc-300 opacity-0 shadow-lg ring-1 ring-white/10 transition-all duration-200">
 								{item.label}
 							</span>
@@ -101,42 +106,83 @@ const rail = [
 		opacity: 1;
 		transform: translateY(0);
 	}
-	.rail-item[data-active='true'] .rail-dot {
-		background: #818cf8;
-		box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.18);
-		transform: scale(1.5);
-	}
 	.rail-item[data-active='true'] .rail-label {
 		opacity: 0.85;
 		transform: translateY(0);
 	}
-	.rail-indicator {
+
+	/* ============ Riel como barra de progreso de la página: una línea que se rellena
+	   con el scroll y una punta que viaja en su extremo — los puntos de cada sección
+	   se "encienden" en cuanto la línea los alcanza, así que el punto y la luz son
+	   literalmente la misma cosa, nunca dos efectos por separado. ============ */
+	.rail-line-fill {
 		background: linear-gradient(90deg, #6366f1, #a855f7);
-		filter: blur(3px);
+		width: 0;
 		opacity: 0;
-		transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1);
-		animation: rail-pulse 1.8s ease-in-out infinite;
+		transition: width 0.08s linear;
 	}
-	.rail-indicator.is-visible {
+	.rail-line-fill.is-visible {
 		opacity: 1;
 	}
-	@keyframes rail-pulse {
-		0%,
-		100% {
-			box-shadow: 0 0 6px rgba(129, 140, 248, 0.5);
+	.rail-tip {
+		background: #c7d2fe;
+		box-shadow: 0 0 8px 2px rgba(129, 140, 248, 0.75);
+		opacity: 0;
+		transition: left 0.08s linear;
+	}
+	.rail-tip.is-visible {
+		opacity: 1;
+	}
+	.rail-dot {
+		transition:
+			background-color 0.3s ease,
+			box-shadow 0.3s ease,
+			transform 0.3s ease;
+	}
+	/* la línea ya la ha alcanzado: el punto queda "encendido" a su paso */
+	.rail-item[data-passed='true'] .rail-dot {
+		background: #a5b4fc;
+		transform: scale(1.25);
+	}
+	/* la sección activa además destaca con su propio brillo, sin dejar de ser el
+	   mismo punto que ya estaba encendido por la línea */
+	.rail-item[data-active='true'] .rail-dot {
+		background: linear-gradient(135deg, #818cf8, #c084fc);
+		box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.22);
+		transform: scale(1.6);
+	}
+	/* pequeño anillo que respira alrededor del punto activo — "estás aquí", sin
+	   competir con el brillo de la línea al pasar por él */
+	.rail-item[data-active='true'] .rail-dot::after {
+		content: '';
+		position: absolute;
+		inset: -6px;
+		border-radius: 999px;
+		border: 1px solid rgba(196, 181, 253, 0.55);
+		animation: rail-dot-breathe 2.2s ease-out infinite;
+	}
+	@keyframes rail-dot-breathe {
+		0% {
+			transform: scale(0.6);
+			opacity: 0.9;
 		}
-		50% {
-			box-shadow: 0 0 14px rgba(129, 140, 248, 0.9);
+		100% {
+			transform: scale(1.6);
+			opacity: 0;
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.rail-indicator {
-			animation: none;
+		.rail-line-fill,
+		.rail-tip {
 			transition: none;
 		}
 		.rail-dot,
 		.rail-label {
 			transition: none;
+		}
+		.rail-item[data-active='true'] .rail-dot::after {
+			animation: none;
+			display: none;
 		}
 	}
 </style>
@@ -168,38 +214,82 @@ const rail = [
 	}
 
 	const track = document.querySelector<HTMLElement>('.rail-track');
-	const indicator = document.getElementById('railIndicator');
+	const lineBg = document.getElementById('railLineBg');
+	const lineFill = document.getElementById('railLineFill');
+	const tip = document.getElementById('railTip');
 	const railLinks = document.querySelectorAll<HTMLAnchorElement>('.rail-item');
 	const sections = Array.from(railLinks)
-		.map((link) => document.getElementById(link.dataset.dot ?? ''))
-		.filter((el): el is HTMLElement => !!el);
+		.map((link) => ({ link, el: document.getElementById(link.dataset.dot ?? '') }))
+		.filter((s): s is { link: HTMLAnchorElement; el: HTMLElement } => !!s.el);
 
-	function moveIndicator(activeLink: Element) {
-		if (!track || !indicator) return;
-		const dot = activeLink.querySelector<HTMLElement>('.rail-dot');
-		if (!dot) return;
+	// el riel es una barra de progreso de la página entera: la línea se rellena según
+	// el scroll (0 al principio, 1 al final) y cada punto se "enciende" en cuanto esa
+	// misma línea lo alcanza — el punto no es un efecto aparte, es donde está la línea.
+	function updateRail() {
+		if (!track || !lineBg || !lineFill || !tip || !sections.length) return;
+		const doc = document.documentElement;
+		const maxScroll = doc.scrollHeight - window.innerHeight;
+		const progress = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
+
+		const dots = sections.map((s) => s.link.querySelector<HTMLElement>('.rail-dot')!);
 		const trackRect = track.getBoundingClientRect();
-		const dotRect = dot.getBoundingClientRect();
-		const x = dotRect.left - trackRect.left + dotRect.width / 2 - 4;
-		indicator.style.transform = `translate(${x}px, -50%)`;
-		indicator.classList.add('is-visible');
+		const positions = dots.map((dot) => {
+			const r = dot.getBoundingClientRect();
+			return r.left - trackRect.left + r.width / 2;
+		});
+		const startX = positions[0];
+		const endX = positions[positions.length - 1];
+		const currentX = startX + (endX - startX) * progress;
+
+		lineBg.style.left = `${startX}px`;
+		lineBg.style.width = `${endX - startX}px`;
+		lineFill.style.left = `${startX}px`;
+		lineFill.style.width = `${Math.max(0, currentX - startX)}px`;
+		lineFill.classList.add('is-visible');
+		tip.style.left = `${currentX}px`;
+		tip.classList.add('is-visible');
+
+		sections.forEach((s, i) => {
+			s.link.toggleAttribute('data-passed', positions[i] <= currentX + 1);
+		});
+	}
+
+	// qué sección es "la activa" (etiqueta visible, punto con más brillo) sigue
+	// basado en cuál tiene el centro más cerca del centro del viewport — recalculado
+	// en cada frame de scroll para no depender de umbrales fijos.
+	let ticking = false;
+	function updateActiveSection() {
+		ticking = false;
+		if (!sections.length) return;
+		const viewportCenter = window.innerHeight / 2;
+		let closest = sections[0];
+		let closestDist = Infinity;
+		for (const s of sections) {
+			const rect = s.el.getBoundingClientRect();
+			const center = rect.top + rect.height / 2;
+			const dist = Math.abs(center - viewportCenter);
+			if (dist < closestDist) {
+				closestDist = dist;
+				closest = s;
+			}
+		}
+		if (closest.link.getAttribute('data-active') !== 'true') {
+			railLinks.forEach((l) => l.removeAttribute('data-active'));
+			closest.link.setAttribute('data-active', 'true');
+		}
+		updateRail();
+	}
+
+	function requestUpdate() {
+		if (ticking) return;
+		ticking = true;
+		requestAnimationFrame(updateActiveSection);
 	}
 
 	if (sections.length) {
-		const railObserver = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (!entry.isIntersecting) continue;
-					const link = document.querySelector(`.rail-item[data-dot="${entry.target.id}"]`);
-					if (!link) continue;
-					railLinks.forEach((l) => l.removeAttribute('data-active'));
-					link.setAttribute('data-active', 'true');
-					moveIndicator(link);
-				}
-			},
-			{ rootMargin: '-45% 0px -45% 0px', threshold: 0 }
-		);
-		sections.forEach((s) => railObserver.observe(s));
+		updateActiveSection();
+		window.addEventListener('scroll', requestUpdate, { passive: true });
+		window.addEventListener('resize', requestUpdate);
 	}
 
 	railLinks.forEach((link) => {
@@ -207,10 +297,5 @@ const rail = [
 			e.preventDefault();
 			document.getElementById(link.dataset.dot ?? '')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		});
-	});
-
-	window.addEventListener('resize', () => {
-		const active = document.querySelector('.rail-item[data-active="true"]');
-		if (active) moveIndicator(active);
 	});
 </script>

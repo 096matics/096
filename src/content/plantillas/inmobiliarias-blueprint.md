@@ -7,4 +7,5 @@ estado: "publico"
 colorHex: "#ff6a3d"
 ruta: "/tarjeta/inmobiliarias-blueprint"
 imagen: "/plantillas/inmobiliarias-blueprint.png"
+notas: ["La casa se dibuja en vivo, línea a línea", "Esquinas con un pulso técnico continuo"]
 ---

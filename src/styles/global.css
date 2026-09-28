@@ -5,6 +5,13 @@
 	   según la velocidad de scroll justo antes de cada revelado: 1 = ritmo base (lento y
 	   vistoso), baja hacia 0.4 cuanto más rápido te desplazas, para que nunca se sienta lento */
 	--reveal-speed: 1;
+
+	/* fondo reactivo, actualizado en vivo por Layout.astro: --pointer-x/-y siguen (con
+	   retraso, vía transition) la posición del cursor; --scroll-parallax crece con la
+	   velocidad de scroll para dar una sensación sutil de profundidad al bajar */
+	--pointer-x: 0px;
+	--pointer-y: 0px;
+	--scroll-parallax: 0px;
 }
 
 body {
@@ -100,8 +107,19 @@ body {
 		opacity: 0.65;
 	}
 }
+.ambient-glow::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: radial-gradient(circle 480px at 50% 45%, rgba(129, 140, 248, 0.12), transparent 70%);
+	transform: translate(var(--pointer-x), var(--pointer-y));
+	transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+	will-change: transform;
+}
 
-/* retícula de puntos: un guiño técnico discreto (red NFC), no un patrón decorativo genérico */
+/* retícula de puntos: un guiño técnico discreto (red NFC), no un patrón decorativo genérico.
+   se desplaza levemente con --scroll-parallax, dando algo de profundidad al bajar. */
 .bg-grid {
 	position: fixed;
 	inset: 0;
@@ -110,7 +128,7 @@ body {
 	opacity: 0.5;
 	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0.6px, transparent 0.6px);
 	background-size: 28px 28px;
-	background-position: 10px 10px;
+	background-position: 10px calc(10px + var(--scroll-parallax));
 	mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 78%);
 	-webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 78%);
 }
@@ -306,5 +324,7 @@ body {
 	.ambient-glow::before,
 	.ambient-glow::after {
 		animation: none;
+		transition: none;
+		transform: none;
 	}
 }

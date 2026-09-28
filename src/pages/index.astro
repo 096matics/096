@@ -7,15 +7,12 @@ import PortafolioPreview from '../components/landing/PortafolioPreview.astro';
 import QuienesSomos from '../components/landing/QuienesSomos.astro';
 import Proceso from '../components/landing/Proceso.astro';
 import ProductoFuturo from '../components/landing/ProductoFuturo.astro';
+import InmoFlowShowcase from '../components/landing/InmoFlowShowcase.astro';
 import Objeciones from '../components/landing/Objeciones.astro';
 import Contacto from '../components/landing/Contacto.astro';
 ---
 
 <Layout title="Tarjetas NFC para negocios locales">
-	<div class="ambient-glow" aria-hidden="true"></div>
-	<div class="bg-grid" aria-hidden="true"></div>
-	<div class="grain-overlay" aria-hidden="true"></div>
-
 	<Nav />
 
 	<main>
@@ -23,13 +20,14 @@ import Contacto from '../components/landing/Contacto.astro';
 		<Hero />
 		<!-- El toque: el mecanismo se bifurca en dos resultados posibles -->
 		<Mecanismo />
-		<PortafolioPreview />
-		<!-- Quién hay detrás, antes de pedir el compromiso -->
-		<QuienesSomos />
-		<!-- La logística: cómo se instala de verdad -->
-		<Proceso />
+		<InmoFlowShowcase />
 		<ProductoFuturo />
+		<PortafolioPreview />
+		<!-- La logística: cómo se instala de verdad, justo antes de las preguntas -->
+		<Proceso />
 		<Objeciones />
+		<!-- Quién hay detrás, justo antes de pedir el contacto -->
+		<QuienesSomos />
 		<Contacto />
 	</main>
 
