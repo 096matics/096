@@ -1,28 +1,27 @@
 ---
 import WhatsAppCTA from '../WhatsAppCTA.astro';
 
-// Segundo intento de esta sección: la primera versión (una tarjeta verde propia
-// con un móvil inventado) no se parecía en nada al producto real y desentonaba
-// con el resto de la página. Esta reutiliza tal cual la composición del hero de
-// InmoFlow (panel de oportunidades + móvil de WhatsApp superpuesto, mismos
-// datos de ejemplo, mismos textos de beneficios) para que se lea inequívocamente
-// como "esto es InmoFlow", dentro de una tarjeta con el mismo lenguaje visual
-// que el resto de 096matics (border-zinc-800/bg-zinc-900, como las de "El
-// mecanismo"). La mejora sobre el original: el panel y el móvil ya no son dos
-// bucles independientes — cuentan la MISMA historia (entra Javier por WhatsApp,
-// se le responde, y su fila en el panel cambia de "Lead nuevo" a "Contactando"
-// en el momento exacto en que se le contesta), con un timeline en @keyframes
-// puro para que quede fiable (ver Mecanismo.astro para el porqué de esa
-// elección).
-const leads = [
-	{ nombre: 'Laura Martínez', meta: 'Valencia · 180.000 €', estado: 'Interesado', cls: '' },
-	{ nombre: 'Carlos Ruiz', meta: 'Paterna · 250.000 €', estado: 'Contactando', cls: 'yellow' },
-	{ nombre: 'Ana López', meta: 'Torrent · 320.000 €', estado: 'Interesado', cls: '' },
-];
+// Tercer intento de esta sección. Las dos versiones anteriores construían su
+// propia coreografía en @keyframes puro — vistosa, pero inventada por
+// nosotros, no lo que InmoFlow hace de verdad. Esta reutiliza literalmente
+// el mecanismo de animación del propio hero real de InmoFlow (el mismo
+// archivo en Desktop/Inmoflow/Index.html): un chat de WhatsApp que se
+// escribe solo mensaje a mensaje con su indicador de "escribiendo…", y un
+// panel de leads en el que van entrando filas nuevas en directo (con FLIP,
+// para que el resto de filas se acomoden con un pequeño desplazamiento en
+// vez de saltar). Ni el texto ni las cifras se inventan: el copy y los
+// beneficios son los mismos tres que usa la propia InmoFlow en su hero real,
+// solo sin la palabra "CRM" (esa ya se explica en /tarjeta/inmoflow).
 const beneficios = [
-	{ titulo: 'Respuesta inmediata', texto: 'a cualquier hora, aunque nadie esté mirando el móvil' },
-	{ titulo: 'Nada se pierde', texto: 'cada conversación queda ordenada, sola, sin hojas de cálculo' },
-	{ titulo: 'Seguimiento automático', texto: '24 horas, 7 días, sin que se le olvide a nadie' },
+	{ titulo: 'Respuesta inmediata', texto: 'a cada nuevo lead' },
+	{ titulo: 'Seguimiento automático', texto: '24 horas, 7 días' },
+	{ titulo: 'Más visitas, más ventas', texto: 'con menos gestión' },
+];
+const leadsIniciales = [
+	{ ini: 'JG', nombre: 'Javier García', meta: 'Valencia · 310.000 €', estado: 'Lead nuevo', cls: 'blue', av: '#9b7f8b' },
+	{ ini: 'LM', nombre: 'Laura Martínez', meta: 'Valencia · 180.000 €', estado: 'Interesado', cls: '', av: '#7d9c88' },
+	{ ini: 'CR', nombre: 'Carlos Ruiz', meta: 'Paterna · 250.000 €', estado: 'Contactando', cls: 'yellow', av: '#a08f74' },
+	{ ini: 'AL', nombre: 'Ana López', meta: 'Torrent · 320.000 €', estado: 'Interesado', cls: '', av: '#74889b' },
 ];
 ---
 
@@ -32,8 +31,8 @@ const beneficios = [
 			<p class="text-sm font-bold tracking-widest text-emerald-400 uppercase">Caso real · InmoFlow</p>
 			<h2 class="mt-2 text-3xl font-semibold text-white sm:text-4xl">Un lead entra. InmoFlow ya le ha respondido.</h2>
 			<p class="mt-3 text-lg text-zinc-400">
-				Cada minuto sin respuesta es una venta que se enfría. InmoFlow contesta a cada cliente al instante, sigue la
-				conversación por su cuenta y avisa al equipo solo cuando de verdad hace falta que alguien entre.
+				InmoFlow es el sistema todo en uno para inmobiliarias: capta leads desde tu web, WhatsApp y portales, y
+				responde automáticamente para que ningún cliente se quede esperando.
 			</p>
 		</div>
 
@@ -45,30 +44,16 @@ const beneficios = [
 					<div class="if-dash-top">
 						<div class="if-dash-title"><span class="if-live-dot"></span>Oportunidades</div>
 						<div class="if-dash-tabs">
-							<span class="if-pill if-pill-live"><span class="if-live-dot if-live-dot--sm"></span>Lead nuevo · 19</span>
+							<span class="if-pill if-pill-live" id="ifLeadPill"><span class="if-live-dot if-live-dot--sm"></span>Lead nuevo · 19</span>
 							<span class="if-pill">Contactando · 12</span>
 							<span class="if-pill">Interesado · 9</span>
 						</div>
 					</div>
-					<div class="if-dash-table">
-						<div class="if-lead-row if-lead-row-javier">
-							<div class="if-avatar" style="--av:#9b7f8b">JG</div>
-							<div class="if-lead-info">
-								<div class="if-lead-name">Javier García</div>
-								<div class="if-lead-meta">Valencia · 310.000 €</div>
-							</div>
-							<span class="if-status if-status-new">Lead nuevo</span>
-							<span class="if-status if-status-contacting">Contactando</span>
-						</div>
+					<div class="if-dash-table" id="ifLeadTable">
 						{
-							leads.map((l) => (
+							leadsIniciales.map((l) => (
 								<div class="if-lead-row">
-									<div class="if-avatar" style={`--av:${l.cls === 'yellow' ? '#a08f74' : '#7d9c88'}`}>
-										{l.nombre
-											.split(' ')
-											.map((w) => w[0])
-											.join('')}
-									</div>
+									<div class="if-avatar" style={`--av:${l.av}`}>{l.ini}</div>
 									<div class="if-lead-info">
 										<div class="if-lead-name">{l.nombre}</div>
 										<div class="if-lead-meta">{l.meta}</div>
@@ -83,12 +68,11 @@ const beneficios = [
 				<div class="if-phone">
 					<div class="if-phone-screen">
 						<div class="if-phone-head"><span class="if-live-dot"></span>Javier García</div>
-						<div class="if-chat">
-							<div class="if-bubble in if-msg-1">¿Sigue disponible el piso de la Av. del Mar? ¿Es de compra o alquiler?</div>
-							<div class="if-bubble out if-msg-2">Comprar</div>
-							<div class="if-bubble in if-typing" aria-hidden="true"><span></span><span></span><span></span></div>
-							<div class="if-bubble in if-msg-3">Perfecto, ¿cuál es tu presupuesto?</div>
-							<div class="if-bubble out if-msg-4">Hasta 320.000 €</div>
+						<div class="if-chat" id="ifChat">
+							<div class="if-bubble in">¿Sigue disponible el piso de la Av. del Mar? ¿Es de compra o alquiler?</div>
+							<div class="if-bubble out">Comprar</div>
+							<div class="if-bubble in">Perfecto. ¿Cuál es tu presupuesto aproximado?</div>
+							<div class="if-bubble out">Hasta 320.000 €</div>
 						</div>
 						<div class="if-chat-input">Escribe un mensaje…</div>
 					</div>
@@ -129,24 +113,9 @@ const beneficios = [
 			radial-gradient(ellipse 50% 55% at 92% 90%, rgba(52, 211, 153, 0.08), transparent 60%);
 	}
 
-	/* las ~8 animaciones infinitas de esta tarjeta (puntos en vivo, mensajes,
-	   estados, el flotar del móvil...) antes corrían sin parar desde que
-	   cargaba la página, seguiera el usuario mirando la sección o llevara rato
-	   desplazado a otra parte — eso es trabajo de más para el hilo principal en
-	   todo momento, y es la otra mitad del lag que se notaba en la página. Se
-	   pausan del todo mientras la tarjeta no está en pantalla (ver el script al
-	   final) y solo corren mientras de verdad se están viendo. */
-	.if-stage {
-		--if-play: paused;
-	}
-	.if-stage.if-playing {
-		--if-play: running;
-	}
-
 	/* ============ Panel + móvil: la misma composición del hero real de InmoFlow
 	   (panel arriba-izquierda, móvil superpuesto abajo-derecha), con sus colores
-	   propios (claros) en vez de adaptarlos al tema oscuro — así se lee sin dudas
-	   como una captura del producto real, no como una reinterpretación. ============ */
+	   propios (claros) en vez de adaptarlos al tema oscuro. ============ */
 	.if-visual {
 		min-height: 360px;
 		max-width: 460px;
@@ -175,12 +144,8 @@ const beneficios = [
 		font-size: 13px;
 		color: #22313a;
 	}
-	/* el punto "en vivo" y su anillo van en capas separadas a propósito: animar
-	   box-shadow (como hacía la versión anterior) obliga a repintar el píxel
-	   entero en cada frame — con 3 puntos de estos corriendo a la vez de forma
-	   infinita, ese repintado constante era buena parte del lag que se notaba
-	   al bajar por la página. Un ::after que solo anima transform+opacity lo
-	   resuelve el compositor solo, sin tocar el hilo principal. */
+	/* el punto "en vivo" anima solo transform+opacity en una capa aparte (::after)
+	   — nunca box-shadow, que obligaría a repintar en cada frame. */
 	.if-live-dot {
 		position: relative;
 		width: 6px;
@@ -196,7 +161,6 @@ const beneficios = [
 		border-radius: 50%;
 		background: #2f9e63;
 		animation: if-ping 2.2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
-		animation-play-state: var(--if-play);
 	}
 	@keyframes if-ping {
 		0% {
@@ -245,40 +209,18 @@ const beneficios = [
 		border-radius: 12px;
 		background: #fff;
 	}
-	.if-lead-row-javier {
-		z-index: 1;
-	}
-	/* antes esto animaba background-color/border-color directamente sobre la fila
-	   — repinta esa zona en cada frame del cruce. Una capa aparte que solo cambia
-	   de opacidad hace el mismo efecto visual (fondo+borde verdes aparecen y se
-	   van) pero el compositor la resuelve sin repintar nada debajo. */
-	.if-lead-row-javier::before {
-		content: '';
-		position: absolute;
-		inset: -1px;
-		border-radius: 12px;
-		background: #eaf5ee;
-		border: 1px solid #bfe0cc;
+	/* la fila que acaba de entrar por JS empieza así (ver el script) y se anima
+	   hasta su estado normal — mismo patrón que usa el hero real de InmoFlow. */
+	.if-lead-row.if-lead-new {
 		opacity: 0;
-		pointer-events: none;
+		transform: translateY(-14px) scale(0.97);
 	}
-	@keyframes if-row-highlight {
-		0%,
-		56% {
-			opacity: 0;
-		}
-		58%,
-		64% {
-			opacity: 1;
-		}
-		66%,
-		100% {
-			opacity: 0;
-		}
-	}
-	.if-lead-row-javier::before {
-		animation: if-row-highlight 9000ms linear infinite;
-		animation-play-state: var(--if-play);
+	.if-lead-row.if-lead-new.if-lead-show {
+		opacity: 1;
+		transform: none;
+		transition:
+			opacity 0.5s ease,
+			transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.if-avatar {
 		width: 30px;
@@ -323,46 +265,9 @@ const beneficios = [
 		background: #f4ede0;
 		color: #9b7745;
 	}
-	.if-status-new,
-	.if-status-contacting {
-		position: absolute;
-		right: 8px;
-		top: 50%;
-		transform: translateY(-50%);
+	.if-status.blue {
 		background: #e8eef3;
 		color: #637c90;
-	}
-	.if-status-contacting {
-		background: #f4ede0;
-		color: #9b7745;
-	}
-	@keyframes if-status-new-cycle {
-		0%,
-		58% {
-			opacity: 1;
-		}
-		60%,
-		100% {
-			opacity: 0;
-		}
-	}
-	@keyframes if-status-contacting-cycle {
-		0%,
-		58% {
-			opacity: 0;
-		}
-		61%,
-		100% {
-			opacity: 1;
-		}
-	}
-	.if-status-new {
-		animation: if-status-new-cycle 9000ms linear infinite;
-		animation-play-state: var(--if-play);
-	}
-	.if-status-contacting {
-		animation: if-status-contacting-cycle 9000ms linear infinite;
-		animation-play-state: var(--if-play);
 	}
 
 	.if-phone {
@@ -377,7 +282,6 @@ const beneficios = [
 		z-index: 2;
 		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
 		animation: if-phone-float 6.5s ease-in-out infinite;
-		animation-play-state: var(--if-play);
 	}
 	@keyframes if-phone-float {
 		0%,
@@ -423,8 +327,6 @@ const beneficios = [
 		line-height: 1.35;
 		margin-bottom: 7px;
 		color: #22313a;
-		opacity: 0;
-		transform: translateY(6px) scale(0.97);
 	}
 	.if-bubble.in {
 		background: #fff;
@@ -434,73 +336,23 @@ const beneficios = [
 		margin-left: auto;
 		background: #dce9df;
 	}
-	.if-msg-1 {
-		opacity: 1;
-		transform: none;
-	}
-	@keyframes if-bubble-in {
-		0%,
-		2.5% {
-			opacity: 0;
-			transform: translateY(6px) scale(0.97);
-		}
-		6%,
-		100% {
-			opacity: 1;
-			transform: none;
-		}
-	}
-	.if-msg-2 {
-		animation: if-bubble-in 9000ms ease-out infinite;
-		animation-delay: 1260ms;
-		animation-play-state: var(--if-play);
-	}
-	.if-msg-3 {
-		animation: if-bubble-in 9000ms ease-out infinite;
-		animation-delay: 3600ms;
-		animation-play-state: var(--if-play);
-	}
-	.if-msg-4 {
-		animation: if-bubble-in 9000ms ease-out infinite;
-		animation-delay: 5220ms;
-		animation-play-state: var(--if-play);
-	}
-	.if-typing {
+	.if-bubble.if-typing-msg {
 		display: flex;
 		gap: 3px;
 		align-items: center;
 		padding: 9px 10px;
 	}
-	@keyframes if-typing-cycle {
-		0%,
-		28% {
-			opacity: 0;
-		}
-		30.5%,
-		39% {
-			opacity: 1;
-		}
-		41%,
-		100% {
-			opacity: 0;
-		}
-	}
-	.if-typing {
-		animation: if-typing-cycle 9000ms ease-out infinite;
-		animation-play-state: var(--if-play);
-	}
-	.if-typing span {
+	.if-bubble.if-typing-msg span {
 		width: 5px;
 		height: 5px;
 		border-radius: 50%;
 		background: #9db1a3;
 		animation: if-blink 1.2s infinite;
-		animation-play-state: var(--if-play);
 	}
-	.if-typing span:nth-child(2) {
+	.if-bubble.if-typing-msg span:nth-child(2) {
 		animation-delay: 0.2s;
 	}
-	.if-typing span:nth-child(3) {
+	.if-bubble.if-typing-msg span:nth-child(3) {
 		animation-delay: 0.4s;
 	}
 	@keyframes if-blink {
@@ -524,20 +376,18 @@ const beneficios = [
 	}
 
 	@media (max-width: 639px) {
-		/* en desktop el móvil se superpone a la esquina del panel (como en el hero
-		   real de InmoFlow), pero en una columna tan estrecha eso tapaba 2 filas
-		   de leads enteras. En móvil, mejor uno debajo del otro, sin solapar nada. */
+		/* el panel de leads es un añadido de esta tarjeta (no está en el hero real
+		   a este ancho tampoco: InmoFlow lo oculta por debajo de 701px y deja solo
+		   el móvil) — mismo criterio aquí, así en pantallas estrechas no compite
+		   con el móvil por el espacio. */
+		.if-dashboard {
+			display: none;
+		}
 		.if-visual {
 			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 28px;
+			justify-content: center;
 			min-height: 0;
 			max-width: 280px;
-		}
-		.if-dashboard {
-			position: static;
-			width: 100%;
 		}
 		.if-phone {
 			position: static;
@@ -547,50 +397,124 @@ const beneficios = [
 
 	@media (prefers-reduced-motion: reduce) {
 		.if-live-dot::after,
-		.if-lead-row-javier::before,
-		.if-status-new,
-		.if-status-contacting,
-		.if-phone,
-		.if-bubble,
-		.if-typing,
-		.if-typing span {
+		.if-phone {
 			animation: none !important;
-		}
-		.if-status-new {
-			opacity: 0;
-		}
-		.if-status-contacting {
-			opacity: 1;
-		}
-		.if-bubble {
-			opacity: 1;
-			transform: none;
-		}
-		.if-typing {
-			opacity: 0;
-			display: none;
 		}
 	}
 </style>
 
 <script>
-	// las animaciones de esta tarjeta solo corren mientras está realmente en
-	// pantalla — .if-playing (ver el CSS de arriba, controla --if-play) se
-	// activa/desactiva en cada entrada/salida del viewport, así el hilo
-	// principal no tiene que mantener ~8 animaciones infinitas corriendo
-	// mientras el usuario está leyendo otra sección de la página.
+	// Mismo mecanismo que el hero real de InmoFlow (Desktop/Inmoflow/Index.html):
+	// un chat que se reescribe solo, mensaje a mensaje, con su indicador de
+	// "escribiendo…", y un panel en el que van entrando leads nuevos en directo
+	// (con FLIP: se mide la posición de las filas antes y después de insertar la
+	// nueva, y se anima la diferencia, para que no salten de golpe). Ambos bucles
+	// se pausan del todo mientras la tarjeta no está en pantalla, para no gastar
+	// hilo principal en algo que nadie está mirando.
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const stage = document.querySelector<HTMLElement>('.if-stage');
-
-	if (stage && !reduceMotion) {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					entry.target.classList.toggle('if-playing', entry.isIntersecting);
-				}
-			},
-			{ threshold: 0.15 }
-		);
+	if (!stage || reduceMotion) {
+		// nothing to animate
+	} else {
+		let playing = false;
+		const observer = new IntersectionObserver((entries) => {
+			for (const entry of entries) playing = entry.isIntersecting;
+		}, { threshold: 0.15 });
 		observer.observe(stage);
+
+		const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+		const waitUntilPlaying = async () => {
+			while (!playing) await sleep(300);
+		};
+
+		/* ---------- Chat de WhatsApp: misma conversación que la real ---------- */
+		const chat = stage.querySelector<HTMLElement>('#ifChat');
+		if (chat) {
+			const conversation = [
+				{ dir: 'in', text: '¿Sigue disponible el piso de la Av. del Mar? ¿Es de compra o alquiler?' },
+				{ dir: 'out', text: 'Comprar' },
+				{ dir: 'in', text: 'Perfecto. ¿Cuál es tu presupuesto aproximado?' },
+				{ dir: 'out', text: 'Hasta 320.000 €' },
+				{ dir: 'in', text: 'Genial. Tengo 3 viviendas que encajan contigo. ¿Te las enseño?' },
+				{ dir: 'out', text: 'Sí, perfecto 🙌' },
+			];
+			(async function runChat() {
+				for (;;) {
+					await waitUntilPlaying();
+					chat.innerHTML = '';
+					for (const m of conversation) {
+						if (!playing) break;
+						if (m.dir === 'in') {
+							const typing = document.createElement('div');
+							typing.className = 'if-bubble in if-typing-msg';
+							typing.setAttribute('aria-hidden', 'true');
+							typing.innerHTML = '<span></span><span></span><span></span>';
+							chat.appendChild(typing);
+							await sleep(1000 + Math.random() * 400);
+							typing.remove();
+						} else {
+							await sleep(550);
+						}
+						const bubble = document.createElement('div');
+						bubble.className = 'if-bubble ' + m.dir;
+						bubble.textContent = m.text;
+						chat.appendChild(bubble);
+						await sleep(900);
+					}
+					await sleep(3200);
+				}
+			})();
+		}
+
+		/* ---------- Leads entrando en directo en el panel (FLIP) ---------- */
+		const table = stage.querySelector<HTMLElement>('#ifLeadTable');
+		const pill = stage.querySelector<HTMLElement>('#ifLeadPill');
+		const dashboardVisible = window.matchMedia('(min-width: 640px)').matches;
+		if (table && pill && dashboardVisible) {
+			const feed = [
+				{ ini: 'MF', name: 'Marta Ferrer', meta: 'Gandía · 195.000 €', cls: 'blue', label: 'Lead nuevo' },
+				{ ini: 'DS', name: 'Diego Sanchís', meta: 'Valencia · 420.000 €', cls: 'yellow', label: 'Contactando' },
+				{ ini: 'EP', name: 'Elena Prats', meta: 'Cullera · 150.000 €', cls: '', label: 'Interesado' },
+				{ ini: 'RB', name: 'Raúl Blasco', meta: 'Alzira · 230.000 €', cls: 'blue', label: 'Lead nuevo' },
+			];
+			let total = 19;
+			let i = 0;
+			setInterval(() => {
+				if (!playing) return;
+				const existing = Array.from(table.querySelectorAll<HTMLElement>('.if-lead-row'));
+				if (!existing.length) return;
+				const topsBefore = existing.map((r) => r.getBoundingClientRect().top);
+
+				const d = feed[i++ % feed.length];
+				const row = document.createElement('div');
+				row.className = 'if-lead-row if-lead-new';
+				row.innerHTML =
+					`<div class="if-avatar" style="--av:#74889b">${d.ini}</div>` +
+					`<div class="if-lead-info"><div class="if-lead-name">${d.name}</div><div class="if-lead-meta">${d.meta}</div></div>` +
+					`<span class="if-status ${d.cls}">${d.label}</span>`;
+				table.prepend(row);
+
+				existing.forEach((r, idx) => {
+					const delta = r.getBoundingClientRect().top - topsBefore[idx];
+					if (!delta) return;
+					r.style.transition = 'none';
+					r.style.transform = `translateY(${-delta}px)`;
+				});
+				void table.offsetWidth;
+				existing.forEach((r) => {
+					r.style.transition = '';
+					r.style.transform = '';
+				});
+
+				void row.offsetHeight;
+				row.classList.add('if-lead-show');
+				pill.lastChild!.textContent = `Lead nuevo · ${++total}`;
+
+				setTimeout(() => {
+					const all = Array.from(table.querySelectorAll<HTMLElement>('.if-lead-row'));
+					while (all.length > 4) all.pop()?.remove();
+				}, 650);
+			}, 4800);
+		}
 	}
 </script>
