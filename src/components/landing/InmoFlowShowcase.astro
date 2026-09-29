@@ -1,256 +1,172 @@
 ---
 import WhatsAppCTA from '../WhatsAppCTA.astro';
 
-// Presentación de InmoFlow como producto: un mini-relato de 4 pasos (llega el
-// lead -> se organiza solo -> responde solo -> tú cierras) contado con un móvil
-// que va avanzando por esas mismas 4 fases. Todo el reloj es CSS puro (una
-// única animación con keyframes en vez de JS cambiando atributos) a propósito:
-// en "El mecanismo" un reloj en JS que reasigna fases sufrió varias rondas de
-// fallos intermitentes reales (transiciones que a veces no arrancaban). Con un
-// timeline declarado de una vez y animation-delay para escalonar cada pieza,
-// no hay ningún punto donde el navegador pueda "perderse" un disparo.
-const pasos = [
-	{
-		titulo: 'Llega un lead',
-		texto: 'Por WhatsApp, Instagram o tu web — todo entra al mismo sitio, sin mirar cuatro pantallas distintas.',
-	},
-	{
-		titulo: 'Se organiza solo',
-		texto: 'InmoFlow lo clasifica y lo mete en tu pipeline: nuevo, contactando, interesado.',
-	},
-	{
-		titulo: 'Responde antes que nadie',
-		texto: 'Un mensaje automático por WhatsApp en segundos, aunque sea fin de semana o de madrugada.',
-	},
-	{
-		titulo: 'Tú cierras la venta',
-		texto: 'Te llega ya cualificado y con seguimiento hecho — solo te queda la visita.',
-	},
+// Segundo intento de esta sección: la primera versión (una tarjeta verde propia
+// con un móvil inventado) no se parecía en nada al producto real y desentonaba
+// con el resto de la página. Esta reutiliza tal cual la composición del hero de
+// InmoFlow (panel de oportunidades + móvil de WhatsApp superpuesto, mismos
+// datos de ejemplo, mismos textos de beneficios) para que se lea inequívocamente
+// como "esto es InmoFlow", dentro de una tarjeta con el mismo lenguaje visual
+// que el resto de 096matics (border-zinc-800/bg-zinc-900, como las de "El
+// mecanismo"). La mejora sobre el original: el panel y el móvil ya no son dos
+// bucles independientes — cuentan la MISMA historia (entra Javier por WhatsApp,
+// se le responde, y su fila en el panel cambia de "Lead nuevo" a "Contactando"
+// en el momento exacto en que se le contesta), con un timeline en @keyframes
+// puro para que quede fiable (ver Mecanismo.astro para el porqué de esa
+// elección).
+const leads = [
+	{ nombre: 'Laura Martínez', meta: 'Valencia · 180.000 €', estado: 'Interesado', cls: '' },
+	{ nombre: 'Carlos Ruiz', meta: 'Paterna · 250.000 €', estado: 'Contactando', cls: 'yellow' },
+	{ nombre: 'Ana López', meta: 'Torrent · 320.000 €', estado: 'Interesado', cls: '' },
+];
+const beneficios = [
+	{ titulo: 'Respuesta inmediata', texto: 'a cada nuevo lead' },
+	{ titulo: 'Seguimiento automático', texto: '24 horas, 7 días' },
+	{ titulo: 'Más visitas, más ventas', texto: 'con menos gestión' },
 ];
 ---
 
 <section data-animate class="border-b border-zinc-800 py-16 sm:py-20">
 	<div class="mx-auto max-w-6xl px-5 sm:px-6">
-		<div data-reveal class="piece piece-d0 if-card relative overflow-hidden rounded-[28px] border border-emerald-400/15 p-7 sm:p-10">
+		<div data-reveal class="piece piece-top piece-d0 mx-auto max-w-2xl text-center">
+			<span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
+				<span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+				InmoFlow · Producto real
+			</span>
+			<h3 class="mt-3 text-2xl font-semibold text-white sm:text-3xl">Un lead entra. InmoFlow ya le ha respondido.</h3>
+			<p class="mt-3 text-zinc-400">
+				Así convierte InmoFlow un mensaje de WhatsApp en una oportunidad organizada — en tiempo real, sin que nadie lo
+				toque.
+			</p>
+		</div>
+
+		<div data-reveal class="piece piece-d1 if-stage relative mt-10 overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6 sm:p-10">
 			<div class="if-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
-			<div class="if-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
 
-			<div class="relative grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-14">
-				<div>
-					<div class="flex items-center gap-2.5">
-						<span class="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-emerald-400/50" aria-hidden="true">
-							<span class="block h-2 w-2 rounded-full bg-emerald-400"></span>
-						</span>
-						<span class="text-sm font-bold tracking-wide text-white">InmoFlow</span>
-						<span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
-							<span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
-							Producto real
-						</span>
-					</div>
-					<h3 class="mt-4 text-2xl font-semibold text-white sm:text-3xl">De un mensaje de WhatsApp a una venta cerrada</h3>
-					<p class="mt-3 max-w-md text-zinc-400">
-						InmoFlow capta, organiza y responde a tus clientes potenciales solo — tú entras cuando ya está todo listo
-						para cerrar.
-					</p>
-
-					<ol class="if-steps mt-6 flex flex-col gap-1">
-						{
-							pasos.map((p, i) => (
-								<li class="if-step relative flex gap-3 rounded-2xl border border-transparent p-3">
-									<span class="if-step-num grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold text-zinc-400">{i + 1}</span>
-									<div class="min-w-0">
-										<p class="if-step-title text-sm font-semibold text-zinc-300">{p.titulo}</p>
-										<p class="mt-0.5 text-[13px] text-zinc-500">{p.texto}</p>
-									</div>
-								</li>
-							))
-						}
-					</ol>
-
-					<div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
-						<span class="text-sm text-zinc-400"><strong class="font-bold text-white">+40%</strong> leads cualificados</span>
-						<span class="text-sm text-zinc-400"><strong class="font-bold text-white">&lt;5 min</strong> tiempo de respuesta</span>
-					</div>
-
-					<div class="mt-6 flex flex-wrap items-center gap-3">
-						<a
-							href="/tarjeta/inmoflow"
-							class="inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition-transform hover:-translate-y-0.5"
-						>
-							Ver InmoFlow completo
-							<span aria-hidden="true">→</span>
-						</a>
-						<WhatsAppCTA texto="Quiero algo así para mi negocio" mensaje="Hola, he visto InmoFlow y quiero algo parecido para mi negocio" />
-					</div>
-				</div>
-
-				<div class="if-phone-wrap mx-auto" aria-hidden="true">
-					<div class="if-phone">
-						<div class="if-phone-screen">
-							<div class="if-phone-head"><span class="if-live-dot"></span>InmoFlow · WhatsApp</div>
-							<div class="if-tag-slot">
-								<span class="if-tag if-tag-lead">
-									<span class="if-tag-dot"></span>
-									Nuevo lead · Valencia
-								</span>
-								<span class="if-tag if-tag-done">
-									<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-									Visita agendada
-								</span>
-							</div>
-							<div class="if-chat">
-								<div class="if-bubble in if-msg-1">¿Sigue disponible el piso de la Av. del Mar?</div>
-								<div class="if-bubble in if-typing" aria-hidden="true"><span></span><span></span><span></span></div>
-								<div class="if-bubble out if-msg-2">¡Sí! Disponible ahora. ¿Te paso horario de visitas?</div>
-							</div>
-							<div class="if-chat-input">Escribe un mensaje…</div>
+			<div class="if-visual relative mx-auto" aria-hidden="true">
+				<div class="if-dashboard absolute top-0 left-0">
+					<div class="if-dash-top">
+						<div class="if-dash-title"><span class="if-live-dot"></span>Oportunidades</div>
+						<div class="if-dash-tabs">
+							<span class="if-pill if-pill-live">Lead nuevo · 19</span>
+							<span class="if-pill">Contactando · 12</span>
+							<span class="if-pill">Interesado · 9</span>
 						</div>
 					</div>
+					<div class="if-dash-table">
+						<div class="if-lead-row if-lead-row-javier">
+							<div class="if-avatar" style="--av:#9b7f8b">JG</div>
+							<div class="if-lead-info">
+								<div class="if-lead-name">Javier García</div>
+								<div class="if-lead-meta">Valencia · 310.000 €</div>
+							</div>
+							<span class="if-status if-status-new">Lead nuevo</span>
+							<span class="if-status if-status-contacting">Contactando</span>
+						</div>
+						{
+							leads.map((l) => (
+								<div class="if-lead-row">
+									<div class="if-avatar" style={`--av:${l.cls === 'yellow' ? '#a08f74' : '#7d9c88'}`}>
+										{l.nombre
+											.split(' ')
+											.map((w) => w[0])
+											.join('')}
+									</div>
+									<div class="if-lead-info">
+										<div class="if-lead-name">{l.nombre}</div>
+										<div class="if-lead-meta">{l.meta}</div>
+									</div>
+									<span class={`if-status ${l.cls}`}>{l.estado}</span>
+								</div>
+							))
+						}
+					</div>
 				</div>
+
+				<div class="if-phone">
+					<div class="if-phone-screen">
+						<div class="if-phone-head"><span class="if-live-dot"></span>Javier García</div>
+						<div class="if-chat">
+							<div class="if-bubble in if-msg-1">¿Sigue disponible el piso de la Av. del Mar? ¿Es de compra o alquiler?</div>
+							<div class="if-bubble out if-msg-2">Comprar</div>
+							<div class="if-bubble in if-typing" aria-hidden="true"><span></span><span></span><span></span></div>
+							<div class="if-bubble in if-msg-3">Perfecto, ¿cuál es tu presupuesto?</div>
+							<div class="if-bubble out if-msg-4">Hasta 320.000 €</div>
+						</div>
+						<div class="if-chat-input">Escribe un mensaje…</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="relative mt-8 grid gap-5 border-t border-zinc-800 pt-6 sm:grid-cols-3">
+				{
+					beneficios.map((b) => (
+						<div class="flex items-start gap-2.5">
+							<span class="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+							<p class="text-sm text-zinc-300">
+								<strong class="font-semibold text-white">{b.titulo}</strong> <span class="text-zinc-500">{b.texto}</span>
+							</p>
+						</div>
+					))
+				}
+			</div>
+
+			<div class="relative mt-7 flex flex-wrap items-center gap-3">
+				<a
+					href="/tarjeta/inmoflow"
+					class="inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition-transform hover:-translate-y-0.5"
+				>
+					Ver InmoFlow completo
+					<span aria-hidden="true">→</span>
+				</a>
+				<WhatsAppCTA texto="Quiero algo así para mi negocio" mensaje="Hola, he visto InmoFlow y quiero algo parecido para mi negocio" />
 			</div>
 		</div>
 	</div>
 </section>
 
 <style>
-	/* ============ Fondo tipo "producto": tarjeta propia con halo verde de marca y
-	   una rejilla sutil, para que se lea como un producto de verdad y no como una
-	   franja de aviso más entre secciones. ============ */
-	.if-card {
-		background: #0a0f0d;
-	}
 	.if-glow {
 		background:
-			radial-gradient(ellipse 60% 80% at 15% 15%, rgba(52, 211, 153, 0.16), transparent 60%),
-			radial-gradient(ellipse 50% 60% at 100% 100%, rgba(52, 211, 153, 0.1), transparent 65%);
-	}
-	.if-grid {
-		opacity: 0.5;
-		background-image:
-			linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-		background-size: 28px 28px;
-		mask-image: radial-gradient(ellipse 80% 80% at 50% 30%, #000 40%, transparent 90%);
+			radial-gradient(ellipse 60% 70% at 12% 10%, rgba(52, 211, 153, 0.12), transparent 60%),
+			radial-gradient(ellipse 50% 55% at 92% 90%, rgba(52, 211, 153, 0.08), transparent 60%);
 	}
 
-	/* ============ Pasos: cada uno se resalta por turnos durante ~2s de un ciclo de
-	   8s — un único keyframe compartido, escalonado con animation-delay, en vez de
-	   4 animaciones distintas o un reloj en JS. Así el orden y el reparto de tiempo
-	   quedan garantizados por el navegador, no por temporizadores que puedan
-	   desincronizarse entre sí. ============ */
-	.if-step {
-		animation: if-step-active 8s ease-in-out infinite;
+	/* ============ Panel + móvil: la misma composición del hero real de InmoFlow
+	   (panel arriba-izquierda, móvil superpuesto abajo-derecha), con sus colores
+	   propios (claros) en vez de adaptarlos al tema oscuro — así se lee sin dudas
+	   como una captura del producto real, no como una reinterpretación. ============ */
+	.if-visual {
+		min-height: 360px;
+		max-width: 460px;
 	}
-	.if-step:nth-child(1) {
-		animation-delay: 0s;
+	.if-dashboard {
+		right: 78px;
+		background: #fff;
+		border: 1px solid #dfe5df;
+		border-radius: 18px;
+		box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+		padding: 16px;
 	}
-	.if-step:nth-child(2) {
-		animation-delay: 2s;
-	}
-	.if-step:nth-child(3) {
-		animation-delay: 4s;
-	}
-	.if-step:nth-child(4) {
-		animation-delay: 6s;
-	}
-	.if-step-num {
-		background: rgba(255, 255, 255, 0.06);
-		transition: none;
-	}
-	@keyframes if-step-active {
-		0%,
-		20% {
-			border-color: rgba(52, 211, 153, 0.35);
-			background: rgba(52, 211, 153, 0.07);
-		}
-		25%,
-		100% {
-			border-color: transparent;
-			background: transparent;
-		}
-	}
-	.if-step:nth-child(1) .if-step-num,
-	.if-step:nth-child(2) .if-step-num,
-	.if-step:nth-child(3) .if-step-num,
-	.if-step:nth-child(4) .if-step-num,
-	.if-step .if-step-title {
-		animation: if-step-num-active 8s ease-in-out infinite;
-	}
-	.if-step:nth-child(1) .if-step-num,
-	.if-step:nth-child(1) .if-step-title {
-		animation-delay: 0s;
-	}
-	.if-step:nth-child(2) .if-step-num,
-	.if-step:nth-child(2) .if-step-title {
-		animation-delay: 2s;
-	}
-	.if-step:nth-child(3) .if-step-num,
-	.if-step:nth-child(3) .if-step-title {
-		animation-delay: 4s;
-	}
-	.if-step:nth-child(4) .if-step-num,
-	.if-step:nth-child(4) .if-step-title {
-		animation-delay: 6s;
-	}
-	@keyframes if-step-num-active {
-		0%,
-		20% {
-			color: #6ee7b7;
-		}
-		25%,
-		100% {
-			color: inherit;
-		}
-	}
-
-	/* ============ Móvil: el mismo timeline de 8s dibuja la conversación entera —
-	   el mensaje entra, aparece la etiqueta de "nuevo lead", se ve un "escribiendo…"
-	   y sale la respuesta, y por último el sello de visita agendada. Cada pieza
-	   "aparece y se queda" hasta que el ciclo entero se reinicia de golpe. ============ */
-	.if-phone-wrap {
-		width: 230px;
-	}
-	.if-phone {
-		position: relative;
-		width: 230px;
-		background: #111;
-		border: 6px solid #111;
-		border-radius: 30px;
-		padding: 9px;
-		box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-		animation: if-phone-float 6.5s ease-in-out infinite;
-	}
-	@keyframes if-phone-float {
-		0%,
-		100% {
-			transform: translateY(0);
-		}
-		50% {
-			transform: translateY(-8px);
-		}
-	}
-	.if-phone-screen {
-		position: relative;
-		background: #f7f8f6;
-		border-radius: 22px;
-		overflow: hidden;
+	.if-dash-top {
 		display: flex;
-		flex-direction: column;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		margin-bottom: 14px;
 	}
-	.if-phone-head {
+	.if-dash-title {
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		padding: 14px;
-		border-bottom: 1px solid #e7ebe6;
-		background: #fff;
-		font-size: 11px;
+		gap: 7px;
 		font-weight: 800;
+		font-size: 13px;
 		color: #22313a;
 	}
 	.if-live-dot {
-		width: 7px;
-		height: 7px;
+		width: 6px;
+		height: 6px;
 		border-radius: 50%;
 		background: #2f9e63;
 		flex-shrink: 0;
@@ -261,73 +177,203 @@ const pasos = [
 			box-shadow: 0 0 0 0 rgba(47, 158, 99, 0.45);
 		}
 		70% {
-			box-shadow: 0 0 0 7px rgba(47, 158, 99, 0);
+			box-shadow: 0 0 0 6px rgba(47, 158, 99, 0);
 		}
 		100% {
 			box-shadow: 0 0 0 0 rgba(47, 158, 99, 0);
 		}
 	}
-
-	/* etiqueta de CRM ("nuevo lead" / "visita agendada"), flotando sobre el chat */
-	.if-tag-slot {
-		position: absolute;
-		top: 46px;
-		left: 0;
-		right: 0;
-		height: 0;
-		z-index: 4;
-		pointer-events: none;
+	.if-dash-tabs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
 	}
-	.if-tag {
-		position: absolute;
-		top: 0;
-		left: 50%;
+	.if-pill {
+		padding: 5px 8px;
+		border-radius: 999px;
+		background: #eef2ed;
+		color: #526a5d;
+		font-weight: 700;
+		font-size: 9px;
+	}
+	.if-pill-live {
 		display: inline-flex;
 		align-items: center;
-		gap: 5px;
-		border-radius: 999px;
-		background: #0a0f0d;
-		color: #6ee7b7;
-		font-size: 9.5px;
-		font-weight: 800;
-		padding: 5px 10px;
-		white-space: nowrap;
-		box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.5);
-		opacity: 0;
-		transform: translate(-50%, -6px) scale(0.9);
+		gap: 4px;
 	}
-	.if-tag-dot {
-		width: 5px;
-		height: 5px;
+	.if-pill-live::before {
+		content: '';
+		width: 4px;
+		height: 4px;
 		border-radius: 50%;
-		background: #6ee7b7;
+		background: #2f9e63;
+		animation: if-pulse 2.2s infinite;
 	}
-	.if-tag-lead {
-		animation: if-tag-in 8s ease-out infinite;
-		animation-delay: 2s;
+	.if-dash-table {
+		display: grid;
+		gap: 8px;
 	}
-	.if-tag-done {
-		animation: if-tag-in 8s ease-out infinite;
-		animation-delay: 6s;
+	.if-lead-row {
+		position: relative;
+		display: grid;
+		grid-template-columns: 30px 1fr auto;
+		gap: 10px;
+		align-items: center;
+		padding: 8px;
+		border: 1px solid #edf0ed;
+		border-radius: 12px;
+		background: #fff;
 	}
-	@keyframes if-tag-in {
+	.if-lead-row-javier {
+		z-index: 1;
+	}
+	@keyframes if-row-highlight {
 		0%,
-		2.5% {
-			opacity: 0;
-			transform: translate(-50%, -6px) scale(0.9);
+		56% {
+			background-color: #fff;
+			border-color: #edf0ed;
 		}
-		8%,
+		58%,
+		64% {
+			background-color: #eaf5ee;
+			border-color: #bfe0cc;
+		}
+		66%,
+		100% {
+			background-color: #fff;
+			border-color: #edf0ed;
+		}
+	}
+	.if-lead-row-javier {
+		animation: if-row-highlight 9000ms linear infinite;
+	}
+	.if-avatar {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		display: grid;
+		place-items: center;
+		font-size: 9px;
+		font-weight: 800;
+		color: #fff;
+		background: var(--av, #93a89a);
+		flex-shrink: 0;
+	}
+	.if-lead-info {
+		min-width: 0;
+	}
+	.if-lead-name {
+		font-size: 11px;
+		font-weight: 700;
+		color: #22313a;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.if-lead-meta {
+		font-size: 9px;
+		color: #66727a;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.if-status {
+		font-size: 9px;
+		font-weight: 700;
+		padding: 4px 7px;
+		border-radius: 999px;
+		background: #e7efe8;
+		color: #5b7464;
+		white-space: nowrap;
+	}
+	.if-status.yellow {
+		background: #f4ede0;
+		color: #9b7745;
+	}
+	.if-status-new,
+	.if-status-contacting {
+		position: absolute;
+		right: 8px;
+		top: 50%;
+		transform: translateY(-50%);
+		background: #e8eef3;
+		color: #637c90;
+	}
+	.if-status-contacting {
+		background: #f4ede0;
+		color: #9b7745;
+	}
+	@keyframes if-status-new-cycle {
+		0%,
+		58% {
+			opacity: 1;
+		}
+		60%,
+		100% {
+			opacity: 0;
+		}
+	}
+	@keyframes if-status-contacting-cycle {
+		0%,
+		58% {
+			opacity: 0;
+		}
+		61%,
 		100% {
 			opacity: 1;
-			transform: translate(-50%, 0) scale(1);
 		}
 	}
+	.if-status-new {
+		animation: if-status-new-cycle 9000ms linear infinite;
+	}
+	.if-status-contacting {
+		animation: if-status-contacting-cycle 9000ms linear infinite;
+	}
 
+	.if-phone {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		width: 168px;
+		background: #111;
+		border: 5px solid #111;
+		border-radius: 26px;
+		padding: 7px;
+		z-index: 2;
+		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+		animation: if-phone-float 6.5s ease-in-out infinite;
+	}
+	@keyframes if-phone-float {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-7px);
+		}
+	}
+	.if-phone-screen {
+		background: #f7f8f6;
+		border-radius: 20px;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+	.if-phone-head {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 10px;
+		border-bottom: 1px solid #e7ebe6;
+		background: #fff;
+		font-size: 9px;
+		font-weight: 800;
+		color: #22313a;
+	}
 	.if-chat {
 		position: relative;
-		padding: 12px;
-		padding-top: 34px;
-		height: 300px;
+		padding: 9px;
+		height: 232px;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
@@ -335,13 +381,14 @@ const pasos = [
 	}
 	.if-bubble {
 		max-width: 88%;
-		padding: 9px 10px;
-		border-radius: 13px;
-		font-size: 11px;
-		margin-bottom: 10px;
+		padding: 7px 8px;
+		border-radius: 11px;
+		font-size: 9px;
+		line-height: 1.35;
+		margin-bottom: 7px;
 		color: #22313a;
 		opacity: 0;
-		transform: translateY(8px) scale(0.97);
+		transform: translateY(6px) scale(0.97);
 	}
 	.if-bubble.in {
 		background: #fff;
@@ -352,20 +399,59 @@ const pasos = [
 		background: #dce9df;
 	}
 	.if-msg-1 {
-		animation: if-bubble-in 8s ease-out infinite;
-		animation-delay: 0s;
+		opacity: 1;
+		transform: none;
+	}
+	@keyframes if-bubble-in {
+		0%,
+		2.5% {
+			opacity: 0;
+			transform: translateY(6px) scale(0.97);
+		}
+		6%,
+		100% {
+			opacity: 1;
+			transform: none;
+		}
+	}
+	.if-msg-2 {
+		animation: if-bubble-in 9000ms ease-out infinite;
+		animation-delay: 1260ms;
+	}
+	.if-msg-3 {
+		animation: if-bubble-in 9000ms ease-out infinite;
+		animation-delay: 3600ms;
+	}
+	.if-msg-4 {
+		animation: if-bubble-in 9000ms ease-out infinite;
+		animation-delay: 5220ms;
 	}
 	.if-typing {
 		display: flex;
-		gap: 4px;
+		gap: 3px;
 		align-items: center;
-		padding: 11px 12px;
-		animation: if-typing-cycle 8s ease-out infinite;
-		animation-delay: 4s;
+		padding: 9px 10px;
+	}
+	@keyframes if-typing-cycle {
+		0%,
+		28% {
+			opacity: 0;
+		}
+		30.5%,
+		39% {
+			opacity: 1;
+		}
+		41%,
+		100% {
+			opacity: 0;
+		}
+	}
+	.if-typing {
+		animation: if-typing-cycle 9000ms ease-out infinite;
 	}
 	.if-typing span {
-		width: 6px;
-		height: 6px;
+		width: 5px;
+		height: 5px;
 		border-radius: 50%;
 		background: #9db1a3;
 		animation: if-blink 1.2s infinite;
@@ -375,35 +461,6 @@ const pasos = [
 	}
 	.if-typing span:nth-child(3) {
 		animation-delay: 0.4s;
-	}
-	.if-msg-2 {
-		animation: if-bubble-in 8s ease-out infinite;
-		animation-delay: 6s;
-	}
-	@keyframes if-bubble-in {
-		0%,
-		2.5% {
-			opacity: 0;
-			transform: translateY(8px) scale(0.97);
-		}
-		8%,
-		100% {
-			opacity: 1;
-			transform: none;
-		}
-	}
-	@keyframes if-typing-cycle {
-		0%,
-		100% {
-			opacity: 0;
-		}
-		2%,
-		23% {
-			opacity: 1;
-		}
-		27% {
-			opacity: 0;
-		}
 	}
 	@keyframes if-blink {
 		0%,
@@ -417,33 +474,58 @@ const pasos = [
 			transform: translateY(-2px);
 		}
 	}
-
 	.if-chat-input {
-		padding: 10px 12px;
+		padding: 8px 10px;
 		border-top: 1px solid #e7ebe6;
 		background: #fff;
-		font-size: 10px;
+		font-size: 8px;
 		color: #9aa19d;
 	}
 
+	@media (max-width: 639px) {
+		/* en desktop el móvil se superpone a la esquina del panel (como en el hero
+		   real de InmoFlow), pero en una columna tan estrecha eso tapaba 2 filas
+		   de leads enteras. En móvil, mejor uno debajo del otro, sin solapar nada. */
+		.if-visual {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 28px;
+			min-height: 0;
+			max-width: 280px;
+		}
+		.if-dashboard {
+			position: static;
+			width: 100%;
+		}
+		.if-phone {
+			position: static;
+			margin: 0 auto;
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
-		.if-step,
-		.if-step-num,
-		.if-step-title,
-		.if-phone,
 		.if-live-dot,
-		.if-tag,
+		.if-pill-live::before,
+		.if-lead-row-javier,
+		.if-status-new,
+		.if-status-contacting,
+		.if-phone,
 		.if-bubble,
 		.if-typing,
 		.if-typing span {
 			animation: none !important;
 		}
-		.if-tag-lead,
+		.if-status-new {
+			opacity: 0;
+		}
+		.if-status-contacting {
+			opacity: 1;
+		}
 		.if-bubble {
 			opacity: 1;
 			transform: none;
 		}
-		.if-tag-done,
 		.if-typing {
 			opacity: 0;
 			display: none;
