@@ -3,41 +3,53 @@ import WhatsAppCTA from '../WhatsAppCTA.astro';
 import Ventana from './inmoflow/Ventana.astro';
 import Pantalla from './inmoflow/Pantalla.astro';
 
-// Presentación de producto de InmoFlow en la home. El eje es el recorrido de
-// un lead, de que entra a que tiene visita, contado sobre la propia app: en
-// escritorio la ventana se queda fija y cambia de pantalla según el paso que
-// estás leyendo; en móvil cada paso lleva su pantalla debajo. Las funciones
-// salen de /tarjeta/inmoflow; el lead y las horas son un ejemplo ilustrativo.
-// A propósito no hay precios ni plazos de montaje: todo es modular y se
-// presupuesta a medida.
+// Presentación de producto de InmoFlow en la home. El corazón es una ventana
+// de la propia app que recorre sola, en bucle, las cinco páginas del día a
+// día (captación → respuesta → ficha → visita → estadísticas), con una
+// explicación en lenguaje llano al lado de cada una. Las funciones salen de
+// /tarjeta/inmoflow; el lead, las horas y las cifras son un ejemplo
+// ilustrativo. A propósito no hay precios ni plazos de montaje: todo es
+// modular y se presupuesta a medida.
 const pasos = [
 	{
 		n: '01',
 		kicker: 'Captación',
-		titulo: 'Todos tus canales, una sola bandeja.',
-		texto: 'Web, portales, WhatsApp, Instagram o Facebook: cada contacto entra en el mismo sitio, con su origen y su mensaje. Se acabó perseguir leads por cinco pestañas.',
+		titulo: 'Todos tus canales, en una sola bandeja.',
+		texto: 'Cuando alguien pregunta por un piso —en tu web, en un portal, por WhatsApp o en redes— aparece aquí al momento, con su nombre, de dónde viene y qué ha escrito.',
+		puntos: ['Ningún contacto se pierde entre correos y pestañas', 'Ves de un vistazo de dónde viene cada cliente'],
 		hora: '23:47',
 	},
 	{
 		n: '02',
 		kicker: 'Respuesta',
-		titulo: 'Contesta en segundos. A cualquier hora.',
-		texto: 'InmoFlow le escribe por WhatsApp desde tu propio número, con la API oficial, en cuanto el lead entra. El cliente no se enfría esperando al lunes.',
+		titulo: 'InmoFlow le contesta solo, en segundos.',
+		texto: 'Sin que nadie toque el móvil, le escribe por WhatsApp desde el número de tu inmobiliaria y le hace las primeras preguntas. Aunque sean las once de la noche.',
+		puntos: ['Mensajes con tu nombre y tu forma de hablar', 'El cliente no se enfría esperando al lunes'],
 		hora: '23:47',
 	},
 	{
 		n: '03',
-		kicker: 'Cualificación',
-		titulo: 'La ficha se rellena mientras conversa.',
-		texto: 'Operación, presupuesto, zona: cada respuesta se guarda en su ficha y el cliente avanza solo por tu embudo de ventas. Sabes a quién llamar primero.',
+		kicker: 'Ficha',
+		titulo: 'Su ficha se rellena sola.',
+		texto: 'Cada respuesta del cliente se guarda en su ficha: qué busca, cuánto puede gastar y en qué zona. Y avanza por tu embudo de ventas sin que lo muevas tú.',
+		puntos: ['Sabes a quién llamar primero', 'Todo tu equipo ve la misma información'],
 		hora: '23:49',
 	},
 	{
 		n: '04',
 		kicker: 'Visita',
-		titulo: 'Y la visita, ya en tu agenda.',
-		texto: 'Se agenda con su recordatorio automático por WhatsApp. Tú solo llegas a enseñar el piso.',
+		titulo: 'La visita, directamente en tu agenda.',
+		texto: 'Cuando el cliente está listo, se le propone hora y la visita queda apuntada, con un recordatorio automático por WhatsApp el mismo día.',
+		puntos: ['Menos llamadas para cuadrar horarios', 'Menos visitas a las que nadie se presenta'],
 		hora: '23:52',
+	},
+	{
+		n: '05',
+		kicker: 'Estadísticas',
+		titulo: 'Y tú, con los números delante.',
+		texto: 'Cuántos contactos entran, cuánto se tarda en responder, cuántas visitas se agendan y qué canal te trae más clientes. En tiempo real.',
+		puntos: ['Sabes qué portal o campaña compensa', 'Decides con datos, no con intuición'],
+		hora: 'Lun 09:00',
 	},
 ];
 
@@ -47,14 +59,8 @@ const modulos = [
 	{ nombre: 'CRM', on: true },
 	{ nombre: 'WhatsApp automático', on: true },
 	{ nombre: 'Agenda de visitas', on: false },
-	{ nombre: 'Informes', on: false },
+	{ nombre: 'Estadísticas', on: false },
 	{ nombre: 'Web de captación', on: false },
-];
-const barras = [
-	{ canal: 'Web', h: 78 },
-	{ canal: 'Portales', h: 100 },
-	{ canal: 'WhatsApp', h: 64 },
-	{ canal: 'Redes', h: 42 },
 ];
 ---
 
@@ -86,39 +92,71 @@ const barras = [
 			</div>
 		</header>
 
-		<!-- ============ Recorrido ============ -->
-		<div class="ifs-tour mt-16 sm:mt-24">
-			<ol class="ifs-steps">
+		<!-- ============ Demo en bucle ============ -->
+		<div data-reveal class="piece piece-d1 ifs-demo mt-14 sm:mt-20">
+			<div class="ifs-tabs" role="tablist" aria-label="Cómo funciona InmoFlow, paso a paso">
 				{
 					pasos.map((p, i) => (
-						<li class="ifs-step" data-step={i} data-active={i === 0 ? 'true' : 'false'}>
-							<div class="ifs-step-copy">
-								<p class="ifs-step-kicker">
-									<span class="ifs-step-n">{p.n}</span>
-									{p.kicker}
-								</p>
-								<h3 class="ifs-step-title">{p.titulo}</h3>
-								<p class="ifs-step-text">{p.texto}</p>
-							</div>
-							<Ventana nav={i} hora={p.hora} class="ifs-step-device">
-								<Pantalla paso={i as 0 | 1 | 2 | 3} />
-							</Ventana>
-						</li>
+						<button
+							type="button"
+							role="tab"
+							id={`ifs-tab-${i}`}
+							aria-controls={`ifs-desc-${i}`}
+							aria-selected={i === 0 ? 'true' : 'false'}
+							tabindex={i === 0 ? 0 : -1}
+							class="ifs-tab"
+							data-hora={p.hora}
+						>
+							<span class="ifs-tab-bar" aria-hidden="true">
+								<i />
+							</span>
+							<span class="ifs-tab-label">
+								<span class="ifs-tab-n">{p.n}</span>
+								{p.kicker}
+							</span>
+						</button>
 					))
 				}
-			</ol>
+			</div>
 
-			<div class="ifs-sticky" aria-hidden="true">
-				<div class="ifs-sticky-inner">
-					<Ventana nav={0} hora={pasos[0].hora} class="ifs-main-device">
-						<div class="ifs-stack">
-							{pasos.map((_, i) => <Pantalla paso={i as 0 | 1 | 2 | 3} class={i === 0 ? 'is-active' : ''} />)}
-						</div>
-					</Ventana>
-					<div class="ifs-progress">
-						{pasos.map((p, i) => <span data-dot={i} class={i === 0 ? 'is-on' : ''}>{p.kicker}</span>)}
+			<div class="ifs-demo-body">
+				<div class="ifs-side">
+					<div class="ifs-descs">
+						{
+							pasos.map((p, i) => (
+								<div class={`ifs-desc ${i === 0 ? 'is-active' : ''}`} role="tabpanel" id={`ifs-desc-${i}`} aria-labelledby={`ifs-tab-${i}`}>
+									<p class="ifs-desc-kicker">Paso {p.n} de 05</p>
+									<h3 class="ifs-desc-title">{p.titulo}</h3>
+									<p class="ifs-desc-text">{p.texto}</p>
+									<ul class="ifs-desc-points">
+										{p.puntos.map((t) => (
+											<li>{t}</li>
+										))}
+									</ul>
+								</div>
+							))
+						}
+					</div>
+					<div class="ifs-controls">
+						<button type="button" class="ifs-ctrl" data-prev aria-label="Paso anterior">
+							<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+						</button>
+						<button type="button" class="ifs-ctrl" data-toggle aria-label="Pausar">
+							<svg class="ifs-ico-pause" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+							<svg class="ifs-ico-play" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg>
+						</button>
+						<button type="button" class="ifs-ctrl" data-next aria-label="Paso siguiente">
+							<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+						</button>
+						<span class="ifs-ctrl-hint">Pasa solo · toca un paso para verlo</span>
 					</div>
 				</div>
+
+				<Ventana nav={0} hora={pasos[0].hora} class="ifs-device">
+					<div class="ifs-stack">
+						{pasos.map((_, i) => <Pantalla paso={i as 0 | 1 | 2 | 3 | 4} />)}
+					</div>
+				</Ventana>
 			</div>
 		</div>
 
@@ -129,44 +167,6 @@ const barras = [
 			</h3>
 			<div class="ifs-bento mt-8">
 				<article data-reveal class="piece piece-d1 ifs-card ifs-card--wide">
-					<div>
-						<p class="ifs-card-kicker">Informes y métricas</p>
-						<p class="ifs-card-title">Qué canal te trae clientes, en tiempo real.</p>
-						<p class="ifs-card-text">Mide lo que importa y decide con datos, no con intuición.</p>
-					</div>
-					<div class="ifs-bars" aria-hidden="true">
-						{
-							barras.map((b, i) => (
-								<span class="ifs-bar" style={`--h:${b.h}%; --d:${i * 0.12}s`}>
-									<i />
-									<small>{b.canal}</small>
-								</span>
-							))
-						}
-					</div>
-				</article>
-
-				<article data-reveal class="piece piece-d2 ifs-card">
-					<p class="ifs-card-kicker">Con tu marca</p>
-					<p class="ifs-card-title">Tu CRM, con tu logo y tus colores.</p>
-					<div class="ifs-brand" aria-hidden="true">
-						<span class="ifs-brand-logo">TI</span>
-						<span>
-							<b>Tu Inmobiliaria</b>
-							<small>Panel de ventas</small>
-						</span>
-					</div>
-				</article>
-
-				<article data-reveal class="piece piece-d2 ifs-card">
-					<p class="ifs-card-kicker">Integraciones</p>
-					<p class="ifs-card-title">Se conecta con lo que ya usas.</p>
-					<div class="ifs-logos">
-						{integraciones.map((n) => <span>{n}</span>)}
-					</div>
-				</article>
-
-				<article data-reveal class="piece piece-d3 ifs-card ifs-card--wide">
 					<div>
 						<p class="ifs-card-kicker">Modular</p>
 						<p class="ifs-card-title">Monta solo las piezas que necesitas.</p>
@@ -182,6 +182,28 @@ const barras = [
 							))
 						}
 					</ul>
+				</article>
+
+				<article data-reveal class="piece piece-d2 ifs-card">
+					<p class="ifs-card-kicker">Con tu marca</p>
+					<p class="ifs-card-title">Tu CRM, con tu logo y tus colores.</p>
+					<div class="ifs-brand" aria-hidden="true">
+						<span class="ifs-brand-logo">TI</span>
+						<span>
+							<b>Tu Inmobiliaria</b>
+							<small>Panel de ventas</small>
+						</span>
+					</div>
+				</article>
+
+				<article data-reveal class="piece piece-d3 ifs-card ifs-card--full">
+					<div>
+						<p class="ifs-card-kicker">Integraciones</p>
+						<p class="ifs-card-title">Se conecta con lo que ya usas.</p>
+					</div>
+					<div class="ifs-logos">
+						{integraciones.map((n) => <span>{n}</span>)}
+					</div>
 				</article>
 			</div>
 		</div>
@@ -249,146 +271,257 @@ const barras = [
 		background: rgba(255, 255, 255, 0.05);
 	}
 
-	/* ============ Recorrido ============ */
-	.ifs-steps {
-		display: grid;
-		gap: 64px;
+	/* ============ Demo en bucle ============ */
+	.ifs-demo {
+		--dur: 7s;
 	}
-	.ifs-step-kicker {
+	.ifs-tabs {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		gap: 8px;
+	}
+	.ifs-tab {
 		display: flex;
-		align-items: center;
+		flex-direction: column;
 		gap: 10px;
-		font-size: 13px;
+		min-width: 0;
+		padding: 6px 0;
+		text-align: left;
+		cursor: pointer;
+	}
+	.ifs-tab:focus-visible {
+		outline: 2px solid #34d399;
+		outline-offset: 4px;
+		border-radius: 6px;
+	}
+	/* barra de progreso tipo "historias": solo transform, nunca width */
+	.ifs-tab-bar {
+		display: block;
+		height: 3px;
+		border-radius: 3px;
+		background: #27272a;
+	}
+	.ifs-tab-bar i {
+		display: block;
+		height: 100%;
+		border-radius: inherit;
+		background: #34d399;
+		transform: scaleX(0);
+		transform-origin: left;
+	}
+	.ifs-tab.is-done .ifs-tab-bar i,
+	.ifs-demo:not(.is-playing) .ifs-tab[aria-selected='true'] .ifs-tab-bar i {
+		transform: scaleX(1);
+	}
+	.ifs-demo.is-playing .ifs-tab[aria-selected='true'] .ifs-tab-bar i {
+		animation: ifs-fill var(--dur) linear forwards;
+	}
+	.ifs-demo.is-paused .ifs-tab-bar i {
+		animation-play-state: paused !important;
+	}
+	@keyframes ifs-fill {
+		to {
+			transform: scaleX(1);
+		}
+	}
+	.ifs-tab-label {
+		display: flex;
+		align-items: baseline;
+		gap: 8px;
+		overflow: hidden;
+		font-size: 14px;
+		font-weight: 600;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		color: #71717a;
+		transition: color 0.3s;
+	}
+	.ifs-tab:hover .ifs-tab-label {
+		color: #a1a1aa;
+	}
+	.ifs-tab[aria-selected='true'] .ifs-tab-label {
+		color: #fff;
+	}
+	.ifs-tab-n {
+		font-size: 12px;
+		font-variant-numeric: tabular-nums;
+		color: #52525b;
+	}
+	.ifs-tab[aria-selected='true'] .ifs-tab-n {
+		color: #34d399;
+	}
+
+	.ifs-demo-body {
+		display: grid;
+		gap: 28px;
+		margin-top: 28px;
+	}
+	.ifs-side {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
+	/* las cinco explicaciones ocupan el mismo hueco: así el bloque no salta de
+	   alto al cambiar de paso */
+	.ifs-descs {
+		display: grid;
+	}
+	.ifs-desc {
+		grid-area: 1 / 1;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(8px);
+		transition:
+			opacity 0.35s ease,
+			transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+			visibility 0s linear 0.35s;
+	}
+	.ifs-desc.is-active {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition-delay: 0s;
+	}
+	.ifs-desc-kicker {
+		font-size: 12px;
 		font-weight: 700;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: #6ee7b7;
 	}
-	.ifs-step-n {
-		font-variant-numeric: tabular-nums;
-		color: #52525b;
-	}
-	.ifs-step-title {
-		margin-top: 12px;
+	.ifs-desc-title {
+		margin-top: 10px;
 		font-size: 26px;
-		line-height: 1.15;
 		font-weight: 600;
+		line-height: 1.15;
 		letter-spacing: -0.02em;
 		color: #fff;
 	}
-	.ifs-step-text {
+	.ifs-desc-text {
 		margin-top: 12px;
 		font-size: 16px;
 		line-height: 1.6;
 		color: #a1a1aa;
 	}
-	.ifs-step :global(.ifs-step-device) {
-		margin-top: 24px;
+	.ifs-desc-points {
+		display: grid;
+		gap: 8px;
+		margin-top: 16px;
 	}
-	.ifs-sticky {
+	.ifs-desc-points li {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		font-size: 14px;
+		color: #d4d4d8;
+	}
+	.ifs-desc-points li::before {
+		content: '✓';
+		display: grid;
+		place-items: center;
+		flex-shrink: 0;
+		width: 18px;
+		height: 18px;
+		margin-top: 1px;
+		border-radius: 50%;
+		background: rgba(52, 211, 153, 0.15);
+		color: #34d399;
+		font-size: 10px;
+		font-weight: 800;
+	}
+	.ifs-controls {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.ifs-ctrl {
+		display: grid;
+		place-items: center;
+		width: 38px;
+		height: 38px;
+		border-radius: 50%;
+		color: #e4e4e7;
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
+	.ifs-ctrl:hover {
+		background: rgba(255, 255, 255, 0.06);
+	}
+	.ifs-ctrl:focus-visible {
+		outline: 2px solid #34d399;
+		outline-offset: 2px;
+	}
+	.ifs-ico-play,
+	.ifs-demo.is-user-paused .ifs-ico-pause {
 		display: none;
+	}
+	.ifs-demo.is-user-paused .ifs-ico-play {
+		display: block;
+	}
+	.ifs-ctrl-hint {
+		margin-left: 6px;
+		font-size: 12px;
+		color: #52525b;
+	}
+	.ifs-stack {
+		display: grid;
+		min-height: 420px;
+	}
+	.ifs-stack > :global(.ifp) {
+		grid-area: 1 / 1;
+		transition:
+			opacity 0.35s ease,
+			visibility 0s linear 0.35s;
+	}
+	.ifs-stack > :global(.ifp:not(.is-active)) {
+		opacity: 0;
+		visibility: hidden;
+	}
+	.ifs-stack > :global(.ifp.is-active) {
+		transition-delay: 0s;
 	}
 
 	@media (min-width: 1024px) {
-		.ifs-tour {
-			display: grid;
-			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-			gap: 56px;
-		}
-		.ifs-steps {
-			gap: 0;
-			/* el primer y último paso necesitan aire para poder llegar al centro */
-			padding: 8vh 0 24vh;
-		}
-		.ifs-step {
-			display: flex;
+		.ifs-demo-body {
+			grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
 			align-items: center;
-			min-height: 72vh;
-			padding-left: 28px;
-			border-left: 1px solid #27272a;
-			position: relative;
+			gap: 56px;
+			margin-top: 40px;
 		}
-		.ifs-step::before {
-			content: '';
-			position: absolute;
-			left: -1px;
-			top: 50%;
-			width: 1px;
-			height: 140px;
-			margin-top: -70px;
-			background: #34d399;
-			transform: scaleY(0);
-			transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+		.ifs-desc-title {
+			font-size: 32px;
 		}
-		.ifs-step[data-active='true']::before {
-			transform: scaleY(1);
+	}
+	@media (max-width: 1023px) {
+		/* en una sola columna, la ventana va justo bajo las pestañas: así se ve
+		   cambiar de página a la vez que se lee su explicación debajo */
+		.ifs-demo-body > :global(.ifs-device) {
+			order: -1;
 		}
-		.ifs-step-copy {
-			opacity: 0.3;
-			transition: opacity 0.5s ease;
+		.ifs-demo-body {
+			margin-top: 20px;
 		}
-		.ifs-step[data-active='true'] .ifs-step-copy {
-			opacity: 1;
+	}
+	@media (max-width: 639px) {
+		.ifs-tabs {
+			gap: 5px;
 		}
-		.ifs-step-title {
-			font-size: 34px;
+		.ifs-tab-label {
+			font-size: 11px;
 		}
-		.ifs-step :global(.ifs-step-device) {
+		.ifs-tab-n,
+		.ifs-ctrl-hint {
 			display: none;
 		}
-		.ifs-sticky {
-			display: block;
+		.ifs-desc-title {
+			font-size: 22px;
 		}
-		.ifs-sticky-inner {
-			position: sticky;
-			top: max(96px, calc(50vh - 290px));
+		.ifs-desc-text {
+			font-size: 15px;
 		}
 		.ifs-stack {
-			display: grid;
-			min-height: 420px;
-		}
-		.ifs-stack > :global(.ifp) {
-			grid-area: 1 / 1;
-			transition:
-				opacity 0.35s ease,
-				visibility 0s linear 0.35s;
-		}
-		.ifs-stack > :global(.ifp:not(.is-active)) {
-			opacity: 0;
-			visibility: hidden;
-		}
-		.ifs-stack > :global(.ifp.is-active) {
-			transition-delay: 0s;
-		}
-		.ifs-progress {
-			display: flex;
-			justify-content: center;
-			gap: 20px;
-			margin-top: 22px;
-			font-size: 12px;
-			font-weight: 600;
-			color: #52525b;
-		}
-		.ifs-progress span {
-			position: relative;
-			padding-top: 10px;
-			transition: color 0.3s;
-		}
-		.ifs-progress span::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			height: 2px;
-			border-radius: 2px;
-			background: #27272a;
-		}
-		.ifs-progress span.is-on {
-			color: #e4e4e7;
-		}
-		.ifs-progress span.is-on::before {
-			background: #34d399;
+			min-height: 360px;
 		}
 	}
 
@@ -396,14 +529,6 @@ const barras = [
 	.ifs-bento {
 		display: grid;
 		gap: 16px;
-	}
-	@media (min-width: 768px) {
-		.ifs-bento {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-		}
-		.ifs-card--wide {
-			grid-column: span 2;
-		}
 	}
 	.ifs-card {
 		display: flex;
@@ -416,12 +541,22 @@ const barras = [
 		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
 	}
 	@media (min-width: 768px) {
+		.ifs-bento {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
 		.ifs-card--wide {
+			grid-column: span 2;
 			flex-direction: row;
 			align-items: flex-end;
 		}
 		.ifs-card--wide > div:first-child {
 			max-width: 300px;
+		}
+		.ifs-card--full {
+			grid-column: 1 / -1;
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
 		}
 	}
 	.ifs-card-kicker {
@@ -434,8 +569,8 @@ const barras = [
 	.ifs-card-title {
 		margin-top: 10px;
 		font-size: 20px;
-		line-height: 1.25;
 		font-weight: 600;
+		line-height: 1.25;
 		color: #fff;
 	}
 	.ifs-card-text {
@@ -444,38 +579,56 @@ const barras = [
 		line-height: 1.55;
 		color: #a1a1aa;
 	}
-	.ifs-bars {
-		display: flex;
-		align-items: flex-end;
-		gap: 14px;
+	.ifs-modules {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 		flex: 1;
-		height: 150px;
-		max-width: 360px;
-	}
-	.ifs-bar {
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		align-items: center;
 		gap: 8px;
-		flex: 1;
-		height: 100%;
+		max-width: 440px;
 	}
-	.ifs-bar i {
-		width: 100%;
-		height: var(--h);
-		border-radius: 10px 10px 4px 4px;
-		background: linear-gradient(180deg, #6ee7b7, rgba(52, 211, 153, 0.25));
-		transform: scaleY(0);
-		transform-origin: bottom;
+	.ifs-modules li {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 12px;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.03);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+		font-size: 13px;
+		color: #a1a1aa;
 	}
-	.is-revealing .ifs-bar i {
-		transform: scaleY(1);
-		transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) calc(0.6s + var(--d));
+	.ifs-toggle {
+		position: relative;
+		flex-shrink: 0;
+		width: 28px;
+		height: 16px;
+		border-radius: 999px;
+		background: #3f3f46;
+		transition: background-color 0.35s ease;
 	}
-	.ifs-bar small {
-		font-size: 11px;
-		color: #71717a;
+	.ifs-toggle::after {
+		content: '';
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: #fff;
+		transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+	/* los módulos activos se "encienden" uno tras otro al aparecer la tarjeta */
+	.is-revealing .ifs-modules li.is-on {
+		color: #fff;
+		transition: color 0.35s ease calc(0.8s + var(--d));
+	}
+	.is-revealing .ifs-modules li.is-on .ifs-toggle {
+		background: #34d399;
+		transition-delay: calc(0.8s + var(--d));
+	}
+	.is-revealing .ifs-modules li.is-on .ifs-toggle::after {
+		transform: translateX(12px);
+		transition-delay: calc(0.8s + var(--d));
 	}
 	.ifs-brand {
 		display: flex;
@@ -533,57 +686,6 @@ const barras = [
 		font-size: 13px;
 		color: #d4d4d8;
 	}
-	.ifs-modules {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 8px;
-		flex: 1;
-		max-width: 440px;
-	}
-	.ifs-modules li {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		padding: 10px 12px;
-		border-radius: 12px;
-		background: rgba(255, 255, 255, 0.03);
-		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
-		font-size: 13px;
-		color: #a1a1aa;
-	}
-	.ifs-toggle {
-		position: relative;
-		width: 28px;
-		height: 16px;
-		flex-shrink: 0;
-		border-radius: 999px;
-		background: #3f3f46;
-		transition: background-color 0.35s ease;
-	}
-	.ifs-toggle::after {
-		content: '';
-		position: absolute;
-		top: 2px;
-		left: 2px;
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		background: #fff;
-		transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-	}
-	/* los módulos activos se "encienden" uno tras otro al aparecer la tarjeta */
-	.is-revealing .ifs-modules li.is-on {
-		color: #fff;
-		transition: color 0.35s ease calc(0.8s + var(--d));
-	}
-	.is-revealing .ifs-modules li.is-on .ifs-toggle {
-		background: #34d399;
-		transition-delay: calc(0.8s + var(--d));
-	}
-	.is-revealing .ifs-modules li.is-on .ifs-toggle::after {
-		transform: translateX(12px);
-		transition-delay: calc(0.8s + var(--d));
-	}
 
 	/* ============ Cierre ============ */
 	.ifs-close {
@@ -607,77 +709,111 @@ const barras = [
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.ifs-bar i {
-			transform: none;
-		}
 		.ifs-brand-logo {
 			animation: none;
+		}
+		.ifs-desc {
+			transition: none;
 		}
 	}
 </style>
 
 <script>
-	// Escritorio: el paso que cruza el centro de la pantalla manda — activa su
-	// pantalla en la ventana fija, el menú lateral, el reloj y la barra de
-	// progreso. Móvil: cada paso lleva su propia ventana y se activa (una sola
-	// vez) cuando entra en pantalla.
-	const root = document.querySelector<HTMLElement>('.ifs');
-	if (root) {
-		const steps = Array.from(root.querySelectorAll<HTMLElement>('.ifs-step'));
-		const main = root.querySelector<HTMLElement>('.ifs-main-device');
-		const screens = main ? Array.from(main.querySelectorAll<HTMLElement>('.ifp')) : [];
-		const navItems = main ? Array.from(main.querySelectorAll<HTMLElement>('[data-nav]')) : [];
-		const clock = main?.querySelector<HTMLElement>('[data-clock]');
-		const dots = Array.from(root.querySelectorAll<HTMLElement>('.ifs-progress [data-dot]'));
-		const horas = steps.map((s) => s.querySelector<HTMLElement>('[data-clock]')?.textContent ?? '');
+	// Demo en bucle: cada paso dura lo que su barra de progreso (--dur, en CSS).
+	// Al acabar la barra pasa al siguiente y, tras el último, vuelve al primero.
+	// Se pausa sola fuera de pantalla y mientras el ratón está sobre la ventana
+	// (para poder mirarla con calma); el botón de pausa la para del todo.
+	const demo = document.querySelector<HTMLElement>('.ifs-demo');
+	if (demo) {
+		const tabs = Array.from(demo.querySelectorAll<HTMLButtonElement>('.ifs-tab'));
+		const descs = Array.from(demo.querySelectorAll<HTMLElement>('.ifs-desc'));
+		const device = demo.querySelector<HTMLElement>('.ifs-device');
+		const screens = Array.from(demo.querySelectorAll<HTMLElement>('.ifs-stack .ifp'));
+		const navItems = Array.from(demo.querySelectorAll<HTMLElement>('.ifs-device [data-nav]'));
+		const clock = demo.querySelector<HTMLElement>('.ifs-device [data-clock]');
+		const toggle = demo.querySelector<HTMLButtonElement>('[data-toggle]');
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const n = tabs.length;
 		let current = 0;
+		let started = false;
+		let userPaused = false;
+		let hovering = false;
+		let visible = false;
 
-		const activate = (i: number) => {
-			if (i === current) return;
-			current = i;
-			steps.forEach((s, j) => (s.dataset.active = String(j === i)));
-			navItems.forEach((n) => n.classList.toggle('is-current', Number(n.dataset.nav) === i));
-			dots.forEach((d, j) => d.classList.toggle('is-on', j === i));
-			if (clock) clock.textContent = horas[i];
+		const syncPause = () => demo.classList.toggle('is-paused', userPaused || hovering || !visible);
+
+		const show = (i: number, focus = false) => {
+			current = (i + n) % n;
+			tabs.forEach((t, j) => {
+				const on = j === current;
+				t.setAttribute('aria-selected', String(on));
+				t.tabIndex = on ? 0 : -1;
+				t.classList.toggle('is-done', j < current);
+				const bar = t.querySelector<HTMLElement>('.ifs-tab-bar i');
+				if (bar) {
+					// reinicia la animación de la barra
+					bar.style.animation = 'none';
+					void bar.offsetWidth;
+					bar.style.animation = '';
+				}
+			});
+			descs.forEach((d, j) => d.classList.toggle('is-active', j === current));
+			navItems.forEach((it) => it.classList.toggle('is-current', Number(it.dataset.nav) === current));
+			if (clock) clock.textContent = tabs[current].dataset.hora ?? '';
 			screens.forEach((s) => s.classList.remove('is-active'));
-			// un frame en reposo para que las entradas vuelvan a arrancar desde cero
-			requestAnimationFrame(() => requestAnimationFrame(() => screens[i]?.classList.add('is-active')));
+			// un frame en reposo para que las entradas de la pantalla arranquen de cero
+			if (started) requestAnimationFrame(() => requestAnimationFrame(() => screens[current]?.classList.add('is-active')));
+			if (focus) tabs[current].focus();
 		};
 
-		const centerObserver = new IntersectionObserver(
-			(entries) => {
-				for (const e of entries) if (e.isIntersecting) activate(Number((e.target as HTMLElement).dataset.step));
-			},
-			{ rootMargin: '-50% 0px -50% 0px' },
-		);
-		steps.forEach((s) => centerObserver.observe(s));
+		tabs.forEach((t, i) => {
+			t.addEventListener('click', () => show(i));
+			t.addEventListener('keydown', (e) => {
+				const dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+				if (!dir) return;
+				e.preventDefault();
+				show(current + dir, true);
+			});
+			t.querySelector('.ifs-tab-bar i')?.addEventListener('animationend', () => {
+				if (i === current) show(current + 1);
+			});
+		});
+		demo.querySelector('[data-prev]')?.addEventListener('click', () => show(current - 1));
+		demo.querySelector('[data-next]')?.addEventListener('click', () => show(current + 1));
+		toggle?.addEventListener('click', () => {
+			userPaused = !userPaused;
+			demo.classList.toggle('is-user-paused', userPaused);
+			toggle.setAttribute('aria-label', userPaused ? 'Reanudar' : 'Pausar');
+			syncPause();
+		});
+		device?.addEventListener('mouseenter', () => {
+			hovering = true;
+			syncPause();
+		});
+		device?.addEventListener('mouseleave', () => {
+			hovering = false;
+			syncPause();
+		});
 
-		// la ventana fija arranca en reposo y se enciende al llegar a ella
-		if (main && screens[0]) {
-			screens[0].classList.remove('is-active');
-			const once = new IntersectionObserver(
-				(entries) => {
-					if (entries.some((e) => e.isIntersecting)) {
-						screens[current]?.classList.add('is-active');
-						once.disconnect();
-					}
-				},
-				{ threshold: 0.4 },
-			);
-			once.observe(main);
+		if (reduceMotion) {
+			if (toggle) toggle.hidden = true;
+		} else {
+			demo.classList.add('is-playing');
 		}
+		syncPause();
 
-		const mobileScreens = Array.from(root.querySelectorAll<HTMLElement>('.ifs-step .ifp'));
-		const mobileObserver = new IntersectionObserver(
+		new IntersectionObserver(
 			(entries) => {
 				for (const e of entries) {
-					if (!e.isIntersecting) continue;
-					e.target.classList.add('is-active');
-					mobileObserver.unobserve(e.target);
+					visible = e.isIntersecting;
+					if (visible && !started) {
+						started = true;
+						show(current);
+					}
 				}
+				syncPause();
 			},
-			{ threshold: 0.45 },
-		);
-		mobileScreens.forEach((s) => mobileObserver.observe(s));
+			{ threshold: 0.35 },
+		).observe(demo);
 	}
 </script>

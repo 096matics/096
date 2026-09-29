@@ -4,7 +4,7 @@
 // .is-active: cada pieza .ifp-in entra escalonada según su --i. El lead, las
 // horas y las cifras de la bandeja son un ejemplo ilustrativo.
 interface Props {
-	paso: 0 | 1 | 2 | 3;
+	paso: 0 | 1 | 2 | 3 | 4;
 	class?: string;
 }
 const { paso, class: className = '' } = Astro.props;
@@ -15,6 +15,17 @@ const canal = {
 	whatsapp: 'M5 18l-1 3 3.5-1.5A8 8 0 1 0 5 18z',
 	instagram: 'M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM17.5 6.5h0',
 };
+const kpis = [
+	{ valor: '128', label: 'Leads este mes', delta: '+18 %' },
+	{ valor: '4 s', label: 'Respuesta media', delta: '24/7' },
+	{ valor: '37', label: 'Visitas agendadas', delta: '+9' },
+];
+const porCanal = [
+	{ canal: 'Portales', n: 46 },
+	{ canal: 'Web', n: 38 },
+	{ canal: 'WhatsApp', n: 29 },
+	{ canal: 'Redes', n: 15 },
+];
 const bandeja = [
 	{ ini: 'LM', nombre: 'Laura Martínez', detalle: 'Ático en Ruzafa · 180.000 €', canal: 'portal', cuando: '21:10', estado: 'Interesado', av: '#7d9c88' },
 	{ ini: 'CR', nombre: 'Carlos Ruiz', detalle: 'Chalet en Paterna · 250.000 €', canal: 'instagram', cuando: '19:42', estado: 'Contactando', av: '#a08f74' },
@@ -165,6 +176,41 @@ const bandeja = [
 					</div>
 					<div class="ifp-toast ifp-in" style="--i:4">
 						<span class="ifp-live" />Recordatorio por WhatsApp · lun 9:00
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	{
+		paso === 4 && (
+			<div class="ifp-stats">
+				<div class="ifp-head ifp-in" style="--i:0">
+					<strong>Informes</strong>
+					<span class="ifp-chips">
+						<span class="is-on">Este mes</span>
+						<span>Trimestre</span>
+					</span>
+				</div>
+				<div class="ifp-kpis">
+					{kpis.map((k, i) => (
+						<div class="ifp-kpi ifp-in" style={`--i:${0.6 + i * 0.4}`}>
+							<span class="ifp-sub">{k.label}</span>
+							<b>{k.valor}</b>
+							<em>{k.delta}</em>
+						</div>
+					))}
+				</div>
+				<div class="ifp-chart ifp-in" style="--i:2">
+					<span class="ifp-sub">Leads por canal</span>
+					<div class="ifp-rows">
+						{porCanal.map((c, i) => (
+							<div class="ifp-rowbar">
+								<span>{c.canal}</span>
+								<i style={`--w:${(c.n / porCanal[0].n) * 100}%; --d:${i * 0.15}s`} />
+								<b>{c.n}</b>
+							</div>
+						))}
 					</div>
 				</div>
 			</div>
@@ -702,9 +748,91 @@ const bandeja = [
 		font-size: 10px;
 	}
 
+	/* ---------- 4 · Informes ---------- */
+	.ifp-stats {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+	.ifp-kpis {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 8px;
+	}
+	.ifp-kpi {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 12px 14px;
+		border-radius: 14px;
+		background: #fff;
+		border: 1px solid #e9ece8;
+	}
+	.ifp-kpi b {
+		font-size: 24px;
+		letter-spacing: -0.02em;
+		font-variant-numeric: tabular-nums;
+	}
+	.ifp-kpi em {
+		align-self: flex-start;
+		padding: 1px 7px;
+		border-radius: 999px;
+		background: #dcebe0;
+		color: #2f7a53;
+		font-size: 11px;
+		font-style: normal;
+		font-weight: 700;
+	}
+	.ifp-chart {
+		padding: 14px;
+		border-radius: 14px;
+		background: #fff;
+		border: 1px solid #e9ece8;
+	}
+	.ifp-rows {
+		display: grid;
+		gap: 10px;
+		margin-top: 12px;
+	}
+	.ifp-rowbar {
+		display: grid;
+		grid-template-columns: 70px minmax(0, 1fr) 28px;
+		align-items: center;
+		gap: 10px;
+		font-size: 12px;
+		color: #66727a;
+	}
+	.ifp-rowbar i {
+		display: block;
+		width: var(--w);
+		height: 12px;
+		border-radius: 6px;
+		background: linear-gradient(90deg, #526a5d, #8fb39c);
+		transform: scaleX(0);
+		transform-origin: left;
+	}
+	.ifp.is-active .ifp-rowbar i {
+		transform: scaleX(1);
+		transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1) calc(0.9s + var(--d));
+	}
+	.ifp-rowbar b {
+		color: #22313a;
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+
 	@media (max-width: 639px) {
 		.ifp {
 			font-size: 12px;
+		}
+		.ifp-kpi {
+			padding: 10px;
+		}
+		.ifp-kpi b {
+			font-size: 19px;
+		}
+		.ifp-kpi .ifp-sub {
+			font-size: 10px;
 		}
 		.ifp-chips span:nth-child(n + 4) {
 			display: none;
@@ -747,7 +875,8 @@ const bandeja = [
 		.ifp-slot--new,
 		.ifp-reply,
 		.ifp-state-b,
-		.ifp-pipe-fill {
+		.ifp-pipe-fill,
+		.ifp-rowbar i {
 			opacity: 1 !important;
 			transform: none !important;
 			animation: none !important;
