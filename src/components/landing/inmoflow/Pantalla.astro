@@ -1,0 +1,764 @@
+---
+// Una de las cuatro pantallas del recorrido de InmoFlow. Se pinta en reposo
+// (piezas ocultas) y cobra vida cuando el script de la sección le pone
+// .is-active: cada pieza .ifp-in entra escalonada según su --i. El lead, las
+// horas y las cifras de la bandeja son un ejemplo ilustrativo.
+interface Props {
+	paso: 0 | 1 | 2 | 3;
+	class?: string;
+}
+const { paso, class: className = '' } = Astro.props;
+
+const canal = {
+	web: 'M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18z',
+	portal: 'M4 11l8-7 8 7M6 9.5V20h12V9.5M10 20v-5h4v5',
+	whatsapp: 'M5 18l-1 3 3.5-1.5A8 8 0 1 0 5 18z',
+	instagram: 'M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM17.5 6.5h0',
+};
+const bandeja = [
+	{ ini: 'LM', nombre: 'Laura Martínez', detalle: 'Ático en Ruzafa · 180.000 €', canal: 'portal', cuando: '21:10', estado: 'Interesado', av: '#7d9c88' },
+	{ ini: 'CR', nombre: 'Carlos Ruiz', detalle: 'Chalet en Paterna · 250.000 €', canal: 'instagram', cuando: '19:42', estado: 'Contactando', av: '#a08f74' },
+	{ ini: 'AL', nombre: 'Ana López', detalle: 'Piso en Torrent · alquiler', canal: 'whatsapp', cuando: '18:05', estado: 'Visita', av: '#74889b' },
+];
+---
+
+<div class={`ifp ifp-${paso} ${className}`} data-screen={paso}>
+	{
+		paso === 0 && (
+			<>
+				<div class="ifp-head ifp-in" style="--i:0">
+					<strong>Bandeja de entrada</strong>
+					<span class="ifp-chips">
+						<span class="is-on">Todos</span>
+						<span>Web</span>
+						<span>Portales</span>
+						<span>WhatsApp</span>
+						<span>Redes</span>
+					</span>
+				</div>
+				<div class="ifp-list">
+					<div class="ifp-lead ifp-lead--new ifp-in" style="--i:1">
+						<span class="ifp-av" style="--av:#9b7f8b">JG<i class="ifp-ch"><svg viewBox="0 0 24 24"><path d={canal.web} /></svg></i></span>
+						<span class="ifp-lead-main">
+							<span class="ifp-lead-top"><strong>Javier García</strong><span class="ifp-now"><span class="ifp-live" />Ahora</span></span>
+							<span class="ifp-sub">Piso en Av. del Mar · formulario web</span>
+							<span class="ifp-msg">“Hola, ¿sigue disponible? Me gustaría verlo.”</span>
+						</span>
+					</div>
+					{
+						bandeja.map((l, i) => (
+							<div class="ifp-lead ifp-lead--old ifp-in" style={`--i:${i * 0.4 + 0.4}`}>
+								<span class="ifp-av" style={`--av:${l.av}`}>
+									{l.ini}
+									<i class="ifp-ch"><svg viewBox="0 0 24 24"><path d={canal[l.canal as keyof typeof canal]} /></svg></i>
+								</span>
+								<span class="ifp-lead-main">
+									<span class="ifp-lead-top"><strong>{l.nombre}</strong><span class="ifp-time">{l.cuando}</span></span>
+									<span class="ifp-sub">{l.detalle}</span>
+								</span>
+								<span class="ifp-tag">{l.estado}</span>
+							</div>
+						))
+					}
+				</div>
+			</>
+		)
+	}
+
+	{
+		paso === 1 && (
+			<div class="ifp-chat">
+				<div class="ifp-chat-head ifp-in" style="--i:0">
+					<span class="ifp-av" style="--av:#9b7f8b">JG</span>
+					<span class="ifp-lead-main">
+						<strong>Javier García</strong>
+						<span class="ifp-sub">WhatsApp · desde tu número</span>
+					</span>
+				</div>
+				<div class="ifp-thread">
+					<p class="ifp-b ifp-b--them ifp-in" style="--i:0.6">Hola, ¿sigue disponible el piso de Av. del Mar?</p>
+					<div class="ifp-swap">
+						<p class="ifp-b ifp-b--us ifp-typing" aria-hidden="true"><i /><i /><i /></p>
+						<p class="ifp-b ifp-b--us ifp-reply">
+							<span class="ifp-auto">Automático</span>
+							¡Hola Javier! Sí, sigue disponible 🙂 ¿Lo buscas para comprar o para alquilar?
+							<time>23:47 ✓✓</time>
+						</p>
+					</div>
+					<p class="ifp-b ifp-b--them ifp-in" style="--i:6.4">Comprar</p>
+					<p class="ifp-b ifp-b--us ifp-in" style="--i:7.4">
+						<span class="ifp-auto">Automático</span>
+						Perfecto. ¿Qué presupuesto aproximado manejas?
+					</p>
+				</div>
+				<div class="ifp-pill ifp-in" style="--i:5">
+					<span class="ifp-live" />Respondido en 4 segundos
+				</div>
+			</div>
+		)
+	}
+
+	{
+		paso === 2 && (
+			<div class="ifp-file">
+				<div class="ifp-file-head ifp-in" style="--i:0">
+					<span class="ifp-av ifp-av--lg" style="--av:#9b7f8b">JG</span>
+					<span class="ifp-lead-main">
+						<strong>Javier García</strong>
+						<span class="ifp-sub">Cliente desde hoy · formulario web</span>
+					</span>
+					<span class="ifp-state">
+						<span class="ifp-state-a">Nuevo</span>
+						<span class="ifp-state-b">Interesado</span>
+					</span>
+				</div>
+				<div class="ifp-pipe ifp-in" style="--i:0.5">
+					{['Nuevo', 'Contactando', 'Interesado', 'Visita', 'Cierre'].map((s) => <span>{s}</span>)}
+					<i class="ifp-pipe-fill" />
+				</div>
+				<dl class="ifp-fields">
+					{[
+						['Operación', 'Compra'],
+						['Presupuesto', 'Hasta 320.000 €'],
+						['Zona', 'Valencia · Av. del Mar'],
+						['Habitaciones', '3 o más'],
+						['Origen', 'Formulario web'],
+						['Siguiente paso', 'Proponer visita'],
+					].map(([k, v], i) => (
+						<div class="ifp-in" style={`--i:${1.2 + i * 0.45}`}>
+							<dt>{k}</dt>
+							<dd>
+								{v}
+								<svg viewBox="0 0 24 24" class="ifp-spark">
+									<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
+								</svg>
+							</dd>
+						</div>
+					))}
+				</dl>
+			</div>
+		)
+	}
+
+	{
+		paso === 3 && (
+			<div class="ifp-agenda">
+				<div class="ifp-head ifp-in" style="--i:0">
+					<strong>Agenda de visitas</strong>
+					<span class="ifp-sub">Semana del 6 al 10</span>
+				</div>
+				<div class="ifp-cal ifp-in" style="--i:0.5">
+					{['Lun 6', 'Mar 7', 'Mié 8', 'Jue 9', 'Vie 10'].map((d, i) => <span class="ifp-day" style={`grid-column:${i + 1}`}>{d}</span>)}
+					<span class="ifp-slot" style="grid-column:2; grid-row:2"><b>10:00</b>Laura M.</span>
+					<span class="ifp-slot" style="grid-column:4; grid-row:2"><b>12:30</b>Carlos R.</span>
+					<span class="ifp-slot" style="grid-column:3; grid-row:3"><b>17:00</b>Ana L.</span>
+					<span class="ifp-slot" style="grid-column:5; grid-row:3"><b>18:15</b>Marta F.</span>
+					<span class="ifp-slot ifp-slot--new" style="grid-column:1; grid-row:2 / span 2">
+						<b>10:30</b>
+						Visita · Javier García
+						<small>Av. del Mar, 14 · 3.º</small>
+					</span>
+				</div>
+				<div class="ifp-toasts">
+					<div class="ifp-toast ifp-in" style="--i:3">
+						<span class="ifp-check">✓</span>Visita confirmada por Javier
+					</div>
+					<div class="ifp-toast ifp-in" style="--i:4">
+						<span class="ifp-live" />Recordatorio por WhatsApp · lun 9:00
+					</div>
+				</div>
+			</div>
+		)
+	}
+</div>
+
+<style>
+	.ifp {
+		--step: 0.32s;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		height: 100%;
+		font-size: 13px;
+	}
+
+	/* ---------- Entrada escalonada ---------- */
+	.ifp-in {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	.ifp.is-active .ifp-in {
+		opacity: 1;
+		transform: none;
+		transition:
+			opacity 0.5s ease,
+			transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: calc(var(--i, 0) * var(--step) + 0.15s);
+	}
+
+	/* ---------- Comunes ---------- */
+	.ifp-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		font-size: 15px;
+	}
+	.ifp-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 5px;
+	}
+	.ifp-chips span {
+		padding: 4px 10px;
+		border-radius: 999px;
+		background: #eef2ed;
+		color: #66727a;
+		font-size: 11px;
+		font-weight: 600;
+	}
+	.ifp-chips .is-on {
+		background: #22313a;
+		color: #fff;
+	}
+	.ifp-sub {
+		display: block;
+		font-size: 12px;
+		color: #7b8680;
+	}
+	.ifp-av {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 38px;
+		height: 38px;
+		flex-shrink: 0;
+		border-radius: 50%;
+		background: var(--av);
+		color: #fff;
+		font-size: 12px;
+		font-weight: 800;
+	}
+	.ifp-av--lg {
+		width: 48px;
+		height: 48px;
+		font-size: 14px;
+	}
+	.ifp-ch {
+		position: absolute;
+		right: -3px;
+		bottom: -3px;
+		display: grid;
+		place-items: center;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		background: #fff;
+		box-shadow: 0 0 0 1px #e2e7e2;
+	}
+	.ifp-ch svg {
+		width: 11px;
+		height: 11px;
+		fill: none;
+		stroke: #526a5d;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ifp-lead-main {
+		display: block;
+		min-width: 0;
+		flex: 1;
+	}
+	.ifp-live {
+		position: relative;
+		display: inline-block;
+		width: 7px;
+		height: 7px;
+		flex-shrink: 0;
+		border-radius: 50%;
+		background: #2f9e63;
+	}
+	.ifp-live::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 50%;
+		background: #2f9e63;
+		animation: ifp-ping 2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+	}
+	@keyframes ifp-ping {
+		from {
+			transform: scale(1);
+			opacity: 0.55;
+		}
+		to {
+			transform: scale(3);
+			opacity: 0;
+		}
+	}
+
+	/* ---------- 0 · Bandeja ---------- */
+	.ifp-list {
+		display: grid;
+		gap: 8px;
+	}
+	.ifp-lead {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 14px;
+		border-radius: 14px;
+		background: #fff;
+		border: 1px solid #e9ece8;
+	}
+	.ifp-lead--new {
+		align-items: flex-start;
+		border-color: #b9d3c1;
+		box-shadow:
+			0 0 0 4px rgba(82, 106, 93, 0.08),
+			0 14px 34px rgba(36, 52, 45, 0.12);
+	}
+	.ifp.is-active .ifp-lead--new {
+		transform: none;
+		animation: ifp-drop 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+		animation-delay: calc(1 * var(--step) + 0.15s);
+	}
+	@keyframes ifp-drop {
+		from {
+			opacity: 0;
+			transform: translateY(-18px) scale(0.97);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+	.ifp-lead-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+	.ifp-now {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 11px;
+		font-weight: 700;
+		color: #2f7a53;
+	}
+	.ifp-time {
+		font-size: 11px;
+		color: #9aa39e;
+		font-variant-numeric: tabular-nums;
+	}
+	.ifp-msg {
+		display: block;
+		margin-top: 8px;
+		padding: 8px 10px;
+		border-radius: 10px;
+		background: #f3f6f2;
+		font-size: 12px;
+	}
+	.ifp.is-active .ifp-lead--old {
+		opacity: 0.7;
+	}
+	.ifp-tag {
+		padding: 3px 9px;
+		border-radius: 999px;
+		background: #eef2ed;
+		color: #5b7464;
+		font-size: 11px;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+
+	/* ---------- 1 · Conversación ---------- */
+	.ifp-chat {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		height: 100%;
+	}
+	.ifp-chat-head,
+	.ifp-file-head {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding-bottom: 12px;
+		border-bottom: 1px solid #eceff0;
+	}
+	.ifp-thread {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		flex: 1;
+		padding: 14px;
+		border-radius: 14px;
+		background: #eef2ed;
+	}
+	.ifp-b {
+		max-width: 80%;
+		padding: 9px 12px;
+		border-radius: 14px;
+		line-height: 1.45;
+	}
+	.ifp-b--them {
+		align-self: flex-start;
+		background: #fff;
+		border-bottom-left-radius: 4px;
+	}
+	.ifp-b--us {
+		align-self: flex-end;
+		background: #d4e7d9;
+		border-bottom-right-radius: 4px;
+	}
+	.ifp-b time {
+		display: block;
+		margin-top: 3px;
+		font-size: 10px;
+		color: #7f8c85;
+		text-align: right;
+	}
+	.ifp-auto {
+		display: block;
+		margin-bottom: 3px;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: #2f7a53;
+	}
+	/* "escribiendo…" y la respuesta comparten hueco: primero aparece uno, luego
+	   se va y entra el otro, sin que el hilo salte */
+	.ifp-swap {
+		display: grid;
+		justify-items: end;
+	}
+	.ifp-swap > * {
+		grid-area: 1 / 1;
+		opacity: 0;
+	}
+	.ifp-typing {
+		display: flex;
+		gap: 4px;
+		align-self: start;
+		padding: 12px 14px;
+	}
+	.ifp-typing i {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #7fa38b;
+		animation: ifp-blink 1.1s infinite;
+	}
+	.ifp-typing i:nth-child(2) {
+		animation-delay: 0.18s;
+	}
+	.ifp-typing i:nth-child(3) {
+		animation-delay: 0.36s;
+	}
+	@keyframes ifp-blink {
+		0%,
+		80%,
+		100% {
+			opacity: 0.3;
+		}
+		40% {
+			opacity: 1;
+		}
+	}
+	.ifp.is-active .ifp-typing {
+		animation: ifp-flash 1.4s ease both;
+		animation-delay: calc(1.8 * var(--step) + 0.15s);
+	}
+	@keyframes ifp-flash {
+		0% {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		15%,
+		80% {
+			opacity: 1;
+			transform: none;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+	.ifp.is-active .ifp-reply {
+		animation: ifp-drop 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+		animation-delay: calc(1.8 * var(--step) + 1.55s);
+	}
+	.ifp-pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		align-self: flex-start;
+		padding: 7px 13px;
+		border-radius: 999px;
+		background: #22313a;
+		color: #fff;
+		font-size: 12px;
+		font-weight: 700;
+	}
+
+	/* ---------- 2 · Ficha ---------- */
+	.ifp-file {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.ifp-file-head strong {
+		font-size: 16px;
+	}
+	.ifp-state {
+		display: grid;
+		font-size: 11px;
+		font-weight: 700;
+	}
+	.ifp-state > span {
+		grid-area: 1 / 1;
+		padding: 4px 10px;
+		border-radius: 999px;
+		text-align: center;
+		white-space: nowrap;
+	}
+	.ifp-state-a {
+		background: #e8eef3;
+		color: #637c90;
+	}
+	.ifp-state-b {
+		background: #dcebe0;
+		color: #2f7a53;
+		opacity: 0;
+	}
+	.ifp.is-active .ifp-state-a {
+		opacity: 0;
+		transition: opacity 0.4s ease 2.6s;
+	}
+	.ifp.is-active .ifp-state-b {
+		opacity: 1;
+		transition: opacity 0.4s ease 2.6s;
+	}
+	.ifp-pipe {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		padding-top: 14px;
+		font-size: 11px;
+		font-weight: 600;
+		color: #9aa39e;
+	}
+	.ifp-pipe::before,
+	.ifp-pipe-fill {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 5px;
+		border-radius: 5px;
+		background: #e6ebe5;
+	}
+	.ifp-pipe-fill {
+		right: auto;
+		width: 50%;
+		background: #526a5d;
+		transform: scaleX(0.2);
+		transform-origin: left;
+	}
+	.ifp.is-active .ifp-pipe-fill {
+		transform: scaleX(1);
+		transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1) 1.6s;
+	}
+	.ifp-fields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+	}
+	.ifp-fields div {
+		padding: 10px 12px;
+		border-radius: 12px;
+		background: #fff;
+		border: 1px solid #e9ece8;
+	}
+	.ifp-fields dt {
+		font-size: 11px;
+		color: #7b8680;
+	}
+	.ifp-fields dd {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 6px;
+		margin-top: 2px;
+		font-weight: 700;
+	}
+	.ifp-spark {
+		width: 13px;
+		height: 13px;
+		flex-shrink: 0;
+		fill: #7fb08f;
+	}
+
+	/* ---------- 3 · Agenda ---------- */
+	.ifp-agenda {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+	.ifp-cal {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		grid-template-rows: auto repeat(2, 72px);
+		gap: 6px;
+		padding: 12px;
+		border-radius: 14px;
+		background: #fff;
+		border: 1px solid #e9ece8;
+	}
+	.ifp-day {
+		grid-row: 1;
+		padding-bottom: 6px;
+		border-bottom: 1px solid #eef1ee;
+		font-size: 11px;
+		font-weight: 700;
+		color: #7b8680;
+		text-align: center;
+	}
+	.ifp-slot {
+		align-self: start;
+		padding: 7px 8px;
+		border-radius: 10px;
+		background: #f1f4ee;
+		font-size: 11px;
+		line-height: 1.3;
+		color: #66727a;
+	}
+	.ifp-slot b {
+		display: block;
+		color: #22313a;
+	}
+	.ifp-slot small {
+		display: block;
+		margin-top: 4px;
+		font-size: 10px;
+		opacity: 0.85;
+	}
+	.ifp-slot--new {
+		align-self: stretch;
+		background: #526a5d;
+		color: #dfe8e1;
+		opacity: 0;
+		transform: scale(0.8);
+		box-shadow: 0 12px 28px rgba(82, 106, 93, 0.4);
+	}
+	.ifp-slot--new b {
+		color: #fff;
+		font-size: 13px;
+	}
+	.ifp.is-active .ifp-slot--new {
+		animation: ifp-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+		animation-delay: calc(1.8 * var(--step) + 0.15s);
+	}
+	@keyframes ifp-pop {
+		from {
+			opacity: 0;
+			transform: scale(0.8);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+	.ifp-toasts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.ifp-toast {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 13px;
+		border-radius: 12px;
+		background: #fff;
+		border: 1px solid #d6e4da;
+		font-size: 12px;
+		font-weight: 600;
+		box-shadow: 0 8px 20px rgba(36, 52, 45, 0.08);
+	}
+	.ifp-check {
+		display: grid;
+		place-items: center;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background: #2f9e63;
+		color: #fff;
+		font-size: 10px;
+	}
+
+	@media (max-width: 639px) {
+		.ifp {
+			font-size: 12px;
+		}
+		.ifp-chips span:nth-child(n + 4) {
+			display: none;
+		}
+		.ifp-lead {
+			padding: 10px;
+		}
+		.ifp-tag {
+			display: none;
+		}
+		.ifp-thread {
+			padding: 10px;
+		}
+		.ifp-b {
+			max-width: 88%;
+		}
+		.ifp-fields div {
+			padding: 8px 10px;
+		}
+		.ifp-pipe span:nth-child(odd) {
+			visibility: hidden;
+		}
+		.ifp-cal {
+			padding: 8px;
+			gap: 4px;
+			grid-template-rows: auto repeat(2, 60px);
+		}
+		.ifp-slot {
+			padding: 5px;
+			font-size: 10px;
+		}
+		.ifp-slot small {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ifp-in,
+		.ifp.is-active .ifp-in,
+		.ifp-slot--new,
+		.ifp-reply,
+		.ifp-state-b,
+		.ifp-pipe-fill {
+			opacity: 1 !important;
+			transform: none !important;
+			animation: none !important;
+			transition: none !important;
+		}
+		.ifp-typing,
+		.ifp-state-a {
+			display: none;
+		}
+		.ifp-live::after {
+			animation: none;
+		}
+	}
+</style>
