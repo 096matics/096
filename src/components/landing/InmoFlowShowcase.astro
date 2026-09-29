@@ -1,520 +1,763 @@
 ---
 import WhatsAppCTA from '../WhatsAppCTA.astro';
 
-// Tercer intento de esta sección. Las dos versiones anteriores construían su
-// propia coreografía en @keyframes puro — vistosa, pero inventada por
-// nosotros, no lo que InmoFlow hace de verdad. Esta reutiliza literalmente
-// el mecanismo de animación del propio hero real de InmoFlow (el mismo
-// archivo en Desktop/Inmoflow/Index.html): un chat de WhatsApp que se
-// escribe solo mensaje a mensaje con su indicador de "escribiendo…", y un
-// panel de leads en el que van entrando filas nuevas en directo (con FLIP,
-// para que el resto de filas se acomoden con un pequeño desplazamiento en
-// vez de saltar). Ni el texto ni las cifras se inventan: el copy y los
-// beneficios son los mismos tres que usa la propia InmoFlow en su hero real,
-// solo sin la palabra "CRM" (esa ya se explica en /tarjeta/inmoflow).
-const beneficios = [
-	{ titulo: 'Respuesta inmediata', texto: 'a cada nuevo lead' },
-	{ titulo: 'Seguimiento automático', texto: '24 horas, 7 días' },
-	{ titulo: 'Más visitas, más ventas', texto: 'con menos gestión' },
+// El stand de producto de InmoFlow en la home. En vez de enseñar "un CRM"
+// (pantallas que cualquier software tiene), cuenta lo único que importa a una
+// inmobiliaria: qué le pasa a un lead que entra cuando nadie está mirando.
+// Cuatro pasos, cada uno con su pantalla y su hora, del sábado por la noche
+// al lunes por la mañana. Las funciones y los datos (7 días, desde 100 €,
+// API oficial de WhatsApp, sin permanencia) son los de /tarjeta/inmoflow;
+// el lead y las horas son un ejemplo ilustrativo.
+const pasos = [
+	{ hora: '23:47', titulo: 'Entra un lead', texto: 'Desde tu web, WhatsApp, portales o redes: todos caen en el mismo sitio.' },
+	{ hora: '23:47', titulo: 'Se le responde al momento', texto: 'Un WhatsApp automático desde tu número, en segundos, no el lunes.' },
+	{ hora: '23:49', titulo: 'Se cualifica solo', texto: 'Operación, presupuesto y zona quedan guardados en su ficha del CRM.' },
+	{ hora: '23:52', titulo: 'La visita queda agendada', texto: 'Con recordatorio automático. Tú lo ves el lunes con el café.' },
 ];
-const leadsIniciales = [
-	{ ini: 'JG', nombre: 'Javier García', meta: 'Valencia · 310.000 €', estado: 'Lead nuevo', cls: 'blue', av: '#9b7f8b' },
-	{ ini: 'LM', nombre: 'Laura Martínez', meta: 'Valencia · 180.000 €', estado: 'Interesado', cls: '', av: '#7d9c88' },
-	{ ini: 'CR', nombre: 'Carlos Ruiz', meta: 'Paterna · 250.000 €', estado: 'Contactando', cls: 'yellow', av: '#a08f74' },
-	{ ini: 'AL', nombre: 'Ana López', meta: 'Torrent · 320.000 €', estado: 'Interesado', cls: '', av: '#74889b' },
+const datos = [
+	{ valor: '< 7 días', texto: 'para tenerlo funcionando' },
+	{ valor: 'Tu número', texto: 'de WhatsApp, vía API oficial' },
+	{ valor: 'Desde 100 €', texto: 'presupuesto cerrado' },
+	{ valor: '0', texto: 'permanencias ni cuotas' },
 ];
 ---
 
-<section data-animate class="border-b border-zinc-800 py-24 sm:py-32">
+<section data-animate class="ifs border-b border-zinc-800 py-24 sm:py-32">
 	<div class="mx-auto max-w-6xl px-5 sm:px-6">
-		<div data-reveal class="piece piece-top piece-d0 mx-auto max-w-2xl text-center">
-			<p class="text-sm font-bold tracking-widest text-emerald-400 uppercase">Caso real · InmoFlow</p>
-			<h2 class="mt-2 text-3xl font-semibold text-white sm:text-4xl">Un lead entra. InmoFlow ya le ha respondido.</h2>
-			<p class="mt-3 text-lg text-zinc-400">
-				InmoFlow es el sistema todo en uno para inmobiliarias: capta leads desde tu web, WhatsApp y portales, y
-				responde automáticamente para que ningún cliente se quede esperando.
+		<div data-reveal class="piece piece-top piece-d0 max-w-2xl">
+			<p class="text-sm font-bold tracking-widest text-emerald-400 uppercase">Producto · InmoFlow</p>
+			<h2 class="mt-2 text-3xl font-semibold text-white sm:text-5xl sm:leading-[1.05]">
+				Sábado, 23:47.<br /><span class="text-zinc-500">Tu inmobiliaria está cerrada. InmoFlow no.</span>
+			</h2>
+			<p class="mt-4 text-lg text-zinc-400">
+				Captación, CRM y seguimiento por WhatsApp para inmobiliarias. Así es el recorrido de un lead que llega fuera de
+				horario:
 			</p>
 		</div>
 
-		<div data-reveal class="piece piece-d1 if-stage relative mt-14 overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6 sm:p-10">
-			<div class="if-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
-
-			<div class="if-visual relative mx-auto" aria-hidden="true">
-				<div class="if-dashboard absolute top-0 left-0">
-					<div class="if-dash-top">
-						<div class="if-dash-title"><span class="if-live-dot"></span>Oportunidades</div>
-						<div class="if-dash-tabs">
-							<span class="if-pill if-pill-live" id="ifLeadPill"><span class="if-live-dot if-live-dot--sm"></span>Lead nuevo · 19</span>
-							<span class="if-pill">Contactando · 12</span>
-							<span class="if-pill">Interesado · 9</span>
-						</div>
-					</div>
-					<div class="if-dash-table" id="ifLeadTable">
-						{
-							leadsIniciales.map((l) => (
-								<div class="if-lead-row">
-									<div class="if-avatar" style={`--av:${l.av}`}>{l.ini}</div>
-									<div class="if-lead-info">
-										<div class="if-lead-name">{l.nombre}</div>
-										<div class="if-lead-meta">{l.meta}</div>
-									</div>
-									<span class={`if-status ${l.cls}`}>{l.estado}</span>
-								</div>
-							))
-						}
-					</div>
-				</div>
-
-				<div class="if-phone">
-					<div class="if-phone-screen">
-						<div class="if-phone-head"><span class="if-live-dot"></span>Javier García</div>
-						<div class="if-chat" id="ifChat">
-							<div class="if-bubble in">¿Sigue disponible el piso de la Av. del Mar? ¿Es de compra o alquiler?</div>
-							<div class="if-bubble out">Comprar</div>
-							<div class="if-bubble in">Perfecto. ¿Cuál es tu presupuesto aproximado?</div>
-							<div class="if-bubble out">Hasta 320.000 €</div>
-						</div>
-						<div class="if-chat-input">Escribe un mensaje…</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="relative mt-8 grid gap-5 border-t border-zinc-800 pt-6 sm:grid-cols-3">
+		<div data-reveal class="piece piece-d1 ifs-stage mt-12 grid gap-6 lg:mt-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10">
+			<!-- Pasos: pestañas que además avanzan solas -->
+			<div class="ifs-steps" role="tablist" aria-label="Recorrido de un lead en InmoFlow">
 				{
-					beneficios.map((b) => (
-						<div class="flex items-start gap-2.5">
-							<span class="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-							<p class="text-sm text-zinc-300">
-								<strong class="font-semibold text-white">{b.titulo}</strong> <span class="text-zinc-500">{b.texto}</span>
-							</p>
-						</div>
+					pasos.map((p, i) => (
+						<button
+							type="button"
+							role="tab"
+							id={`ifs-tab-${i}`}
+							aria-controls={`ifs-panel-${i}`}
+							aria-selected={i === 0 ? 'true' : 'false'}
+							tabindex={i === 0 ? 0 : -1}
+							class="ifs-step"
+							data-step={i}
+						>
+							<span class="ifs-step-time">{p.hora}</span>
+							<span class="ifs-step-body">
+								<span class="ifs-step-title">{p.titulo}</span>
+								<span class="ifs-step-text">{p.texto}</span>
+							</span>
+							<span class="ifs-step-bar" aria-hidden="true" />
+						</button>
 					))
 				}
 			</div>
 
-			<div class="relative mt-7 flex flex-wrap items-center gap-3">
-				<a
-					href="/tarjeta/inmoflow"
-					class="inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition-transform hover:-translate-y-0.5"
-				>
-					Ver InmoFlow completo
-					<span aria-hidden="true">→</span>
-				</a>
-				<WhatsAppCTA texto="Quiero algo así para mi negocio" mensaje="Hola, he visto InmoFlow y quiero algo parecido para mi negocio" />
+			<!-- Pantalla del producto: una por paso -->
+			<div class="ifs-device">
+				<div class="ifs-device-top" aria-hidden="true">
+					<span class="ifs-dots"><i></i><i></i><i></i></span>
+					<span class="ifs-app"><span class="ifs-logo">⌂</span>InmoFlow</span>
+					<span class="ifs-clock" id="ifsClock">Sáb 23:47</span>
+				</div>
+
+				<div class="ifs-screens">
+					<!-- 1 · Entra el lead -->
+					<div class="ifs-screen is-active" role="tabpanel" id="ifs-panel-0" aria-labelledby="ifs-tab-0">
+						<p class="ifs-label ifs-in" style="--i:0">Bandeja de entrada · todos tus canales</p>
+						<div class="ifs-sources ifs-in" style="--i:1">
+							<span>Web</span><span>WhatsApp</span><span>Portales</span><span>Instagram</span><span>Facebook</span>
+						</div>
+						<div class="ifs-card ifs-card--new ifs-in" style="--i:2">
+							<div class="ifs-av" style="--av:#9b7f8b">JG</div>
+							<div class="min-w-0 flex-1">
+								<div class="ifs-row-between">
+									<strong>Javier García</strong>
+									<span class="ifs-badge ifs-badge--blue">Nuevo</span>
+								</div>
+								<p class="ifs-muted">Formulario web · Piso en Av. del Mar, Valencia</p>
+								<p class="ifs-quote">“¿Sigue disponible? Me gustaría verlo.”</p>
+							</div>
+						</div>
+						<div class="ifs-card ifs-card--old ifs-in" style="--i:3">
+							<div class="ifs-av" style="--av:#7d9c88">LM</div>
+							<div class="min-w-0 flex-1">
+								<div class="ifs-row-between"><strong>Laura Martínez</strong><span class="ifs-badge">Interesado</span></div>
+								<p class="ifs-muted">Portal · Valencia · 180.000 €</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- 2 · Respuesta automática -->
+					<div class="ifs-screen" role="tabpanel" id="ifs-panel-1" aria-labelledby="ifs-tab-1" hidden>
+						<p class="ifs-label ifs-in" style="--i:0">WhatsApp · Javier García</p>
+						<div class="ifs-chat">
+							<div class="ifs-bubble ifs-bubble--them ifs-in" style="--i:1">¿Sigue disponible? Me gustaría verlo.<time>23:47</time></div>
+							<div class="ifs-bubble ifs-bubble--us ifs-in" style="--i:3">
+								¡Hola Javier! Sí, sigue disponible 🙂 Para enseñarte también opciones parecidas: ¿buscas comprar o
+								alquilar?<time>23:47 ✓✓</time>
+							</div>
+							<p class="ifs-auto ifs-in" style="--i:4"><span class="ifs-live"></span>Enviado automáticamente en 4 segundos</p>
+						</div>
+					</div>
+
+					<!-- 3 · Cualificación en el CRM -->
+					<div class="ifs-screen" role="tabpanel" id="ifs-panel-2" aria-labelledby="ifs-tab-2" hidden>
+						<div class="ifs-split">
+							<div class="ifs-chat ifs-chat--mini">
+								<div class="ifs-bubble ifs-bubble--them ifs-in" style="--i:0">Comprar</div>
+								<div class="ifs-bubble ifs-bubble--us ifs-in" style="--i:1">¿Presupuesto aproximado?</div>
+								<div class="ifs-bubble ifs-bubble--them ifs-in" style="--i:2">Hasta 320.000 €</div>
+							</div>
+							<div class="ifs-file ifs-in" style="--i:1">
+								<div class="ifs-row-between">
+									<strong>Ficha · Javier García</strong>
+									<span class="ifs-stage-pill"><span class="ifs-stage-from">Nuevo</span><span class="ifs-stage-to">Interesado</span></span>
+								</div>
+								<dl>
+									<div class="ifs-in" style="--i:2"><dt>Operación</dt><dd>Compra</dd></div>
+									<div class="ifs-in" style="--i:3"><dt>Presupuesto</dt><dd>320.000 €</dd></div>
+									<div class="ifs-in" style="--i:4"><dt>Zona</dt><dd>Valencia · Av. del Mar</dd></div>
+									<div class="ifs-in" style="--i:5"><dt>Canal</dt><dd>Formulario web → WhatsApp</dd></div>
+								</dl>
+							</div>
+						</div>
+					</div>
+
+					<!-- 4 · Visita agendada -->
+					<div class="ifs-screen" role="tabpanel" id="ifs-panel-3" aria-labelledby="ifs-tab-3" hidden>
+						<p class="ifs-label ifs-in" style="--i:0">Calendario de visitas · semana que viene</p>
+						<div class="ifs-cal ifs-in" style="--i:1">
+							{['Lun', 'Mar', 'Mié', 'Jue', 'Vie'].map((d) => <span class="ifs-cal-day">{d}</span>)}
+							<span class="ifs-slot ifs-slot--new ifs-in" style="--i:3; grid-column:1; grid-row:2">
+								<b>10:30</b> Visita · Javier García<small>Av. del Mar, Valencia</small>
+							</span>
+							<span class="ifs-slot" style="grid-column:2; grid-row:3"><b>12:00</b> Laura M.</span>
+							<span class="ifs-slot" style="grid-column:4; grid-row:2"><b>17:00</b> Carlos R.</span>
+							<span class="ifs-slot" style="grid-column:5; grid-row:3"><b>11:15</b> Ana L.</span>
+						</div>
+						<p class="ifs-auto ifs-in" style="--i:4"><span class="ifs-live"></span>Recordatorio por WhatsApp programado para el lunes a las 9:00</p>
+					</div>
+				</div>
 			</div>
+		</div>
+
+		<dl data-reveal class="piece piece-d2 mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-800 lg:grid-cols-4">
+			{
+				datos.map((d) => (
+					<div class="bg-zinc-950 px-5 py-5">
+						<dt class="text-2xl font-semibold text-white">{d.valor}</dt>
+						<dd class="mt-1 text-sm text-zinc-500">{d.texto}</dd>
+					</div>
+				))
+			}
+		</dl>
+
+		<div data-reveal class="piece piece-d3 mt-8 flex flex-wrap items-center gap-3">
+			<a
+				href="/tarjeta/inmoflow"
+				class="inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-zinc-950 transition-transform hover:-translate-y-0.5"
+			>
+				Ver InmoFlow completo <span aria-hidden="true">→</span>
+			</a>
+			<WhatsAppCTA texto="Quiero una demo para mi inmobiliaria" mensaje="Hola, he visto InmoFlow en vuestra web y quiero una demo para mi inmobiliaria" />
 		</div>
 	</div>
 </section>
 
 <style>
-	.if-glow {
-		background:
-			radial-gradient(ellipse 60% 70% at 12% 10%, rgba(52, 211, 153, 0.12), transparent 60%),
-			radial-gradient(ellipse 50% 55% at 92% 90%, rgba(52, 211, 153, 0.08), transparent 60%);
+	/* ============ Pasos (pestañas) ============ */
+	.ifs-steps {
+		display: grid;
+		gap: 6px;
+		align-content: start;
+	}
+	.ifs-step {
+		position: relative;
+		display: grid;
+		grid-template-columns: 52px 1fr;
+		gap: 14px;
+		width: 100%;
+		padding: 16px 16px 18px;
+		border-radius: 16px;
+		border: 1px solid transparent;
+		text-align: left;
+		cursor: pointer;
+		overflow: hidden;
+		transition:
+			background-color 0.3s,
+			border-color 0.3s;
+	}
+	.ifs-step:hover {
+		background: rgba(255, 255, 255, 0.025);
+	}
+	.ifs-step[aria-selected='true'] {
+		background: rgba(52, 211, 153, 0.06);
+		border-color: rgba(52, 211, 153, 0.22);
+	}
+	.ifs-step:focus-visible {
+		outline: 2px solid #34d399;
+		outline-offset: 2px;
+	}
+	.ifs-step-time {
+		font-variant-numeric: tabular-nums;
+		font-size: 13px;
+		font-weight: 700;
+		color: #52525b;
+		padding-top: 2px;
+		transition: color 0.3s;
+	}
+	.ifs-step[aria-selected='true'] .ifs-step-time {
+		color: #34d399;
+	}
+	.ifs-step-body {
+		display: grid;
+		gap: 4px;
+	}
+	.ifs-step-title {
+		font-weight: 600;
+		color: #a1a1aa;
+		transition: color 0.3s;
+	}
+	.ifs-step[aria-selected='true'] .ifs-step-title {
+		color: #fff;
+	}
+	.ifs-step-text {
+		font-size: 14px;
+		line-height: 1.45;
+		color: #71717a;
+		display: none;
+	}
+	.ifs-step[aria-selected='true'] .ifs-step-text {
+		display: block;
+	}
+	/* barra de progreso del autoplay: solo transform (scaleX), nunca width */
+	.ifs-step-bar {
+		position: absolute;
+		left: 16px;
+		right: 16px;
+		bottom: 8px;
+		height: 2px;
+		border-radius: 2px;
+		background: #34d399;
+		transform: scaleX(0);
+		transform-origin: left;
+		opacity: 0;
+	}
+	.ifs-step[aria-selected='true'] .ifs-step-bar {
+		opacity: 1;
+	}
+	.ifs-stage.is-auto .ifs-step[aria-selected='true'] .ifs-step-bar {
+		animation: ifs-progress 6s linear forwards;
+	}
+	.ifs-stage.is-paused .ifs-step-bar {
+		animation-play-state: paused !important;
+	}
+	@keyframes ifs-progress {
+		to {
+			transform: scaleX(1);
+		}
 	}
 
-	/* ============ Panel + móvil: la misma composición del hero real de InmoFlow
-	   (panel arriba-izquierda, móvil superpuesto abajo-derecha), con sus colores
-	   propios (claros) en vez de adaptarlos al tema oscuro. ============ */
-	.if-visual {
-		min-height: 360px;
-		max-width: 460px;
+	/* ============ Dispositivo: los colores claros propios de InmoFlow ============ */
+	.ifs-device {
+		position: relative;
+		border-radius: 22px;
+		background: #fbfbf8;
+		color: #22313a;
+		box-shadow:
+			0 0 0 1px rgba(255, 255, 255, 0.06),
+			0 30px 80px -20px rgba(52, 211, 153, 0.18),
+			0 30px 60px rgba(0, 0, 0, 0.45);
+		overflow: hidden;
+		align-self: start;
 	}
-	.if-dashboard {
-		right: 78px;
-		background: #fff;
-		border: 1px solid #dfe5df;
-		border-radius: 18px;
-		box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-		padding: 16px;
-	}
-	.if-dash-top {
-		display: flex;
-		flex-wrap: wrap;
+	.ifs-device-top {
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
-		justify-content: space-between;
-		gap: 10px;
-		margin-bottom: 14px;
+		padding: 11px 16px;
+		background: #fff;
+		border-bottom: 1px solid #e7ebe6;
+		font-size: 12px;
 	}
-	.if-dash-title {
+	.ifs-dots {
 		display: flex;
+		gap: 6px;
+	}
+	.ifs-dots i {
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		background: #e2e6e2;
+	}
+	.ifs-app {
+		display: inline-flex;
 		align-items: center;
 		gap: 7px;
 		font-weight: 800;
+	}
+	.ifs-logo {
+		display: grid;
+		place-items: center;
+		width: 20px;
+		height: 20px;
+		border-radius: 6px;
+		background: #526a5d;
+		color: #fff;
+		font-size: 12px;
+	}
+	.ifs-clock {
+		justify-self: end;
+		font-variant-numeric: tabular-nums;
+		font-weight: 700;
+		color: #66727a;
+	}
+	.ifs-screens {
+		display: grid;
+		min-height: 360px;
+		padding: 22px;
+	}
+	.ifs-screen {
+		grid-area: 1 / 1;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	.ifs-screen[hidden] {
+		display: none;
+	}
+	/* entrada escalonada de cada pieza de la pantalla activa */
+	.ifs-in {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	.ifs-screen.is-active .ifs-in {
+		opacity: 1;
+		transform: none;
+		transition:
+			opacity 0.45s ease,
+			transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: calc(var(--i, 0) * 0.35s + 0.1s);
+	}
+
+	.ifs-label {
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: #66727a;
+	}
+	.ifs-muted {
+		font-size: 12px;
+		color: #66727a;
+	}
+	.ifs-row-between {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		font-size: 14px;
+	}
+	.ifs-sources {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.ifs-sources span {
+		padding: 5px 10px;
+		border-radius: 999px;
+		background: #eef2ed;
+		color: #526a5d;
+		font-size: 11px;
+		font-weight: 700;
+	}
+	.ifs-card {
+		display: flex;
+		gap: 12px;
+		padding: 14px;
+		border-radius: 14px;
+		background: #fff;
+		border: 1px solid #e7ebe6;
+	}
+	.ifs-card--new {
+		border-color: #b9d3c1;
+		box-shadow: 0 10px 30px rgba(36, 52, 45, 0.1);
+	}
+	.ifs-card--old {
+		opacity: 0.6;
+	}
+	.ifs-screen.is-active .ifs-card--old {
+		opacity: 0.6;
+	}
+	.ifs-quote {
+		margin-top: 8px;
 		font-size: 13px;
 		color: #22313a;
 	}
-	/* el punto "en vivo" anima solo transform+opacity en una capa aparte (::after)
-	   — nunca box-shadow, que obligaría a repintar en cada frame. */
-	.if-live-dot {
+	.ifs-av {
+		display: grid;
+		place-items: center;
+		width: 38px;
+		height: 38px;
+		flex-shrink: 0;
+		border-radius: 50%;
+		background: var(--av);
+		color: #fff;
+		font-size: 12px;
+		font-weight: 800;
+	}
+	.ifs-badge {
+		padding: 3px 9px;
+		border-radius: 999px;
+		background: #e7efe8;
+		color: #5b7464;
+		font-size: 11px;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+	.ifs-badge--blue {
+		background: #e8eef3;
+		color: #637c90;
+	}
+
+	.ifs-chat {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 16px;
+		border-radius: 16px;
+		background: #eef2ed;
+		flex: 1;
+	}
+	.ifs-bubble {
+		max-width: 82%;
+		padding: 10px 12px;
+		border-radius: 14px;
+		font-size: 13px;
+		line-height: 1.45;
+	}
+	.ifs-bubble time {
+		display: block;
+		margin-top: 4px;
+		font-size: 10px;
+		color: #8a958f;
+		text-align: right;
+	}
+	.ifs-bubble--them {
+		align-self: flex-start;
+		background: #fff;
+		border-bottom-left-radius: 4px;
+	}
+	.ifs-bubble--us {
+		align-self: flex-end;
+		background: #d4e7d9;
+		border-bottom-right-radius: 4px;
+	}
+	.ifs-auto {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		align-self: flex-start;
+		padding: 6px 12px;
+		border-radius: 999px;
+		background: #fff;
+		border: 1px solid #d6e4da;
+		color: #2f7a53;
+		font-size: 12px;
+		font-weight: 700;
+	}
+	.ifs-live {
 		position: relative;
-		width: 6px;
-		height: 6px;
+		width: 7px;
+		height: 7px;
 		border-radius: 50%;
 		background: #2f9e63;
-		flex-shrink: 0;
 	}
-	.if-live-dot::after {
+	.ifs-live::after {
 		content: '';
 		position: absolute;
 		inset: 0;
 		border-radius: 50%;
 		background: #2f9e63;
-		animation: if-ping 2.2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+		animation: ifs-ping 2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
 	}
-	@keyframes if-ping {
-		0% {
+	@keyframes ifs-ping {
+		from {
 			transform: scale(1);
 			opacity: 0.55;
 		}
-		100% {
-			transform: scale(3.2);
+		to {
+			transform: scale(3);
 			opacity: 0;
 		}
 	}
-	.if-dash-tabs {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-	}
-	.if-pill {
-		padding: 5px 8px;
-		border-radius: 999px;
-		background: #eef2ed;
-		color: #526a5d;
-		font-weight: 700;
-		font-size: 9px;
-	}
-	.if-pill-live {
-		display: inline-flex;
-		align-items: center;
-		gap: 4px;
-	}
-	.if-live-dot--sm {
-		width: 4px;
-		height: 4px;
-	}
-	.if-dash-table {
+
+	.ifs-split {
 		display: grid;
-		gap: 8px;
+		grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+		gap: 14px;
+		flex: 1;
 	}
-	.if-lead-row {
-		position: relative;
-		display: grid;
-		grid-template-columns: 30px 1fr auto;
-		gap: 10px;
-		align-items: center;
-		padding: 8px;
-		border: 1px solid #edf0ed;
-		border-radius: 12px;
+	.ifs-chat--mini .ifs-bubble {
+		max-width: 92%;
+		font-size: 12px;
+	}
+	.ifs-file {
+		padding: 16px;
+		border-radius: 16px;
 		background: #fff;
+		border: 1px solid #e7ebe6;
+		box-shadow: 0 10px 30px rgba(36, 52, 45, 0.08);
 	}
-	/* la fila que acaba de entrar por JS empieza así (ver el script) y se anima
-	   hasta su estado normal — mismo patrón que usa el hero real de InmoFlow. */
-	.if-lead-row.if-lead-new {
-		opacity: 0;
-		transform: translateY(-14px) scale(0.97);
-	}
-	.if-lead-row.if-lead-new.if-lead-show {
-		opacity: 1;
-		transform: none;
-		transition:
-			opacity 0.5s ease,
-			transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-	}
-	.if-avatar {
-		width: 30px;
-		height: 30px;
-		border-radius: 50%;
+	.ifs-file dl {
 		display: grid;
-		place-items: center;
-		font-size: 9px;
-		font-weight: 800;
-		color: #fff;
-		background: var(--av, #93a89a);
-		flex-shrink: 0;
+		gap: 2px;
+		margin-top: 12px;
 	}
-	.if-lead-info {
-		min-width: 0;
+	.ifs-file dl div {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 9px 0;
+		border-top: 1px solid #eef1ee;
+		font-size: 13px;
 	}
-	.if-lead-name {
+	.ifs-file dt {
+		color: #66727a;
+	}
+	.ifs-file dd {
+		font-weight: 700;
+		text-align: right;
+	}
+	/* el estado cambia de "Nuevo" a "Interesado" cuando la ficha ya está completa */
+	.ifs-stage-pill {
+		display: grid;
 		font-size: 11px;
 		font-weight: 700;
-		color: #22313a;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
-	.if-lead-meta {
-		font-size: 9px;
-		color: #66727a;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	.if-status {
-		font-size: 9px;
-		font-weight: 700;
-		padding: 4px 7px;
+	.ifs-stage-pill span {
+		grid-area: 1 / 1;
+		padding: 3px 9px;
 		border-radius: 999px;
-		background: #e7efe8;
-		color: #5b7464;
 		white-space: nowrap;
+		text-align: center;
+		transition: opacity 0.4s ease 2.2s;
 	}
-	.if-status.yellow {
-		background: #f4ede0;
-		color: #9b7745;
-	}
-	.if-status.blue {
+	.ifs-stage-from {
 		background: #e8eef3;
 		color: #637c90;
 	}
+	.ifs-stage-to {
+		background: #e7efe8;
+		color: #2f7a53;
+		opacity: 0;
+	}
+	.ifs-screen.is-active .ifs-stage-from {
+		opacity: 0;
+	}
+	.ifs-screen.is-active .ifs-stage-to {
+		opacity: 1;
+	}
 
-	.if-phone {
-		position: absolute;
-		right: 0;
-		bottom: 0;
-		width: 168px;
-		background: #111;
-		border: 5px solid #111;
-		border-radius: 26px;
-		padding: 7px;
-		z-index: 2;
-		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-		animation: if-phone-float 6.5s ease-in-out infinite;
-	}
-	@keyframes if-phone-float {
-		0%,
-		100% {
-			transform: translateY(0);
-		}
-		50% {
-			transform: translateY(-7px);
-		}
-	}
-	.if-phone-screen {
-		background: #f7f8f6;
-		border-radius: 20px;
-		overflow: hidden;
-		display: flex;
-		flex-direction: column;
-	}
-	.if-phone-head {
-		display: flex;
-		align-items: center;
+	.ifs-cal {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		grid-template-rows: auto repeat(2, minmax(64px, auto));
 		gap: 6px;
-		padding: 10px;
-		border-bottom: 1px solid #e7ebe6;
+		padding: 12px;
+		border-radius: 16px;
 		background: #fff;
-		font-size: 9px;
-		font-weight: 800;
-		color: #22313a;
+		border: 1px solid #e7ebe6;
 	}
-	.if-chat {
-		position: relative;
-		padding: 9px;
-		height: 232px;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		overflow: hidden;
+	.ifs-cal-day {
+		grid-row: 1;
+		font-size: 11px;
+		font-weight: 700;
+		color: #66727a;
+		text-align: center;
+		padding-bottom: 4px;
 	}
-	.if-bubble {
-		max-width: 88%;
+	.ifs-slot {
+		align-self: start;
 		padding: 7px 8px;
-		border-radius: 11px;
-		font-size: 9px;
-		line-height: 1.35;
-		margin-bottom: 7px;
+		border-radius: 10px;
+		background: #f1f4ee;
+		font-size: 11px;
+		line-height: 1.3;
+		color: #66727a;
+	}
+	.ifs-slot b {
+		display: block;
 		color: #22313a;
 	}
-	.if-bubble.in {
-		background: #fff;
-		border: 1px solid #e5e9e5;
+	.ifs-slot small {
+		display: block;
+		margin-top: 2px;
+		font-size: 10px;
 	}
-	.if-bubble.out {
-		margin-left: auto;
-		background: #dce9df;
+	.ifs-slot--new {
+		background: #526a5d;
+		color: #dfe8e1;
+		box-shadow: 0 8px 24px rgba(82, 106, 93, 0.35);
 	}
-	.if-bubble.if-typing-msg {
-		display: flex;
-		gap: 3px;
-		align-items: center;
-		padding: 9px 10px;
-	}
-	.if-bubble.if-typing-msg span {
-		width: 5px;
-		height: 5px;
-		border-radius: 50%;
-		background: #9db1a3;
-		animation: if-blink 1.2s infinite;
-	}
-	.if-bubble.if-typing-msg span:nth-child(2) {
-		animation-delay: 0.2s;
-	}
-	.if-bubble.if-typing-msg span:nth-child(3) {
-		animation-delay: 0.4s;
-	}
-	@keyframes if-blink {
-		0%,
-		80%,
-		100% {
-			opacity: 0.25;
-			transform: translateY(0);
-		}
-		40% {
-			opacity: 1;
-			transform: translateY(-2px);
-		}
-	}
-	.if-chat-input {
-		padding: 8px 10px;
-		border-top: 1px solid #e7ebe6;
-		background: #fff;
-		font-size: 8px;
-		color: #9aa19d;
+	.ifs-slot--new b {
+		color: #fff;
 	}
 
-	@media (max-width: 639px) {
-		/* el panel de leads es un añadido de esta tarjeta (no está en el hero real
-		   a este ancho tampoco: InmoFlow lo oculta por debajo de 701px y deja solo
-		   el móvil) — mismo criterio aquí, así en pantallas estrechas no compite
-		   con el móvil por el espacio. */
-		.if-dashboard {
-			display: none;
+	@media (max-width: 1023px) {
+		/* en móvil/tablet los pasos se vuelven una fila de pestañas compacta; el
+		   texto del paso activo va debajo, a todo el ancho */
+		.ifs-steps {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 4px;
 		}
-		.if-visual {
-			display: flex;
-			justify-content: center;
-			min-height: 0;
-			max-width: 280px;
-		}
-		.if-phone {
+		.ifs-step {
+			grid-template-columns: 1fr;
+			gap: 4px;
+			padding: 10px 10px 14px;
 			position: static;
-			margin: 0 auto;
+		}
+		.ifs-steps {
+			position: relative;
+			padding-bottom: 0;
+		}
+		.ifs-step-title {
+			font-size: 12px;
+			line-height: 1.25;
+		}
+		.ifs-step-text {
+			display: none !important;
+		}
+		.ifs-step-bar {
+			left: auto;
+			right: auto;
+			bottom: auto;
+			position: relative;
+			display: block;
+			width: 100%;
+			margin-top: 6px;
+		}
+	}
+	@media (max-width: 639px) {
+		.ifs-screens {
+			padding: 16px;
+			min-height: 380px;
+		}
+		.ifs-split {
+			grid-template-columns: 1fr;
+		}
+		.ifs-chat--mini {
+			flex: none;
+		}
+		.ifs-step-time {
+			font-size: 11px;
+		}
+		.ifs-step-title {
+			font-size: 11px;
+		}
+		.ifs-cal {
+			padding: 8px;
+			gap: 4px;
+		}
+		.ifs-slot {
+			padding: 6px;
+			font-size: 10px;
+		}
+		.ifs-slot small {
+			display: none;
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.if-live-dot::after,
-		.if-phone {
-			animation: none !important;
+		.ifs-live::after {
+			animation: none;
+		}
+		.ifs-in,
+		.ifs-screen.is-active .ifs-in {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+		.ifs-stage-pill span {
+			transition: none;
 		}
 	}
 </style>
 
 <script>
-	// Mismo mecanismo que el hero real de InmoFlow (Desktop/Inmoflow/Index.html):
-	// un chat que se reescribe solo, mensaje a mensaje, con su indicador de
-	// "escribiendo…", y un panel en el que van entrando leads nuevos en directo
-	// (con FLIP: se mide la posición de las filas antes y después de insertar la
-	// nueva, y se anima la diferencia, para que no salten de golpe). Ambos bucles
-	// se pausan del todo mientras la tarjeta no está en pantalla, para no gastar
-	// hilo principal en algo que nadie está mirando.
-	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const stage = document.querySelector<HTMLElement>('.if-stage');
-	if (!stage || reduceMotion) {
-		// nothing to animate
-	} else {
-		let playing = false;
-		const observer = new IntersectionObserver((entries) => {
-			for (const entry of entries) playing = entry.isIntersecting;
-		}, { threshold: 0.15 });
-		observer.observe(stage);
+	// Pestañas con autoplay: cada paso dura lo que su barra de progreso (6 s, en
+	// CSS). Al acabar la animación de la barra se pasa al siguiente. Si la
+	// persona hace clic en un paso, se queda en él (se para el autoplay). Fuera
+	// de pantalla, la barra se pausa y con ella el avance.
+	const stage = document.querySelector<HTMLElement>('.ifs-stage');
+	if (stage) {
+		const tabs = Array.from(stage.querySelectorAll<HTMLButtonElement>('.ifs-step'));
+		const panels = Array.from(stage.querySelectorAll<HTMLElement>('.ifs-screen'));
+		const clock = stage.querySelector<HTMLElement>('#ifsClock');
+		const horas = ['Sáb 23:47', 'Sáb 23:47', 'Sáb 23:49', 'Sáb 23:52'];
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		let current = 0;
 
-		const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-		const waitUntilPlaying = async () => {
-			while (!playing) await sleep(300);
+		const show = (i: number, focus = false) => {
+			current = i;
+			tabs.forEach((t, j) => {
+				const on = j === i;
+				t.setAttribute('aria-selected', String(on));
+				t.tabIndex = on ? 0 : -1;
+				// reinicia la animación de la barra
+				const bar = t.querySelector<HTMLElement>('.ifs-step-bar');
+				if (bar && on) {
+					bar.style.animation = 'none';
+					void bar.offsetWidth;
+					bar.style.animation = '';
+				}
+			});
+			panels.forEach((p, j) => {
+				p.classList.remove('is-active');
+				p.hidden = j !== i;
+			});
+			// un frame con la pantalla visible pero sin .is-active para que las
+			// transiciones de entrada arranquen desde su estado inicial
+			requestAnimationFrame(() => requestAnimationFrame(() => panels[i].classList.add('is-active')));
+			if (clock) clock.textContent = horas[i];
+			if (focus) tabs[i].focus();
 		};
 
-		/* ---------- Chat de WhatsApp: misma conversación que la real ---------- */
-		const chat = stage.querySelector<HTMLElement>('#ifChat');
-		if (chat) {
-			const conversation = [
-				{ dir: 'in', text: '¿Sigue disponible el piso de la Av. del Mar? ¿Es de compra o alquiler?' },
-				{ dir: 'out', text: 'Comprar' },
-				{ dir: 'in', text: 'Perfecto. ¿Cuál es tu presupuesto aproximado?' },
-				{ dir: 'out', text: 'Hasta 320.000 €' },
-				{ dir: 'in', text: 'Genial. Tengo 3 viviendas que encajan contigo. ¿Te las enseño?' },
-				{ dir: 'out', text: 'Sí, perfecto 🙌' },
-			];
-			(async function runChat() {
-				for (;;) {
-					await waitUntilPlaying();
-					chat.innerHTML = '';
-					for (const m of conversation) {
-						if (!playing) break;
-						if (m.dir === 'in') {
-							const typing = document.createElement('div');
-							typing.className = 'if-bubble in if-typing-msg';
-							typing.setAttribute('aria-hidden', 'true');
-							typing.innerHTML = '<span></span><span></span><span></span>';
-							chat.appendChild(typing);
-							await sleep(1000 + Math.random() * 400);
-							typing.remove();
-						} else {
-							await sleep(550);
-						}
-						const bubble = document.createElement('div');
-						bubble.className = 'if-bubble ' + m.dir;
-						bubble.textContent = m.text;
-						chat.appendChild(bubble);
-						await sleep(900);
-					}
-					await sleep(3200);
-				}
-			})();
+		tabs.forEach((t, i) => {
+			t.addEventListener('click', () => {
+				stage.classList.remove('is-auto');
+				show(i);
+			});
+			t.addEventListener('keydown', (e) => {
+				const dir = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+				if (!dir) return;
+				e.preventDefault();
+				stage.classList.remove('is-auto');
+				show((current + dir + tabs.length) % tabs.length, true);
+			});
+			t.querySelector('.ifs-step-bar')?.addEventListener('animationend', () => {
+				if (stage.classList.contains('is-auto')) show((i + 1) % tabs.length);
+			});
+		});
+
+		if (!reduceMotion) {
+			stage.classList.add('is-auto', 'is-paused');
+			new IntersectionObserver(
+				(entries) => {
+					for (const entry of entries) stage.classList.toggle('is-paused', !entry.isIntersecting);
+				},
+				{ threshold: 0.35 },
+			).observe(stage);
 		}
-
-		/* ---------- Leads entrando en directo en el panel (FLIP) ---------- */
-		const table = stage.querySelector<HTMLElement>('#ifLeadTable');
-		const pill = stage.querySelector<HTMLElement>('#ifLeadPill');
-		const dashboardVisible = window.matchMedia('(min-width: 640px)').matches;
-		if (table && pill && dashboardVisible) {
-			const feed = [
-				{ ini: 'MF', name: 'Marta Ferrer', meta: 'Gandía · 195.000 €', cls: 'blue', label: 'Lead nuevo' },
-				{ ini: 'DS', name: 'Diego Sanchís', meta: 'Valencia · 420.000 €', cls: 'yellow', label: 'Contactando' },
-				{ ini: 'EP', name: 'Elena Prats', meta: 'Cullera · 150.000 €', cls: '', label: 'Interesado' },
-				{ ini: 'RB', name: 'Raúl Blasco', meta: 'Alzira · 230.000 €', cls: 'blue', label: 'Lead nuevo' },
-			];
-			let total = 19;
-			let i = 0;
-			setInterval(() => {
-				if (!playing) return;
-				const existing = Array.from(table.querySelectorAll<HTMLElement>('.if-lead-row'));
-				if (!existing.length) return;
-				const topsBefore = existing.map((r) => r.getBoundingClientRect().top);
-
-				const d = feed[i++ % feed.length];
-				const row = document.createElement('div');
-				row.className = 'if-lead-row if-lead-new';
-				row.innerHTML =
-					`<div class="if-avatar" style="--av:#74889b">${d.ini}</div>` +
-					`<div class="if-lead-info"><div class="if-lead-name">${d.name}</div><div class="if-lead-meta">${d.meta}</div></div>` +
-					`<span class="if-status ${d.cls}">${d.label}</span>`;
-				table.prepend(row);
-
-				existing.forEach((r, idx) => {
-					const delta = r.getBoundingClientRect().top - topsBefore[idx];
-					if (!delta) return;
-					r.style.transition = 'none';
-					r.style.transform = `translateY(${-delta}px)`;
-				});
-				void table.offsetWidth;
-				existing.forEach((r) => {
-					r.style.transition = '';
-					r.style.transform = '';
-				});
-
-				void row.offsetHeight;
-				row.classList.add('if-lead-show');
-				pill.lastChild!.textContent = `Lead nuevo · ${++total}`;
-
-				setTimeout(() => {
-					const all = Array.from(table.querySelectorAll<HTMLElement>('.if-lead-row'));
-					while (all.length > 4) all.pop()?.remove();
-				}, 650);
-			}, 4800);
-		}
+		show(0);
 	}
 </script>
