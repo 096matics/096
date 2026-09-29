@@ -20,9 +20,9 @@ const leads = [
 	{ nombre: 'Ana López', meta: 'Torrent · 320.000 €', estado: 'Interesado', cls: '' },
 ];
 const beneficios = [
-	{ titulo: 'Respuesta inmediata', texto: 'a cada nuevo lead' },
-	{ titulo: 'Seguimiento automático', texto: '24 horas, 7 días' },
-	{ titulo: 'Más visitas, más ventas', texto: 'con menos gestión' },
+	{ titulo: 'Respuesta inmediata', texto: 'a cualquier hora, aunque nadie esté mirando el móvil' },
+	{ titulo: 'Todo en un CRM', texto: 'leads, conversaciones y visitas en un mismo sitio' },
+	{ titulo: 'Seguimiento automático', texto: '24 horas, 7 días, sin que se le olvide a nadie' },
 ];
 ---
 
@@ -31,12 +31,13 @@ const beneficios = [
 		<div data-reveal class="piece piece-top piece-d0 mx-auto max-w-2xl text-center">
 			<span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
 				<span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
-				InmoFlow · Producto real
+				InmoFlow · CRM para inmobiliarias
 			</span>
 			<h3 class="mt-3 text-2xl font-semibold text-white sm:text-3xl">Un lead entra. InmoFlow ya le ha respondido.</h3>
 			<p class="mt-3 text-zinc-400">
-				Así convierte InmoFlow un mensaje de WhatsApp en una oportunidad organizada — en tiempo real, sin que nadie lo
-				toque.
+				InmoFlow es un CRM pensado para inmobiliarias: capta leads desde tu web, WhatsApp y portales, los organiza
+				automáticamente y responde al momento — para que ningún cliente se quede esperando ni se pierda entre cien
+				conversaciones.
 			</p>
 		</div>
 
@@ -48,7 +49,7 @@ const beneficios = [
 					<div class="if-dash-top">
 						<div class="if-dash-title"><span class="if-live-dot"></span>Oportunidades</div>
 						<div class="if-dash-tabs">
-							<span class="if-pill if-pill-live">Lead nuevo · 19</span>
+							<span class="if-pill if-pill-live"><span class="if-live-dot if-live-dot--sm"></span>Lead nuevo · 19</span>
 							<span class="if-pill">Contactando · 12</span>
 							<span class="if-pill">Interesado · 9</span>
 						</div>
@@ -132,6 +133,20 @@ const beneficios = [
 			radial-gradient(ellipse 50% 55% at 92% 90%, rgba(52, 211, 153, 0.08), transparent 60%);
 	}
 
+	/* las ~8 animaciones infinitas de esta tarjeta (puntos en vivo, mensajes,
+	   estados, el flotar del móvil...) antes corrían sin parar desde que
+	   cargaba la página, seguiera el usuario mirando la sección o llevara rato
+	   desplazado a otra parte — eso es trabajo de más para el hilo principal en
+	   todo momento, y es la otra mitad del lag que se notaba en la página. Se
+	   pausan del todo mientras la tarjeta no está en pantalla (ver el script al
+	   final) y solo corren mientras de verdad se están viendo. */
+	.if-stage {
+		--if-play: paused;
+	}
+	.if-stage.if-playing {
+		--if-play: running;
+	}
+
 	/* ============ Panel + móvil: la misma composición del hero real de InmoFlow
 	   (panel arriba-izquierda, móvil superpuesto abajo-derecha), con sus colores
 	   propios (claros) en vez de adaptarlos al tema oscuro — así se lee sin dudas
@@ -164,23 +179,37 @@ const beneficios = [
 		font-size: 13px;
 		color: #22313a;
 	}
+	/* el punto "en vivo" y su anillo van en capas separadas a propósito: animar
+	   box-shadow (como hacía la versión anterior) obliga a repintar el píxel
+	   entero en cada frame — con 3 puntos de estos corriendo a la vez de forma
+	   infinita, ese repintado constante era buena parte del lag que se notaba
+	   al bajar por la página. Un ::after que solo anima transform+opacity lo
+	   resuelve el compositor solo, sin tocar el hilo principal. */
 	.if-live-dot {
+		position: relative;
 		width: 6px;
 		height: 6px;
 		border-radius: 50%;
 		background: #2f9e63;
 		flex-shrink: 0;
-		animation: if-pulse 2.2s infinite;
 	}
-	@keyframes if-pulse {
+	.if-live-dot::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 50%;
+		background: #2f9e63;
+		animation: if-ping 2.2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+		animation-play-state: var(--if-play);
+	}
+	@keyframes if-ping {
 		0% {
-			box-shadow: 0 0 0 0 rgba(47, 158, 99, 0.45);
-		}
-		70% {
-			box-shadow: 0 0 0 6px rgba(47, 158, 99, 0);
+			transform: scale(1);
+			opacity: 0.55;
 		}
 		100% {
-			box-shadow: 0 0 0 0 rgba(47, 158, 99, 0);
+			transform: scale(3.2);
+			opacity: 0;
 		}
 	}
 	.if-dash-tabs {
@@ -201,13 +230,9 @@ const beneficios = [
 		align-items: center;
 		gap: 4px;
 	}
-	.if-pill-live::before {
-		content: '';
+	.if-live-dot--sm {
 		width: 4px;
 		height: 4px;
-		border-radius: 50%;
-		background: #2f9e63;
-		animation: if-pulse 2.2s infinite;
 	}
 	.if-dash-table {
 		display: grid;
@@ -227,25 +252,37 @@ const beneficios = [
 	.if-lead-row-javier {
 		z-index: 1;
 	}
+	/* antes esto animaba background-color/border-color directamente sobre la fila
+	   — repinta esa zona en cada frame del cruce. Una capa aparte que solo cambia
+	   de opacidad hace el mismo efecto visual (fondo+borde verdes aparecen y se
+	   van) pero el compositor la resuelve sin repintar nada debajo. */
+	.if-lead-row-javier::before {
+		content: '';
+		position: absolute;
+		inset: -1px;
+		border-radius: 12px;
+		background: #eaf5ee;
+		border: 1px solid #bfe0cc;
+		opacity: 0;
+		pointer-events: none;
+	}
 	@keyframes if-row-highlight {
 		0%,
 		56% {
-			background-color: #fff;
-			border-color: #edf0ed;
+			opacity: 0;
 		}
 		58%,
 		64% {
-			background-color: #eaf5ee;
-			border-color: #bfe0cc;
+			opacity: 1;
 		}
 		66%,
 		100% {
-			background-color: #fff;
-			border-color: #edf0ed;
+			opacity: 0;
 		}
 	}
-	.if-lead-row-javier {
+	.if-lead-row-javier::before {
 		animation: if-row-highlight 9000ms linear infinite;
+		animation-play-state: var(--if-play);
 	}
 	.if-avatar {
 		width: 30px;
@@ -325,9 +362,11 @@ const beneficios = [
 	}
 	.if-status-new {
 		animation: if-status-new-cycle 9000ms linear infinite;
+		animation-play-state: var(--if-play);
 	}
 	.if-status-contacting {
 		animation: if-status-contacting-cycle 9000ms linear infinite;
+		animation-play-state: var(--if-play);
 	}
 
 	.if-phone {
@@ -342,6 +381,7 @@ const beneficios = [
 		z-index: 2;
 		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
 		animation: if-phone-float 6.5s ease-in-out infinite;
+		animation-play-state: var(--if-play);
 	}
 	@keyframes if-phone-float {
 		0%,
@@ -417,14 +457,17 @@ const beneficios = [
 	.if-msg-2 {
 		animation: if-bubble-in 9000ms ease-out infinite;
 		animation-delay: 1260ms;
+		animation-play-state: var(--if-play);
 	}
 	.if-msg-3 {
 		animation: if-bubble-in 9000ms ease-out infinite;
 		animation-delay: 3600ms;
+		animation-play-state: var(--if-play);
 	}
 	.if-msg-4 {
 		animation: if-bubble-in 9000ms ease-out infinite;
 		animation-delay: 5220ms;
+		animation-play-state: var(--if-play);
 	}
 	.if-typing {
 		display: flex;
@@ -448,6 +491,7 @@ const beneficios = [
 	}
 	.if-typing {
 		animation: if-typing-cycle 9000ms ease-out infinite;
+		animation-play-state: var(--if-play);
 	}
 	.if-typing span {
 		width: 5px;
@@ -455,6 +499,7 @@ const beneficios = [
 		border-radius: 50%;
 		background: #9db1a3;
 		animation: if-blink 1.2s infinite;
+		animation-play-state: var(--if-play);
 	}
 	.if-typing span:nth-child(2) {
 		animation-delay: 0.2s;
@@ -505,9 +550,8 @@ const beneficios = [
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.if-live-dot,
-		.if-pill-live::before,
-		.if-lead-row-javier,
+		.if-live-dot::after,
+		.if-lead-row-javier::before,
 		.if-status-new,
 		.if-status-contacting,
 		.if-phone,
@@ -532,3 +576,25 @@ const beneficios = [
 		}
 	}
 </style>
+
+<script>
+	// las animaciones de esta tarjeta solo corren mientras está realmente en
+	// pantalla — .if-playing (ver el CSS de arriba, controla --if-play) se
+	// activa/desactiva en cada entrada/salida del viewport, así el hilo
+	// principal no tiene que mantener ~8 animaciones infinitas corriendo
+	// mientras el usuario está leyendo otra sección de la página.
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const stage = document.querySelector<HTMLElement>('.if-stage');
+
+	if (stage && !reduceMotion) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					entry.target.classList.toggle('if-playing', entry.isIntersecting);
+				}
+			},
+			{ threshold: 0.15 }
+		);
+		observer.observe(stage);
+	}
+</script>

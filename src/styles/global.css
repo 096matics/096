@@ -18,6 +18,25 @@ body {
 	background: #09090b;
 }
 
+/* red de seguridad SOLO en móvil: varias piezas de la web (tarjetas NFC que se
+   deslizan hacia el móvil, el hero de InmoFlow, el marquee de logos…) animan
+   elementos posicionados en absoluto que a propósito llegan hasta el borde o
+   un poco más allá. Recortarlas una a una con overflow:hidden en su propio
+   contenedor es fragil — en Safari de iPhone (motor WebKit, no Chromium) un
+   overflow:hidden puesto en un contenedor intermedio que envuelve contenido
+   con animaciones y bordes redondeados puede hacer que ESE CONTENIDO
+   directamente deje de pintarse (el fallo real detrás de "no veo los móviles"
+   tras el primer intento de arreglo, que sí evitaba el desbordamiento pero
+   escondía el teléfono entero). Cortar el scroll horizontal aquí, en el único
+   contenedor de verdad (html/body), evita el hueco a la derecha sin tocar el
+   overflow de ningún componente individual. */
+@media (max-width: 639px) {
+	html,
+	body {
+		overflow-x: hidden;
+	}
+}
+
 /* ============ Iconos de contacto: usados en el pie de la landing y en el de las páginas sueltas ============ */
 
 .contact-icon {
