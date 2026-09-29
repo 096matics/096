@@ -39,7 +39,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <style>
+  <style is:global>
+    /* is:global: el hero crea burbujas de chat y filas de leads por JS, y esos
+       nodos no llevan el atributo de ámbito de Astro, así que con estilos con
+       ámbito salían sin formato. Esta página es independiente: global equivale
+       al comportamiento del HTML original. */
+
     /* ============ Base ============ */
     :root{
       --bg:#fbfbf8;
