@@ -5,17 +5,18 @@ import WhatsAppCTA from '../WhatsAppCTA.astro';
 
 // negocios de ejemplo para las animaciones de los móviles — plantillas/colores reales
 // del portafolio. Cada demo usa las suyas propias, sin repetir entre las dos.
-// tapX/tapY: posición real del enlace "Guardar contacto" en cada plantilla,
-// medida sobre su propia captura — cada diseño lo coloca en un sitio distinto
-// de la página, así que no vale un único punto fijo para las cuatro (antes
-// estaba clavado al 84% y en la mayoría no coincidía con nada real).
+// tapX/tapY: centro real del enlace "Guardar contacto" (o "vCard") en cada
+// plantilla, en % de su captura (640×1362) — medidos sobre la imagen ampliada
+// con una retícula, porque los valores anteriores caían entre dos botones o
+// sobre el icono del teléfono. Como la pantalla del móvil tiene casi la misma
+// proporción que la captura, el % de la imagen coincide con el de la pantalla.
 // Arcade Studio se quitó de aquí: esa plantilla no tiene ningún botón de
 // guardar contacto, así que no hay nada real que señalar en ella.
 const demosContacto = [
-	{ sector: 'Inmobiliarias', negocio: 'Plano Inmobiliaria', color: '#ff6a3d', imagen: '/plantillas/inmobiliarias-blueprint.png', tapX: 50, tapY: 59 },
-	{ sector: 'Seguros', negocio: 'Vitalia Seguros', color: '#5B93E8', imagen: '/plantillas/seguros-estandar.png', tapX: 50, tapY: 58 },
-	{ sector: 'Inmobiliarias', negocio: 'Costa Norte', color: '#2B6E4E', imagen: '/plantillas/inmobiliarias-editorial.png', tapX: 13, tapY: 82.5 },
-	{ sector: 'Autónomos', negocio: 'Terminal Dev', color: '#4fd1c5', imagen: '/plantillas/cv-terminal.png', tapX: 50, tapY: 62 },
+	{ sector: 'Inmobiliarias', negocio: 'Plano Inmobiliaria', color: '#ff6a3d', imagen: '/plantillas/inmobiliarias-blueprint.png', tapX: 50, tapY: 62 },
+	{ sector: 'Seguros', negocio: 'Vitalia Seguros', color: '#5B93E8', imagen: '/plantillas/seguros-estandar.png', tapX: 50, tapY: 60 },
+	{ sector: 'Inmobiliarias', negocio: 'Costa Norte', color: '#2B6E4E', imagen: '/plantillas/inmobiliarias-editorial.png', tapX: 11, tapY: 85.8 },
+	{ sector: 'Autónomos', negocio: 'Terminal Dev', color: '#4fd1c5', imagen: '/plantillas/cv-terminal.png', tapX: 64.7, tapY: 64.1 },
 ];
 const demosResenas = [
 	{ sector: 'Inmobiliarias', negocio: 'Editorial Home', color: '#2B6E4E', imagen: '/plantillas/inmobiliarias-editorial.png' },
@@ -236,33 +237,41 @@ const ramas = [
 <script>
 	// las dos demos de móvil (contacto y reseñas) comparten un único reloj — para
 	// que el momento de "contacto" (flash) y el de "toque" (botón/estrellas)
-	// coincidan siempre en ambas — pero ya no es JS cambiando un atributo cada
-	// fase: toda esa coreografía vive ahora en @keyframes puro dentro de cada
-	// componente (ver ContactoDemo.astro/ResenasDemo.astro), con 8800ms de ciclo
-	// exacto. Lo único que sigue haciendo falta en JS es decidir qué negocio
-	// enseña cada móvil, así que esto solo alterna una clase cada 8800ms —
-	// mucho menos que antes y sin ningún punto donde perder un disparo.
-	const CYCLE_MS = 8800;
+	// coincidan siempre en ambas. Toda la coreografía vive en @keyframes de
+	// 8800ms dentro de cada componente (ver ContactoDemo.astro/ResenasDemo.astro);
+	// aquí solo se decide qué negocio enseña cada móvil.
+	//
+	// Antes eso lo hacía un setInterval(8800) aparte, y se desacompasaba de las
+	// animaciones CSS: al cambiar de pestaña el navegador frena los temporizadores
+	// pero no el reloj de las animaciones, y a la vuelta la plantilla cambiaba a
+	// media animación (el toque caía descolocado). Ahora el cambio de negocio lo
+	// dispara el propio reloj CSS: el evento animationiteration de la tarjeta,
+	// que salta exactamente al terminar cada ciclo.
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const stages = Array.from(document.querySelectorAll<HTMLElement>('.demo-stage'));
+	const clock = document.querySelector<HTMLElement>('.demo-contacto .demo-card');
 
-	if (stages.length && !reduceMotion) {
+	if (stages.length && clock && !reduceMotion) {
 		const totalSteps = Math.max(...stages.map((s) => Number(s.dataset.totalSteps ?? 1)));
 		let step = 0;
 
-		function setStep(n: number) {
+		const setStep = (n: number) => {
 			stages.forEach((stage) => {
 				stage.dataset.activeStep = String(n);
 				stage.querySelectorAll<HTMLElement>('[data-step]').forEach((el) => {
 					el.classList.toggle('is-current', el.dataset.step === String(n));
 				});
 			});
-		}
+		};
 
 		setStep(step);
-		setInterval(() => {
+		// arranca todas las animaciones de ambos móviles en el mismo instante
+		stages.forEach((stage) => stage.getAnimations({ subtree: true }).forEach((a) => (a.currentTime = 0)));
+
+		clock.addEventListener('animationiteration', (e) => {
+			if (e.animationName !== 'demo-card-cycle') return;
 			step = (step + 1) % totalSteps;
 			setStep(step);
-		}, CYCLE_MS);
+		});
 	}
 </script>

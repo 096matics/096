@@ -1,26 +1,499 @@
 ---
 import WhatsAppCTA from '../WhatsAppCTA.astro';
+
+// Scoring de clientes — todavía en desarrollo. En vez de solo anunciarlo, la
+// tarjeta enseña qué hará: un barrido "analiza" a varios clientes, cada uno
+// sube hasta su puntuación, la lista se reordena de más a menos probable y el
+// primero se marca para llamar. Las señales bajo cada nombre explican de dónde
+// sale la nota. Clientes y puntuaciones son un ejemplo ilustrativo.
+const clientes = [
+	{ ini: 'CR', nombre: 'Carlos Ruiz', senales: ['Abrió 2 emails'], score: 41, av: '#a08f74' },
+	{ ini: 'LM', nombre: 'Laura Martínez', senales: ['Visitó 3 pisos', 'Pidió financiación'], score: 92, av: '#7d9c88' },
+	{ ini: 'AL', nombre: 'Ana López', senales: ['Sin respuesta 30 días'], score: 18, av: '#74889b' },
+	{ ini: 'JG', nombre: 'Javier García', senales: ['Presupuesto claro', 'Respondió en 5 min'], score: 74, av: '#9b7f8b' },
+];
+const senalesTipos = ['Visitas', 'Respuestas', 'Presupuesto', 'Actividad reciente'];
 ---
 
-<section data-animate class="border-b border-zinc-800 bg-white/[0.015]">
-	<div data-reveal class="piece piece-d0 mx-auto flex max-w-6xl flex-col items-start gap-4 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-		<div class="flex items-start gap-3.5 sm:items-center">
-			<span class="mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-dashed border-amber-400/50 px-2.5 py-1 text-[10px] font-bold tracking-widest text-amber-400 uppercase sm:mt-0">
-				<span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
-				Próximamente
-			</span>
-			<div>
-				<p class="font-semibold text-white">Scoring de clientes: sabrás a quién llamar primero</p>
-				<p class="mt-0.5 max-w-lg text-sm text-zinc-500">
-					Analizamos tus clientes y los clasificamos según su probabilidad real de compra.
+<section data-animate class="sc border-b border-zinc-800 py-20 sm:py-24">
+	<div class="mx-auto max-w-6xl px-5 sm:px-6">
+		<div data-reveal class="piece piece-d0 sc-shell">
+			<div class="sc-grid-bg" aria-hidden="true"></div>
+
+			<div class="sc-copy">
+				<span class="sc-badge">
+					<span class="sc-badge-dot"></span>
+					En desarrollo · Próximamente
+				</span>
+				<h2 class="mt-5 text-3xl font-semibold text-white sm:text-4xl">
+					Scoring de clientes.<br />
+					<span class="sc-title-grad">Sabrás a quién llamar primero.</span>
+				</h2>
+				<p class="mt-4 max-w-md text-base leading-relaxed text-zinc-400 sm:text-lg">
+					Analizamos cómo se comporta cada cliente y le damos una nota según su probabilidad real de compra. Tu lista
+					se ordena sola: arriba, quien está listo para comprar.
 				</p>
+				<p class="mt-5 text-xs font-semibold tracking-widest text-zinc-500 uppercase">Se fija en</p>
+				<ul class="mt-2 flex flex-wrap gap-2">
+					{senalesTipos.map((s) => <li class="sc-chip">{s}</li>)}
+				</ul>
+				<div class="mt-7">
+					<WhatsAppCTA
+						texto="Avísame cuando esté listo"
+						mensaje="Hola, quiero que me aviséis cuando esté listo el scoring de clientes"
+						variant="amber"
+					/>
+				</div>
+			</div>
+
+			<div class="sc-panel" aria-hidden="true">
+				<div class="sc-panel-top">
+					<span class="sc-panel-title">Clientes por probabilidad de compra</span>
+					<span class="sc-status" data-status>Analizando…</span>
+				</div>
+				<div class="sc-list" style={`--n:${clientes.length}`}>
+					<span class="sc-scan"></span>
+					{
+						clientes.map((c, i) => (
+							<div class="sc-row" data-score={c.score} style={`--pos:${i}`}>
+								<span class="sc-av" style={`--av:${c.av}`}>
+									{c.ini}
+								</span>
+								<span class="sc-info">
+									<span class="sc-name">
+										{c.nombre}
+										<span class="sc-first">🔥 Llama primero</span>
+									</span>
+									<span class="sc-signals">
+										{c.senales.map((s) => (
+											<span>{s}</span>
+										))}
+									</span>
+								</span>
+								<span class="sc-meter">
+									<span class="sc-num">0</span>
+									<span class="sc-bar">
+										<i style={`--s:${c.score / 100}`} />
+									</span>
+								</span>
+							</div>
+						))
+					}
+				</div>
 			</div>
 		</div>
-		<WhatsAppCTA
-			texto="Avísame cuando esté listo"
-			mensaje="Hola, quiero que me aviséis cuando esté listo el scoring de clientes"
-			variant="amber"
-			class="shrink-0"
-		/>
 	</div>
 </section>
+
+<style>
+	.sc-shell {
+		position: relative;
+		display: grid;
+		gap: 40px;
+		align-items: center;
+		padding: 36px 28px;
+		border-radius: 28px;
+		background:
+			radial-gradient(ellipse 55% 80% at 100% 0%, rgba(245, 158, 11, 0.12), transparent 60%),
+			radial-gradient(ellipse 50% 70% at 0% 100%, rgba(245, 158, 11, 0.06), transparent 60%),
+			rgba(255, 255, 255, 0.015);
+		box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.18);
+	}
+	@media (min-width: 1024px) {
+		.sc-shell {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+			gap: 56px;
+			padding: 52px;
+		}
+	}
+	/* retícula tipo plano: "esto se está construyendo" */
+	.sc-grid-bg {
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		pointer-events: none;
+		background-image:
+			linear-gradient(rgba(245, 158, 11, 0.07) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(245, 158, 11, 0.07) 1px, transparent 1px);
+		background-size: 28px 28px;
+		mask-image: radial-gradient(ellipse 70% 90% at 75% 50%, #000 20%, transparent 75%);
+		-webkit-mask-image: radial-gradient(ellipse 70% 90% at 75% 50%, #000 20%, transparent 75%);
+	}
+	.sc-copy,
+	.sc-panel {
+		position: relative;
+	}
+
+	.sc-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 12px;
+		border-radius: 999px;
+		border: 1px dashed rgba(251, 191, 36, 0.5);
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: #fbbf24;
+		background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.14), transparent) no-repeat;
+		background-size: 200% 100%;
+		animation: sc-shimmer 3.2s ease-in-out infinite;
+	}
+	@keyframes sc-shimmer {
+		from {
+			background-position: 150% 0;
+		}
+		to {
+			background-position: -50% 0;
+		}
+	}
+	.sc-badge-dot {
+		position: relative;
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: #fbbf24;
+	}
+	.sc-badge-dot::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 50%;
+		background: #fbbf24;
+		animation: sc-ping 2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+	}
+	@keyframes sc-ping {
+		from {
+			transform: scale(1);
+			opacity: 0.6;
+		}
+		to {
+			transform: scale(3);
+			opacity: 0;
+		}
+	}
+	.sc-title-grad {
+		background: linear-gradient(90deg, #fcd34d, #f59e0b 60%, #fb923c);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+	.sc-chip {
+		padding: 5px 11px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.04);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+		font-size: 12px;
+		color: #d4d4d8;
+	}
+
+	/* ============ Panel ============ */
+	.sc-panel {
+		padding: 18px;
+		border-radius: 20px;
+		background: rgba(9, 9, 11, 0.8);
+		box-shadow:
+			inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+			0 30px 70px -30px rgba(245, 158, 11, 0.35);
+	}
+	.sc-panel-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 14px;
+		font-size: 12px;
+	}
+	.sc-panel-title {
+		font-weight: 600;
+		color: #e4e4e7;
+	}
+	.sc-status {
+		padding: 3px 10px;
+		border-radius: 999px;
+		background: rgba(245, 158, 11, 0.12);
+		color: #fbbf24;
+		font-weight: 700;
+		white-space: nowrap;
+		transition:
+			background-color 0.3s,
+			color 0.3s;
+	}
+	.sc-status.is-done {
+		background: rgba(52, 211, 153, 0.12);
+		color: #34d399;
+	}
+
+	/* filas en posición absoluta: reordenarlas es solo cambiar --pos, y el
+	   transform hace el resto (sin saltos de maquetación) */
+	.sc-list {
+		--row: 68px;
+		position: relative;
+		height: calc(var(--n) * var(--row) - 8px);
+	}
+	.sc-row {
+		position: absolute;
+		inset: 0 0 auto 0;
+		display: grid;
+		grid-template-columns: 38px minmax(0, 1fr) 120px;
+		align-items: center;
+		gap: 12px;
+		height: calc(var(--row) - 8px);
+		padding: 0 14px;
+		border-radius: 14px;
+		background: rgba(255, 255, 255, 0.03);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+		transform: translateY(calc(var(--pos) * var(--row)));
+		transition:
+			transform 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+			background-color 0.5s,
+			box-shadow 0.5s;
+	}
+	.sc-row.is-top {
+		background: rgba(245, 158, 11, 0.08);
+		box-shadow:
+			inset 0 0 0 1px rgba(245, 158, 11, 0.45),
+			0 12px 30px -12px rgba(245, 158, 11, 0.5);
+	}
+	.sc-av {
+		display: grid;
+		place-items: center;
+		width: 38px;
+		height: 38px;
+		border-radius: 50%;
+		background: var(--av);
+		color: #fff;
+		font-size: 12px;
+		font-weight: 800;
+	}
+	.sc-info {
+		display: grid;
+		gap: 4px;
+		min-width: 0;
+	}
+	.sc-name {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		overflow: hidden;
+		font-size: 14px;
+		font-weight: 600;
+		color: #fafafa;
+		white-space: nowrap;
+	}
+	.sc-first {
+		padding: 2px 8px;
+		border-radius: 999px;
+		background: #f59e0b;
+		color: #1c1003;
+		font-size: 10px;
+		font-weight: 800;
+		opacity: 0;
+		transform: scale(0.6);
+		transition:
+			opacity 0.3s,
+			transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+	.sc-row.is-top .sc-first {
+		opacity: 1;
+		transform: none;
+	}
+	.sc-signals {
+		display: flex;
+		gap: 5px;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	.sc-signals span {
+		padding: 1px 7px;
+		border-radius: 6px;
+		background: rgba(255, 255, 255, 0.05);
+		font-size: 11px;
+		color: #a1a1aa;
+	}
+	.sc-meter {
+		display: grid;
+		grid-template-columns: 30px 1fr;
+		align-items: center;
+		gap: 8px;
+	}
+	.sc-num {
+		font-size: 17px;
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+		color: #fff;
+		text-align: right;
+	}
+	.sc-bar {
+		height: 6px;
+		border-radius: 6px;
+		background: rgba(255, 255, 255, 0.08);
+	}
+	.sc-bar i {
+		display: block;
+		height: 100%;
+		border-radius: inherit;
+		background: linear-gradient(90deg, #f59e0b, #fcd34d);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.sc-list.is-scored .sc-bar i {
+		transform: scaleX(var(--s));
+	}
+
+	/* barrido de "análisis" que recorre la lista antes de puntuar */
+	.sc-scan {
+		position: absolute;
+		inset: -6px -6px auto;
+		z-index: 2;
+		height: 46px;
+		border-radius: 14px;
+		background: linear-gradient(180deg, transparent, rgba(251, 191, 36, 0.18) 50%, transparent);
+		box-shadow: 0 1px 0 rgba(251, 191, 36, 0.6);
+		opacity: 0;
+		pointer-events: none;
+	}
+	.sc-list.is-scanning .sc-scan {
+		animation: sc-scan 1.5s cubic-bezier(0.45, 0, 0.55, 1);
+	}
+	@keyframes sc-scan {
+		0% {
+			opacity: 0;
+			transform: translateY(0);
+		}
+		15%,
+		85% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(calc(var(--n) * var(--row) - 40px));
+		}
+	}
+
+	@media (max-width: 639px) {
+		.sc-shell {
+			padding: 26px 18px;
+		}
+		.sc-panel {
+			padding: 12px;
+		}
+		.sc-row {
+			grid-template-columns: 34px minmax(0, 1fr) 76px;
+			gap: 10px;
+			padding: 0 10px;
+		}
+		.sc-av {
+			width: 34px;
+			height: 34px;
+		}
+		.sc-meter {
+			grid-template-columns: 1fr;
+			gap: 4px;
+		}
+		.sc-num {
+			text-align: left;
+			font-size: 15px;
+		}
+		.sc-signals span:nth-child(n + 2) {
+			display: none;
+		}
+		.sc-first {
+			position: absolute;
+			top: -9px;
+			left: 10px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.sc-badge,
+		.sc-badge-dot::after {
+			animation: none;
+		}
+		.sc-row,
+		.sc-bar i {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	// Ciclo: barrido → cada fila sube hasta su nota → la lista se reordena de
+	// más a menos probable → el primero se marca → pausa → vuelta al orden
+	// inicial. Se para del todo mientras la tarjeta no está en pantalla.
+	const list = document.querySelector<HTMLElement>('.sc-list');
+	const status = document.querySelector<HTMLElement>('.sc [data-status]');
+	if (list && status) {
+		const rows = Array.from(list.querySelectorAll<HTMLElement>('.sc-row'));
+		const scores = rows.map((r) => Number(r.dataset.score));
+		const ranking = scores.map((s, i) => ({ s, i })).sort((a, b) => b.s - a.s);
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+		let visible = false;
+		const waitVisible = async () => {
+			while (!visible) await sleep(250);
+		};
+
+		const setNums = (p: number) =>
+			rows.forEach((r, i) => (r.querySelector('.sc-num')!.textContent = String(Math.round(scores[i] * p))));
+
+		const countUp = (ms: number) =>
+			new Promise<void>((resolve) => {
+				const t0 = performance.now();
+				const tick = (t: number) => {
+					const p = Math.min(1, (t - t0) / ms);
+					setNums(1 - Math.pow(1 - p, 3));
+					if (p < 1) requestAnimationFrame(tick);
+					else resolve();
+				};
+				requestAnimationFrame(tick);
+			});
+
+		const sorted = () => {
+			ranking.forEach((r, pos) => rows[r.i].style.setProperty('--pos', String(pos)));
+			rows[ranking[0].i].classList.add('is-top');
+		};
+
+		if (reduceMotion) {
+			setNums(1);
+			list.classList.add('is-scored');
+			sorted();
+			status.textContent = 'Ordenado';
+			status.classList.add('is-done');
+		} else {
+			new IntersectionObserver((entries) => entries.forEach((e) => (visible = e.isIntersecting)), { threshold: 0.3 }).observe(list);
+
+			(async function loop() {
+				for (;;) {
+					await waitVisible();
+					// reposo: orden inicial y a cero
+					rows.forEach((r, i) => {
+						r.style.setProperty('--pos', String(i));
+						r.classList.remove('is-top');
+					});
+					list.classList.remove('is-scored', 'is-scanning');
+					setNums(0);
+					status.textContent = 'Analizando…';
+					status.classList.remove('is-done');
+					await sleep(700);
+
+					void list.offsetWidth;
+					list.classList.add('is-scanning');
+					await sleep(1500);
+					list.classList.remove('is-scanning');
+
+					list.classList.add('is-scored');
+					await countUp(1400);
+					await sleep(400);
+
+					sorted();
+					status.textContent = 'Ordenado por probabilidad';
+					status.classList.add('is-done');
+					await sleep(4200);
+				}
+			})();
+		}
+	}
+</script>

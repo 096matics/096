@@ -101,7 +101,7 @@ const dockIcons = ['#fbbf24', '#f472b6', '#fb923c', '#facc15'];
 									<p class="max-w-[95px] truncate text-[12px] font-semibold">{d.negocio}</p>
 								</div>
 								<div class="demo-stars relative mt-4 flex w-fit gap-1">
-									<span class="demo-tap-ping demo-tap-ping-stars pointer-events-none absolute -inset-2 rounded-full" aria-hidden="true"></span>
+									<span class="demo-tap-ping demo-tap-ping-stars pointer-events-none absolute rounded-full" aria-hidden="true"></span>
 									<span class="demo-tap-finger demo-tap-finger-stars pointer-events-none absolute" aria-hidden="true"></span>
 									{Array.from({ length: 5 }).map((_, s) => (
 										<svg width="15" height="15" viewBox="0 0 20 20" class="demo-star" style={`--star-delay:${s * 90}ms`} fill="#3f3f46">
@@ -111,9 +111,9 @@ const dockIcons = ['#fbbf24', '#f472b6', '#fb923c', '#facc15'];
 								</div>
 								<p class="mt-3 text-[10.5px] leading-snug text-zinc-400">Escribe una reseña pública...</p>
 							</div>
-							<div class="demo-save-btn relative w-full overflow-hidden rounded-full py-2 text-center text-[11px] font-medium text-white" style={`background:${d.color}`}>
+							<div class="demo-save-btn relative w-full rounded-full py-2 text-center text-[11px] font-medium text-white" style={`background:${d.color}`}>
 								Publicar
-								<span class="demo-tap-ping absolute inset-0 rounded-full" aria-hidden="true"></span>
+								<span class="demo-tap-ping demo-tap-ping-btn absolute rounded-full" aria-hidden="true"></span>
 								<span class="demo-tap-finger pointer-events-none absolute" aria-hidden="true"></span>
 							</div>
 						</div>
@@ -360,7 +360,12 @@ const dockIcons = ['#fbbf24', '#f472b6', '#fb923c', '#facc15'];
 		animation-delay: var(--star-delay);
 	}
 	.demo-tap-ping-stars {
-		background: rgba(255, 255, 255, 0.5);
+		top: 50%;
+		right: -0.5px;
+		width: 30px;
+		height: 30px;
+		margin: -15px -7.5px 0 0;
+		background: rgba(245, 166, 35, 0.4);
 		opacity: 0;
 		transform: scale(0.6);
 	}
@@ -388,7 +393,7 @@ const dockIcons = ['#fbbf24', '#f472b6', '#fb923c', '#facc15'];
 	}
 	.demo-tap-finger-stars {
 		top: 50%;
-		left: 20px;
+		left: calc(100% - 7.5px);
 		transform: translate(-50%, -220%) scale(0.75);
 	}
 	@keyframes demo-finger-tap-stars-cycle {
@@ -423,6 +428,13 @@ const dockIcons = ['#fbbf24', '#f472b6', '#fb923c', '#facc15'];
 	}
 
 	/* segundo toque: sobre publicar */
+	.demo-tap-ping-btn {
+		top: 50%;
+		left: 50%;
+		width: 34px;
+		height: 34px;
+		margin: -17px 0 0 -17px;
+	}
 	.demo-tap-ping {
 		background: rgba(255, 255, 255, 0.55);
 		opacity: 0;
