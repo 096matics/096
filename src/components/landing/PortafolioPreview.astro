@@ -84,7 +84,8 @@ const ICONOS: Record<string, string> = {
 								</h3>
 								<div class="mt-2 flex items-center gap-1 text-[11px] font-semibold text-amber-400">
 									<svg class="sector-score-star" width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6.1L10 14.9l-5.4 3 1.3-6.1L1.3 7.7l6.1-.6L10 1.5z" /></svg>
-									<span class="sector-score" data-score={s.data.valoracion}>0.0</span> <span class="font-normal text-zinc-500">· toca para leer</span>
+									<span class="sector-score" data-score={s.data.valoracion}>0.0</span>{' '}
+									<span class="hidden font-normal text-zinc-500 sm:inline">· toca para leer</span>
 								</div>
 								<span class="sector-card-tip pointer-events-none absolute bottom-full left-1/2 mb-2.5 w-[190px] -translate-x-1/2 translate-y-1 rounded-xl border border-white/10 bg-zinc-950 p-3 text-[11.5px] leading-snug text-zinc-300 opacity-0 shadow-xl transition-all duration-200">
 									{s.data.resumen}
@@ -182,6 +183,22 @@ const ICONOS: Record<string, string> = {
 			transform 0.6s cubic-bezier(0.22, 1.4, 0.36, 1),
 			box-shadow 0.3s ease;
 	}
+	/* el abanico abierto separaba cada carta 122px del centro — con 5 cartas eso
+	   pone las dos de las esquinas (fan ±2) a ±244px, muy por fuera de una
+	   pantalla de móvil (~335px de ancho útil, la mitad son ~167px). Sin forma
+	   de arrastrar el mazo, esas dos quedaban fuera de la pantalla y no había
+	   manera de tocarlas. En móvil el abanico usa un paso mucho más corto para
+	   que las 5 quepan dentro del ancho visible. */
+	.sector-deck {
+		--fan-x: 122px;
+		--fan-rot: 9deg;
+	}
+	@media (max-width: 639px) {
+		.sector-deck {
+			--fan-x: 33px;
+			--fan-rot: 5deg;
+		}
+	}
 	/* la animación de entrada solo toca `opacity`/`scale`/`translate` (propiedades
 	   independientes de `transform`) — si tocara `transform` directamente, su
 	   `forwards` la dejaría fija para siempre y ganaría a la regla de abrir/cerrar
@@ -206,7 +223,7 @@ const ICONOS: Record<string, string> = {
 	}
 	/* abanico abierto: cada carta salta a su hueco horizontal con un rebote claro */
 	.sector-deck[data-deck-state='open'] .sector-card {
-		transform: translate(-50%, -50%) translate(calc(var(--fan) * 122px), calc(var(--fan) * var(--fan) * 7px)) rotate(calc(var(--fan) * 9deg));
+		transform: translate(-50%, -50%) translate(calc(var(--fan) * var(--fan-x)), calc(var(--fan) * var(--fan) * 7px)) rotate(calc(var(--fan) * var(--fan-rot)));
 		z-index: calc(20 + var(--fan) * 10);
 		box-shadow: 0 22px 40px -16px rgba(0, 0, 0, 0.65);
 	}
@@ -214,7 +231,7 @@ const ICONOS: Record<string, string> = {
 		box-shadow: 0 26px 44px -14px rgba(0, 0, 0, 0.7);
 	}
 	.sector-deck[data-deck-state='open'] .sector-card:hover {
-		transform: translate(-50%, -50%) translate(calc(var(--fan) * 122px), calc(var(--fan) * var(--fan) * 7px - 12px)) rotate(calc(var(--fan) * 9deg)) scale(1.06);
+		transform: translate(-50%, -50%) translate(calc(var(--fan) * var(--fan-x)), calc(var(--fan) * var(--fan) * 7px - 12px)) rotate(calc(var(--fan) * var(--fan-rot))) scale(1.06);
 		z-index: 40;
 	}
 	/* pista al pasar el ratón: un resumen corto, tanto apiladas como abiertas */
